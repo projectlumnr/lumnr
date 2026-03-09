@@ -17,7 +17,9 @@ import {
   Info,
   ShieldCheck,
   FileText,
-  X
+  X,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 const App = () => {
@@ -34,20 +36,27 @@ const App = () => {
   const [activeNoteId, setActiveNoteId] = useState(notes[0]?.id);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [theme, setTheme] = useState(() => localStorage.getItem('lumnr_theme') || 'dark');
   
   // Menu States
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null); // 'about', 'privacy', 'terms' or null
   
   const shareMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
+  const settingsRef = useRef(null);
   
   const activeNote = notes.find(n => n.id === activeNoteId) || notes[0];
 
   useEffect(() => {
     localStorage.setItem('lumnr_notes', JSON.stringify(notes));
   }, [notes]);
+
+  useEffect(() => {
+    localStorage.setItem('lumnr_theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,10 +66,18 @@ const App = () => {
       if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
         setMoreMenuOpen(false);
       }
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+        setSettingsOpen(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+    setSettingsOpen(false);
+  };
 
   const createNote = () => {
     const newNote = {
@@ -126,41 +143,53 @@ const App = () => {
   const charCount = activeNote?.content.length || 0;
 
   const Modal = ({ title, children, onClose }) => (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-6 animate-in fade-in duration-300">
-      <div className="bg-[#0a0a0a] border border-[#1f1f1f] w-full max-w-lg rounded-xl overflow-hidden shadow-2xl">
-        <div className="flex items-center justify-between p-5 border-b border-[#1f1f1f]">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-white">{title}</h2>
-          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 animate-in fade-in duration-300">
+      <div className={`${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'} border w-full max-w-lg rounded-xl overflow-hidden shadow-2xl`}>
+        <div className={`flex items-center justify-between p-5 border-b ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-100'}`}>
+          <h2 className={`text-sm font-semibold uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
+          <button onClick={onClose} className="text-zinc-500 hover:text-zinc-800 transition-colors">
             <X size={18} />
           </button>
         </div>
-        <div className="p-8 text-zinc-400 text-sm leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide">
+        <div className={`p-8 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-600'} text-sm leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
           {children}
         </div>
       </div>
     </div>
   );
 
+  const themeClasses = theme === 'dark' 
+    ? 'bg-[#000000] text-[#ededed] selection:bg-[#333] selection:text-[#fff]' 
+    : 'bg-[#fafafa] text-[#1a1a1a] selection:bg-[#ddd] selection:text-[#000]';
+
+  const sidebarClasses = theme === 'dark'
+    ? 'bg-[#0a0a0a] border-[#1f1f1f]'
+    : 'bg-white border-zinc-200';
+
+  const inputClasses = theme === 'dark'
+    ? 'bg-[#000] border-[#1f1f1f] text-white focus:border-zinc-500 placeholder:text-zinc-700'
+    : 'bg-[#f5f5f5] border-zinc-200 text-zinc-900 focus:border-zinc-400 placeholder:text-zinc-400';
+
   return (
-    <div className="flex h-screen bg-[#000000] text-[#ededed] font-sans selection:bg-[#333] selection:text-[#fff]">
+    <div className={`flex h-screen font-sans theme-transition ${themeClasses}`}>
       {/* Sidebar */}
       <aside 
         className={`${
           sidebarOpen ? 'w-72' : 'w-0'
-        } transition-all duration-300 ease-in-out border-r border-[#1f1f1f] flex flex-col overflow-hidden bg-[#0a0a0a]`}
+        } transition-all duration-300 ease-in-out border-r flex flex-col overflow-hidden theme-transition ${sidebarClasses}`}
       >
         <div className="p-5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={theme === 'dark' ? 'text-white' : 'text-black'}>
               <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
               <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <span className="font-medium tracking-tighter text-lg text-white">lumnr</span>
+            <span className={`font-medium tracking-tighter text-lg ${theme === 'dark' ? 'text-white' : 'text-black'}`}>lumnr</span>
           </div>
           <button 
             onClick={createNote}
-            className="p-1.5 rounded-md hover:bg-[#1f1f1f] transition-colors text-zinc-400 hover:text-white"
+            className={`p-1.5 rounded-md transition-colors ${theme === 'dark' ? 'hover:bg-[#1f1f1f] text-zinc-400 hover:text-white' : 'hover:bg-zinc-100 text-zinc-500 hover:text-black'}`}
           >
             <Plus size={18} />
           </button>
@@ -174,7 +203,7 @@ const App = () => {
               placeholder="Search thoughts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#000] border border-[#1f1f1f] rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-zinc-500 transition-all placeholder:text-zinc-700"
+              className={`w-full border rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none transition-all ${inputClasses}`}
             />
           </div>
         </div>
@@ -185,11 +214,13 @@ const App = () => {
               key={note.id}
               onClick={() => setActiveNoteId(note.id)}
               className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-200 ${
-                activeNoteId === note.id ? 'bg-[#111] text-white' : 'hover:bg-[#0a0a0a] text-zinc-400'
+                activeNoteId === note.id 
+                  ? (theme === 'dark' ? 'bg-[#111] text-white' : 'bg-zinc-100 text-black') 
+                  : (theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500')
               }`}
             >
               <div className="flex justify-between items-start mb-0.5">
-                <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? 'text-zinc-100' : 'text-zinc-300'}`}>
+                <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
                   {note.title || 'Untitled'}
                 </span>
                 <button 
@@ -206,30 +237,46 @@ const App = () => {
           ))}
         </div>
 
-        <div className="p-4 border-t border-[#1f1f1f] text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center">
+        <div className={`p-4 border-t text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
           <span>{notes.length} Docs</span>
-          <Settings size={14} className="cursor-pointer hover:text-zinc-300 transition-colors" />
+          <div ref={settingsRef}>
+            <button 
+              onClick={() => setSettingsOpen(!settingsOpen)}
+              className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-800'}`}
+            >
+              <Settings size={14} />
+            </button>
+            
+            {settingsOpen && (
+              <div className={`absolute bottom-12 right-4 w-44 border rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200 ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                  {theme === 'dark' ? <Sun size={12} /> : <Moon size={12} />}
+                  {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col relative bg-[#000]">
+      <main className="flex-1 flex flex-col relative theme-transition">
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 bg-[#0a0a0a] border border-[#1f1f1f] border-l-0 rounded-r-md text-zinc-500 hover:text-white transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 border border-l-0 rounded-r-md transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f] text-zinc-500 hover:text-white' : 'bg-white border-zinc-200 text-zinc-400 hover:text-black'}`}
         >
           <ChevronRight size={16} />
         </button>
 
-        <header className="h-14 border-b border-[#1f1f1f] flex items-center justify-between px-6">
+        <header className={`h-14 border-b flex items-center justify-between px-6 theme-transition ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
           <div className="flex items-center gap-4 text-[11px] text-zinc-400 uppercase tracking-widest">
             <span className="flex items-center gap-1.5">
               <Clock size={12} strokeWidth={1.5} />
               {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}
             </span>
-            <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
+            <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
             <span>{wordCount} words</span>
-            <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
+            <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
             <span>{charCount} characters</span>
           </div>
           
@@ -237,24 +284,24 @@ const App = () => {
             <div className="relative" ref={shareMenuRef}>
               <button 
                 onClick={() => setShareMenuOpen(!shareMenuOpen)}
-                className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]"
+                className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-colors px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}
               >
                 <Share2 size={12} />
                 Share
               </button>
               
               {shareMenuOpen && (
-                <div className="absolute right-0 top-10 w-48 bg-[#0a0a0a] border border-[#1f1f1f] rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200">
-                  <button onClick={downloadNote} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200 ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Download size={12} /> Download .txt
                   </button>
-                  <button onClick={copyToClipboard} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors border-b border-[#1f1f1f]">
+                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
                     <Copy size={12} /> Copy Text
                   </button>
-                  <button onClick={() => shareToSocial('twitter')} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Twitter size={12} /> X (Twitter)
                   </button>
-                  <button onClick={() => shareToSocial('whatsapp')} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                  <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <ExternalLink size={12} /> WhatsApp
                   </button>
                 </div>
@@ -264,20 +311,20 @@ const App = () => {
             <div className="relative" ref={moreMenuRef}>
               <button 
                 onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                className="text-zinc-400 hover:text-white transition-colors flex items-center"
+                className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}
               >
                 <MoreHorizontal size={18} />
               </button>
               
               {moreMenuOpen && (
-                <div className="absolute right-0 top-10 w-40 bg-[#0a0a0a] border border-[#1f1f1f] rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200">
-                  <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                <div className={`absolute right-0 top-10 w-40 border rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200 ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                  <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Info size={12} /> About
                   </button>
-                  <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                  <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <ShieldCheck size={12} /> Privacy
                   </button>
-                  <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                  <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <FileText size={12} /> Terms
                   </button>
                 </div>
@@ -294,13 +341,13 @@ const App = () => {
                 value={activeNote.title}
                 onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
                 placeholder="Untitled"
-                className="w-full bg-transparent text-4xl font-semibold tracking-tight text-white placeholder:text-zinc-800 focus:outline-none"
+                className={`w-full bg-transparent text-4xl font-semibold tracking-tight focus:outline-none theme-transition ${theme === 'dark' ? 'text-white placeholder:text-zinc-800' : 'text-zinc-900 placeholder:text-zinc-200'}`}
               />
               <textarea
                 value={activeNote.content}
                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
                 placeholder="Write your thoughts..."
-                className="w-full h-full bg-transparent text-lg text-zinc-200 leading-relaxed placeholder:text-zinc-800 focus:outline-none resize-none min-h-[60vh]"
+                className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] theme-transition ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
               />
             </div>
           ) : (
@@ -323,7 +370,7 @@ const App = () => {
 
       {modalContent === 'privacy' && (
         <Modal title="Privacy Policy" onClose={() => setModalContent(null)}>
-          <p className="mb-4 text-white font-medium">Your data stays with you.</p>
+          <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays with you.</p>
           <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
           <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
         </Modal>
@@ -337,6 +384,11 @@ const App = () => {
       )}
 
       <style>{`
+        .theme-transition {
+          transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                      color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes fadeIn {
