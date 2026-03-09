@@ -63,6 +63,7 @@ const App = () => {
     );
 
     const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
+    const charCount = activeNote?.content.length || 0;
 
     return (
         <div className="flex h-screen bg-[#000000] text-[#ededed] selection:bg-[#333] selection:text-[#fff] font-sans">
@@ -70,7 +71,6 @@ const App = () => {
             <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 ease-in-out border-r border-[#1f1f1f] flex flex-col overflow-hidden bg-[#0a0a0a]`}>
                 <div className="p-5 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                        {/* New Minimalist Geometric Pencil Logo */}
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
                             <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
                             <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -134,10 +134,12 @@ const App = () => {
                     <div className="flex items-center gap-4 text-[11px] text-zinc-400 uppercase tracking-widest">
                         <span className="flex items-center gap-1.5">
                             <Clock size={12} strokeWidth={1.5} />
-                            {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}
+                            {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}
                         </span>
                         <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
                         <span>{wordCount} words</span>
+                        <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
+                        <span>{charCount} characters</span>
                     </div>
                     <div className="flex items-center gap-3">
                         <button className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]">
