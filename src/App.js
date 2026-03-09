@@ -15,8 +15,8 @@ const App = () => {
         const saved = localStorage.getItem('lumnr_notes');
         return saved ? JSON.parse(saved) : [{
             id: '1',
-            title: 'Welcome to Lumnr',
-            content: 'Lumnr is a minimal digital notebook designed for focus.\n\nEverything you write is saved locally in your browser. Start typing to begin your journey.',
+            title: 'Welcome to lumnr',
+            content: 'lumnr is a minimal digital notebook designed for focus.\n\nEverything you write is saved locally in your browser. Start typing to begin your journey.',
             updatedAt: Date.now()
         }];
     });
@@ -34,7 +34,7 @@ const App = () => {
     const createNote = () => {
         const newNote = {
             id: Date.now().toString(),
-            title: 'Untitled Note',
+            title: '',
             content: '',
             updatedAt: Date.now()
         };
@@ -68,20 +68,25 @@ const App = () => {
         <div className="flex h-screen bg-[#000000] text-[#ededed] selection:bg-[#333] selection:text-[#fff] font-sans">
             {/* Sidebar */}
             <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 ease-in-out border-r border-[#1f1f1f] flex flex-col overflow-hidden bg-[#0a0a0a]`}>
-                <div className="p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
-                            <div className="w-3 h-[2px] bg-black rotate-45"></div>
-                        </div>
-                        <span className="font-semibold tracking-tight text-lg italic uppercase">lumnr</span>
+                <div className="p-5 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                        {/* Minimal Pencil Logo */}
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                            <path d="M12 19L19 12L22 15L15 22L12 19Z" fill="currentColor" fillOpacity="0.2"/>
+                            <path d="M18 2L22 6L9 19L5 15L18 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                            <path d="M2 22L5 21L3 19L2 22Z" fill="currentColor"/>
+                            <path d="M2 22L5 21M2 22L3 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="font-medium tracking-tighter text-lg text-white">lumnr</span>
                     </div>
-                    <button onClick={createNote} className="p-1.5 rounded-md hover:bg-[#1f1f1f] transition-colors text-zinc-400 hover:text-white">
+                    <button onClick={createNote} className="p-1.5 rounded-md hover:bg-[#1f1f1f] transition-colors text-zinc-500 hover:text-white">
                         <Plus size={18} />
                     </button>
                 </div>
+
                 <div className="px-4 mb-4">
                     <div className="relative group">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600">
                             <Search size={14} />
                         </span>
                         <input 
@@ -89,25 +94,31 @@ const App = () => {
                             placeholder="Search thoughts..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-[#111] border border-[#1f1f1f] rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-zinc-700 transition-all placeholder:text-zinc-600"
+                            className="w-full bg-[#000] border border-[#1f1f1f] rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-zinc-700 transition-all placeholder:text-zinc-700"
                         />
                     </div>
                 </div>
-                <div className="flex-1 overflow-y-auto px-2 space-y-1 overflow-x-hidden">
+
+                <div className="flex-1 overflow-y-auto px-2 space-y-0.5 overflow-x-hidden scrollbar-hide">
                     {filteredNotes.map(note => (
-                        <div key={note.id} onClick={() => setActiveNoteId(note.id)} className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-200 ${activeNoteId === note.id ? 'bg-[#161616] text-white' : 'hover:bg-[#111] text-zinc-400'}`}>
-                            <div className="flex justify-between items-start mb-1">
-                                <span className="text-sm font-medium truncate pr-4">{note.title || 'Untitled'}</span>
-                                <button onClick={(e) => deleteNote(note.id, e)} className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity">
+                        <div key={note.id} onClick={() => setActiveNoteId(note.id)} className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-200 ${activeNoteId === note.id ? 'bg-[#111] text-white' : 'hover:bg-[#0a0a0a] text-zinc-500'}`}>
+                            <div className="flex justify-between items-start mb-0.5">
+                                <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? 'text-zinc-100' : 'text-zinc-400'}`}>
+                                    {note.title || 'Untitled'}
+                                </span>
+                                <button onClick={(e) => deleteNote(note.id, e)} className="opacity-0 group-hover:opacity-100 p-0.5 hover:text-red-400 transition-opacity">
                                     <Trash2 size={12} />
                                 </button>
                             </div>
-                            <span className="text-xs text-zinc-600 line-clamp-1 truncate">{note.content || 'No content...'}</span>
+                            <span className="text-[11px] text-zinc-600 line-clamp-1 truncate uppercase tracking-wider font-mono">
+                                {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                            </span>
                         </div>
                     ))}
                 </div>
+
                 <div className="p-4 border-t border-[#1f1f1f] text-[10px] text-zinc-600 uppercase tracking-widest flex justify-between items-center">
-                    <span>{notes.length} Documents</span>
+                    <span>{notes.length} Docs</span>
                     <button className="hover:text-zinc-400 transition-colors">
                         <Settings size={14} />
                     </button>
@@ -116,48 +127,50 @@ const App = () => {
 
             {/* Main Content */}
             <main className="flex-1 flex flex-col relative bg-[#000]">
-                <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 bg-[#0a0a0a] border border-[#1f1f1f] border-l-0 rounded-r-md text-zinc-500 hover:text-white transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 bg-[#0a0a0a] border border-[#1f1f1f] border-l-0 rounded-r-md text-zinc-600 hover:text-white transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <ChevronRight size={16} />
                 </button>
+
                 <header className="h-14 border-b border-[#1f1f1f] flex items-center justify-between px-6">
-                    <div className="flex items-center gap-4 text-xs text-zinc-500">
+                    <div className="flex items-center gap-4 text-[11px] text-zinc-600 uppercase tracking-widest">
                         <span className="flex items-center gap-1.5">
-                            <Clock size={12} />
+                            <Clock size={12} strokeWidth={1.5} />
                             {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}
                         </span>
                         <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
                         <span>{wordCount} words</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 text-xs text-zinc-400 hover:text-white transition-colors bg-[#111] px-3 py-1.5 rounded-md border border-[#1f1f1f]">
+                        <button className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-500 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]">
                             <Share2 size={12} />
                             Share
                         </button>
-                        <button className="text-zinc-500 hover:text-white transition-colors">
+                        <button className="text-zinc-600 hover:text-white transition-colors">
                             <MoreHorizontal size={18} />
                         </button>
                     </div>
                 </header>
-                <div className="flex-1 max-w-3xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto">
+
+                <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto">
                     {activeNote ? (
-                        <div className="space-y-8" key={activeNote.id}>
+                        <div className="space-y-10" key={activeNote.id}>
                             <input
                                 type="text"
                                 value={activeNote.title}
                                 onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
-                                placeholder="The Title"
-                                className="w-full bg-transparent text-4xl lg:text-5xl font-bold tracking-tight text-white placeholder:text-zinc-800 focus:outline-none"
+                                placeholder="Untitled"
+                                className="w-full bg-transparent text-4xl font-semibold tracking-tight text-white placeholder:text-zinc-900 focus:outline-none"
                             />
                             <textarea
                                 value={activeNote.content}
                                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
-                                placeholder="Begin your thought..."
-                                className="w-full h-full bg-transparent text-lg lg:text-xl text-zinc-300 leading-relaxed placeholder:text-zinc-800 focus:outline-none resize-none min-h-[60vh]"
+                                placeholder="Write your thoughts..."
+                                className="w-full h-full bg-transparent text-lg text-zinc-400 leading-relaxed placeholder:text-zinc-900 focus:outline-none resize-none min-h-[60vh]"
                             />
                         </div>
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-zinc-600 space-y-4">
-                            <p className="text-sm uppercase tracking-widest">Select a document to begin</p>
+                        <div className="h-full flex flex-col items-center justify-center text-zinc-800 space-y-4">
+                            <p className="text-xs uppercase tracking-[0.2em]">Select a document</p>
                         </div>
                     )}
                 </div>
