@@ -13,7 +13,11 @@ import {
   Download,
   Copy,
   Twitter,
-  ExternalLink
+  ExternalLink,
+  Info,
+  ShieldCheck,
+  FileText,
+  X
 } from 'lucide-react';
 
 const App = () => {
@@ -30,21 +34,28 @@ const App = () => {
   const [activeNoteId, setActiveNoteId] = useState(notes[0]?.id);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Menu States
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null); // 'about', 'privacy', 'terms' or null
+  
   const shareMenuRef = useRef(null);
+  const moreMenuRef = useRef(null);
   
   const activeNote = notes.find(n => n.id === activeNoteId) || notes[0];
 
-  // Persist notes to localStorage
   useEffect(() => {
     localStorage.setItem('lumnr_notes', JSON.stringify(notes));
   }, [notes]);
 
-  // Close share menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) {
         setShareMenuOpen(false);
+      }
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
+        setMoreMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -113,6 +124,22 @@ const App = () => {
 
   const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
   const charCount = activeNote?.content.length || 0;
+
+  const Modal = ({ title, children, onClose }) => (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-6 animate-in fade-in duration-300">
+      <div className="bg-[#0a0a0a] border border-[#1f1f1f] w-full max-w-lg rounded-xl overflow-hidden shadow-2xl">
+        <div className="flex items-center justify-between p-5 border-b border-[#1f1f1f]">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-white">{title}</h2>
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+        <div className="p-8 text-zinc-400 text-sm leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex h-screen bg-[#000000] text-[#ededed] font-sans selection:bg-[#333] selection:text-[#fff]">
@@ -203,36 +230,59 @@ const App = () => {
             <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
             <span>{wordCount} words</span>
             <div className="w-[1px] h-3 bg-[#1f1f1f]"></div>
-            <span>{charCount} chars</span>
+            <span>{charCount} characters</span>
           </div>
           
-          <div className="flex items-center gap-3 relative" ref={shareMenuRef}>
-            <button 
-              onClick={() => setShareMenuOpen(!shareMenuOpen)}
-              className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]"
-            >
-              <Share2 size={12} />
-              Share
-            </button>
-            
-            {shareMenuOpen && (
-              <div className="absolute right-0 top-10 w-48 bg-[#0a0a0a] border border-[#1f1f1f] rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200">
-                <button onClick={downloadNote} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
-                  <Download size={12} /> Download .txt
-                </button>
-                <button onClick={copyToClipboard} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors border-b border-[#1f1f1f]">
-                  <Copy size={12} /> Copy Text
-                </button>
-                <button onClick={() => shareToSocial('twitter')} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
-                  <Twitter size={12} /> X (Twitter)
-                </button>
-                <button onClick={() => shareToSocial('whatsapp')} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
-                  <ExternalLink size={12} /> WhatsApp
-                </button>
-              </div>
-            )}
+          <div className="flex items-center gap-3">
+            <div className="relative" ref={shareMenuRef}>
+              <button 
+                onClick={() => setShareMenuOpen(!shareMenuOpen)}
+                className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]"
+              >
+                <Share2 size={12} />
+                Share
+              </button>
+              
+              {shareMenuOpen && (
+                <div className="absolute right-0 top-10 w-48 bg-[#0a0a0a] border border-[#1f1f1f] rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200">
+                  <button onClick={downloadNote} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                    <Download size={12} /> Download .txt
+                  </button>
+                  <button onClick={copyToClipboard} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors border-b border-[#1f1f1f]">
+                    <Copy size={12} /> Copy Text
+                  </button>
+                  <button onClick={() => shareToSocial('twitter')} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                    <Twitter size={12} /> X (Twitter)
+                  </button>
+                  <button onClick={() => shareToSocial('whatsapp')} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                    <ExternalLink size={12} /> WhatsApp
+                  </button>
+                </div>
+              )}
+            </div>
 
-            <MoreHorizontal size={18} className="text-zinc-400 cursor-pointer hover:text-white transition-colors" />
+            <div className="relative" ref={moreMenuRef}>
+              <button 
+                onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                className="text-zinc-400 hover:text-white transition-colors flex items-center"
+              >
+                <MoreHorizontal size={18} />
+              </button>
+              
+              {moreMenuOpen && (
+                <div className="absolute right-0 top-10 w-40 bg-[#0a0a0a] border border-[#1f1f1f] rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200">
+                  <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                    <Info size={12} /> About
+                  </button>
+                  <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                    <ShieldCheck size={12} /> Privacy
+                  </button>
+                  <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider text-zinc-400 hover:bg-[#111] hover:text-white transition-colors">
+                    <FileText size={12} /> Terms
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 
@@ -261,6 +311,30 @@ const App = () => {
           )}
         </div>
       </main>
+
+      {/* Modals */}
+      {modalContent === 'about' && (
+        <Modal title="About lumnr" onClose={() => setModalContent(null)}>
+          <p className="mb-4">lumnr is a minimalist digital workspace designed to remove distractions and let your ideas shine.</p>
+          <p className="mb-4">Built with a focus on speed and simplicity, it provides a clean slate for your daily thoughts, journals, or code snippets.</p>
+          <p className="opacity-50 text-[10px] uppercase tracking-widest mt-8">Version 1.2.0 • Focus First</p>
+        </Modal>
+      )}
+
+      {modalContent === 'privacy' && (
+        <Modal title="Privacy Policy" onClose={() => setModalContent(null)}>
+          <p className="mb-4 text-white font-medium">Your data stays with you.</p>
+          <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
+          <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
+        </Modal>
+      )}
+
+      {modalContent === 'terms' && (
+        <Modal title="Terms of Service" onClose={() => setModalContent(null)}>
+          <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
+          <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
+        </Modal>
+      )}
 
       <style>{`
         .scrollbar-hide::-webkit-scrollbar { display: none; }
