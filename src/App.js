@@ -79,14 +79,14 @@ const App = () => {
                         </svg>
                         <span className="font-medium tracking-tighter text-lg text-white">lumnr</span>
                     </div>
-                    <button onClick={createNote} className="p-1.5 rounded-md hover:bg-[#1f1f1f] transition-colors text-zinc-500 hover:text-white">
+                    <button onClick={createNote} className="p-1.5 rounded-md hover:bg-[#1f1f1f] transition-colors text-zinc-400 hover:text-white">
                         <Plus size={18} />
                     </button>
                 </div>
 
                 <div className="px-4 mb-4">
                     <div className="relative group">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
                             <Search size={14} />
                         </span>
                         <input 
@@ -94,32 +94,32 @@ const App = () => {
                             placeholder="Search thoughts..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-[#000] border border-[#1f1f1f] rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-zinc-700 transition-all placeholder:text-zinc-700"
+                            className="w-full bg-[#000] border border-[#1f1f1f] rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none focus:border-zinc-500 transition-all placeholder:text-zinc-700"
                         />
                     </div>
                 </div>
 
                 <div className="flex-1 overflow-y-auto px-2 space-y-0.5 overflow-x-hidden scrollbar-hide">
                     {filteredNotes.map(note => (
-                        <div key={note.id} onClick={() => setActiveNoteId(note.id)} className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-200 ${activeNoteId === note.id ? 'bg-[#111] text-white' : 'hover:bg-[#0a0a0a] text-zinc-500'}`}>
+                        <div key={note.id} onClick={() => setActiveNoteId(note.id)} className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-200 ${activeNoteId === note.id ? 'bg-[#111] text-white' : 'hover:bg-[#0a0a0a] text-zinc-400'}`}>
                             <div className="flex justify-between items-start mb-0.5">
-                                <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? 'text-zinc-100' : 'text-zinc-400'}`}>
+                                <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? 'text-zinc-100' : 'text-zinc-300'}`}>
                                     {note.title || 'Untitled'}
                                 </span>
                                 <button onClick={(e) => deleteNote(note.id, e)} className="opacity-0 group-hover:opacity-100 p-0.5 hover:text-red-400 transition-opacity">
                                     <Trash2 size={12} />
                                 </button>
                             </div>
-                            <span className="text-[11px] text-zinc-600 line-clamp-1 truncate uppercase tracking-wider font-mono">
+                            <span className="text-[11px] text-zinc-500 line-clamp-1 truncate uppercase tracking-wider font-mono">
                                 {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
                             </span>
                         </div>
                     ))}
                 </div>
 
-                <div className="p-4 border-t border-[#1f1f1f] text-[10px] text-zinc-600 uppercase tracking-widest flex justify-between items-center">
+                <div className="p-4 border-t border-[#1f1f1f] text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center">
                     <span>{notes.length} Docs</span>
-                    <button className="hover:text-zinc-400 transition-colors">
+                    <button className="hover:text-zinc-300 transition-colors">
                         <Settings size={14} />
                     </button>
                 </div>
@@ -127,12 +127,12 @@ const App = () => {
 
             {/* Main Content */}
             <main className="flex-1 flex flex-col relative bg-[#000]">
-                <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 bg-[#0a0a0a] border border-[#1f1f1f] border-l-0 rounded-r-md text-zinc-600 hover:text-white transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 bg-[#0a0a0a] border border-[#1f1f1f] border-l-0 rounded-r-md text-zinc-500 hover:text-white transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <ChevronRight size={16} />
                 </button>
 
                 <header className="h-14 border-b border-[#1f1f1f] flex items-center justify-between px-6">
-                    <div className="flex items-center gap-4 text-[11px] text-zinc-600 uppercase tracking-widest">
+                    <div className="flex items-center gap-4 text-[11px] text-zinc-400 uppercase tracking-widest">
                         <span className="flex items-center gap-1.5">
                             <Clock size={12} strokeWidth={1.5} />
                             {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}
@@ -141,11 +141,11 @@ const App = () => {
                         <span>{wordCount} words</span>
                     </div>
                     <div className="flex items-center gap-3">
-                        <button className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-500 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]">
+                        <button className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-zinc-400 hover:text-white transition-colors bg-[#0a0a0a] px-3 py-1.5 rounded-md border border-[#1f1f1f]">
                             <Share2 size={12} />
                             Share
                         </button>
-                        <button className="text-zinc-600 hover:text-white transition-colors">
+                        <button className="text-zinc-400 hover:text-white transition-colors">
                             <MoreHorizontal size={18} />
                         </button>
                     </div>
@@ -159,17 +159,17 @@ const App = () => {
                                 value={activeNote.title}
                                 onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
                                 placeholder="Untitled"
-                                className="w-full bg-transparent text-4xl font-semibold tracking-tight text-white placeholder:text-zinc-900 focus:outline-none"
+                                className="w-full bg-transparent text-4xl font-semibold tracking-tight text-white placeholder:text-zinc-800 focus:outline-none"
                             />
                             <textarea
                                 value={activeNote.content}
                                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
                                 placeholder="Write your thoughts..."
-                                className="w-full h-full bg-transparent text-lg text-zinc-400 leading-relaxed placeholder:text-zinc-900 focus:outline-none resize-none min-h-[60vh]"
+                                className="w-full h-full bg-transparent text-lg text-zinc-200 leading-relaxed placeholder:text-zinc-800 focus:outline-none resize-none min-h-[60vh]"
                             />
                         </div>
                     ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-zinc-800 space-y-4">
+                        <div className="h-full flex flex-col items-center justify-center text-zinc-700 space-y-4">
                             <p className="text-xs uppercase tracking-[0.2em]">Select a document</p>
                         </div>
                     )}
