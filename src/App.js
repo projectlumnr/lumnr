@@ -7,7 +7,6 @@ import {
   Clock, 
   Search, 
   MoreHorizontal,
-  ChevronLeft,
   Settings,
   Share2,
   Download,
@@ -24,6 +23,7 @@ import {
 
 const App = () => {
   const [notes, setNotes] = useState(() => {
+    if (typeof window === 'undefined') return [];
     const saved = localStorage.getItem('lumnr_notes');
     return saved ? JSON.parse(saved) : [{
       id: '1',
@@ -36,13 +36,15 @@ const App = () => {
   const [activeNoteId, setActiveNoteId] = useState(notes[0]?.id);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [theme, setTheme] = useState(() => localStorage.getItem('lumnr_theme') || 'dark');
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === 'undefined') return 'dark';
+    return localStorage.getItem('lumnr_theme') || 'dark';
+  });
   
-  // Menu States
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(null); // 'about', 'privacy', 'terms' or null
+  const [modalContent, setModalContent] = useState(null);
   
   const shareMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
@@ -60,15 +62,9 @@ const App = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) {
-        setShareMenuOpen(false);
-      }
-      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
-        setMoreMenuOpen(false);
-      }
-      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
-        setSettingsOpen(false);
-      }
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) setShareMenuOpen(false);
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) setMoreMenuOpen(false);
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) setSettingsOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -143,8 +139,8 @@ const App = () => {
   const charCount = activeNote?.content.length || 0;
 
   const Modal = ({ title, children, onClose }) => (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 animate-in fade-in duration-300">
-      <div className={`${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'} border w-full max-w-lg rounded-xl overflow-hidden shadow-2xl`}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 animate-in">
+      <div className={`${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'} border w-full max-w-lg rounded-xl overflow-hidden shadow-2xl transition-colors duration-300`}>
         <div className={`flex items-center justify-between p-5 border-b ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-100'}`}>
           <h2 className={`text-sm font-semibold uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-800 transition-colors">
@@ -173,11 +169,7 @@ const App = () => {
   return (
     <div className={`flex h-screen font-sans theme-transition ${themeClasses}`}>
       {/* Sidebar */}
-      <aside 
-        className={`${
-          sidebarOpen ? 'w-72' : 'w-0'
-        } transition-all duration-300 ease-in-out border-r flex flex-col overflow-hidden theme-transition ${sidebarClasses}`}
-      >
+      <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 ease-in-out border-r flex flex-col overflow-hidden theme-transition ${sidebarClasses}`}>
         <div className="p-5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={theme === 'dark' ? 'text-white' : 'text-black'}>
@@ -187,17 +179,14 @@ const App = () => {
             </svg>
             <span className={`font-medium tracking-tighter text-lg ${theme === 'dark' ? 'text-white' : 'text-black'}`}>lumnr</span>
           </div>
-          <button 
-            onClick={createNote}
-            className={`p-1.5 rounded-md transition-colors ${theme === 'dark' ? 'hover:bg-[#1f1f1f] text-zinc-400 hover:text-white' : 'hover:bg-zinc-100 text-zinc-500 hover:text-black'}`}
-          >
+          <button onClick={createNote} className={`p-1.5 rounded-md transition-colors ${theme === 'dark' ? 'hover:bg-[#1f1f1f] text-zinc-400 hover:text-white' : 'hover:bg-zinc-100 text-zinc-500 hover:text-black'}`}>
             <Plus size={18} />
           </button>
         </div>
 
         <div className="px-4 mb-4">
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-zinc-300 transition-colors" size={14} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
             <input 
               type="text"
               placeholder="Search thoughts..."
@@ -223,10 +212,7 @@ const App = () => {
                 <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
                   {note.title || 'Untitled'}
                 </span>
-                <button 
-                  onClick={(e) => deleteNote(note.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity"
-                >
+                <button onClick={(e) => deleteNote(note.id, e)} className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity">
                   <Trash2 size={12} />
                 </button>
               </div>
@@ -240,15 +226,11 @@ const App = () => {
         <div className={`p-4 border-t text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
           <span>{notes.length} Docs</span>
           <div ref={settingsRef}>
-            <button 
-              onClick={() => setSettingsOpen(!settingsOpen)}
-              className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-800'}`}
-            >
+            <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-800'}`}>
               <Settings size={14} />
             </button>
-            
             {settingsOpen && (
-              <div className={`absolute bottom-12 right-4 w-44 border rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200 ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+              <div className={`absolute bottom-12 right-0 w-44 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
                 <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                   {theme === 'dark' ? <Sun size={12} /> : <Moon size={12} />}
                   {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
@@ -259,7 +241,7 @@ const App = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main */}
       <main className="flex-1 flex flex-col relative theme-transition">
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -282,16 +264,11 @@ const App = () => {
           
           <div className="flex items-center gap-3">
             <div className="relative" ref={shareMenuRef}>
-              <button 
-                onClick={() => setShareMenuOpen(!shareMenuOpen)}
-                className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-colors px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}
-              >
-                <Share2 size={12} />
-                Share
+              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-colors px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
+                <Share2 size={12} /> Share
               </button>
-              
               {shareMenuOpen && (
-                <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200 ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
                   <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Download size={12} /> Download .txt
                   </button>
@@ -309,15 +286,11 @@ const App = () => {
             </div>
 
             <div className="relative" ref={moreMenuRef}>
-              <button 
-                onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}
-              >
+              <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>
                 <MoreHorizontal size={18} />
               </button>
-              
               {moreMenuOpen && (
-                <div className={`absolute right-0 top-10 w-40 border rounded-lg shadow-2xl py-2 z-50 animate-in fade-in duration-200 ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                <div className={`absolute right-0 top-10 w-40 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
                   <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Info size={12} /> About
                   </button>
@@ -335,7 +308,7 @@ const App = () => {
 
         <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto scrollbar-hide">
           {activeNote ? (
-            <div className="space-y-10 animate-in fade-in duration-500">
+            <div className="space-y-10 animate-in">
               <input
                 type="text"
                 value={activeNote.title}
@@ -360,26 +333,31 @@ const App = () => {
       </main>
 
       {/* Modals */}
-      {modalContent === 'about' && (
-        <Modal title="About lumnr" onClose={() => setModalContent(null)}>
-          <p className="mb-4">lumnr is a minimalist digital workspace designed to remove distractions and let your ideas shine.</p>
-          <p className="mb-4">Built with a focus on speed and simplicity, it provides a clean slate for your daily thoughts, journals, or code snippets.</p>
-          <p className="opacity-50 text-[10px] uppercase tracking-widest mt-8">Version 1.2.0 • Focus First</p>
-        </Modal>
-      )}
-
-      {modalContent === 'privacy' && (
-        <Modal title="Privacy Policy" onClose={() => setModalContent(null)}>
-          <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays with you.</p>
-          <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
-          <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
-        </Modal>
-      )}
-
-      {modalContent === 'terms' && (
-        <Modal title="Terms of Service" onClose={() => setModalContent(null)}>
-          <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
-          <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
+      {modalContent && (
+        <Modal 
+          title={modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : "Terms of Service"} 
+          onClose={() => setModalContent(null)}
+        >
+          {modalContent === 'about' && (
+            <>
+              <p className="mb-4">lumnr is a minimalist digital workspace designed to remove distractions and let your ideas shine.</p>
+              <p className="mb-4">Built with a focus on speed and simplicity, it provides a clean slate for your daily thoughts, journals, or code snippets.</p>
+              <p className="opacity-50 text-[10px] uppercase tracking-widest mt-8">Version 1.2.0 • Focus First</p>
+            </>
+          )}
+          {modalContent === 'privacy' && (
+            <>
+              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays with you.</p>
+              <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
+              <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
+            </>
+          )}
+          {modalContent === 'terms' && (
+            <>
+              <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
+              <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
+            </>
+          )}
         </Modal>
       )}
 
