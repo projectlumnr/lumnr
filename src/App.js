@@ -19,7 +19,8 @@ import {
   X,
   Sun,
   Moon,
-  Coffee
+  Coffee,
+  Heart
 } from 'lucide-react';
 
 const App = () => {
@@ -362,7 +363,11 @@ const App = () => {
                 <Coffee size={14} /> Support the Project
               </a>
 
-              <p className="opacity-50 text-[10px] uppercase tracking-widest mt-8">Version 1.2.0 • Focus First</p>
+              <div className="flex items-center justify-center gap-1.5 opacity-50 text-[10px] uppercase tracking-widest mt-8">
+                <span>Made with</span>
+                <Heart size={10} className="text-red-500 fill-current" />
+                <span>by Aayaam</span>
+              </div>
             </div>
           )}
           {modalContent === 'privacy' && (
