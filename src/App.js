@@ -70,12 +70,11 @@ const App = () => {
             <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 ease-in-out border-r border-[#1f1f1f] flex flex-col overflow-hidden bg-[#0a0a0a]`}>
                 <div className="p-5 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
-                        {/* Minimal Pencil Logo */}
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
-                            <path d="M12 19L19 12L22 15L15 22L12 19Z" fill="currentColor" fillOpacity="0.2"/>
-                            <path d="M18 2L22 6L9 19L5 15L18 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-                            <path d="M2 22L5 21L3 19L2 22Z" fill="currentColor"/>
-                            <path d="M2 22L5 21M2 22L3 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        {/* New Minimalist Geometric Pencil Logo */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+                            <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
+                            <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         <span className="font-medium tracking-tighter text-lg text-white">lumnr</span>
                     </div>
