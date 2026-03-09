@@ -150,7 +150,7 @@ const App = () => {
   // Custom Modal Component
   const Modal = ({ title, children, onClose }) => (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 animate-in">
-      <div className={`${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'} border w-full max-w-lg rounded-xl overflow-hidden shadow-2xl transition-colors duration-300`}>
+      <div className={`${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'} border w-full max-w-lg rounded-xl overflow-hidden shadow-2xl`}>
         <div className={`flex items-center justify-between p-5 border-b ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-100'}`}>
           <h2 className={`text-sm font-semibold uppercase tracking-widest ${theme === 'dark' ? 'text-white' : 'text-zinc-900'}`}>{title}</h2>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-800 transition-colors">
@@ -179,10 +179,10 @@ const App = () => {
   return (
     <div className={`flex h-screen font-sans theme-transition ${themeClasses}`}>
       {/* Sidebar */}
-      <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-all duration-300 ease-in-out border-r flex flex-col overflow-hidden theme-transition ${sidebarClasses}`}>
+      <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} transition-[width] duration-500 ease-in-out border-r flex flex-col overflow-hidden ${sidebarClasses}`}>
         <div className="p-5 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={theme === 'dark' ? 'text-white' : 'text-black'}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>
               <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
               <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -202,7 +202,7 @@ const App = () => {
               placeholder="Search thoughts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full border rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none transition-all ${inputClasses}`}
+              className={`w-full border rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none ${inputClasses}`}
             />
           </div>
         </div>
@@ -212,7 +212,7 @@ const App = () => {
             <div
               key={note.id}
               onClick={() => setActiveNoteId(note.id)}
-              className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-200 ${
+              className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-300 ${
                 activeNoteId === note.id 
                   ? (theme === 'dark' ? 'bg-[#111] text-white' : 'bg-zinc-100 text-black') 
                   : (theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500')
@@ -252,15 +252,15 @@ const App = () => {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col relative theme-transition">
+      <main className="flex-1 flex flex-col relative">
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 border border-l-0 rounded-r-md transition-all ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f] text-zinc-500 hover:text-white' : 'bg-white border-zinc-200 text-zinc-400 hover:text-black'}`}
+          className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1 border border-l-0 rounded-r-md transition-all duration-500 ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f] text-zinc-500 hover:text-white' : 'bg-white border-zinc-200 text-zinc-400 hover:text-black'}`}
         >
           <ChevronRight size={16} />
         </button>
 
-        <header className={`h-14 border-b flex items-center justify-between px-6 theme-transition ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
+        <header className={`h-14 border-b flex items-center justify-between px-6 ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
           <div className="flex items-center gap-4 text-[11px] text-zinc-400 uppercase tracking-widest">
             <span className="flex items-center gap-1.5">
               <Clock size={12} strokeWidth={1.5} />
@@ -274,7 +274,7 @@ const App = () => {
           
           <div className="flex items-center gap-3">
             <div className="relative" ref={shareMenuRef}>
-              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-colors px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
+              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
                 <Share2 size={12} /> Share
               </button>
               {shareMenuOpen && (
@@ -324,13 +324,13 @@ const App = () => {
                 value={activeNote.title}
                 onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
                 placeholder="Untitled"
-                className={`w-full bg-transparent text-4xl font-semibold tracking-tight focus:outline-none theme-transition ${theme === 'dark' ? 'text-white placeholder:text-zinc-800' : 'text-zinc-900 placeholder:text-zinc-200'}`}
+                className={`w-full bg-transparent text-4xl font-semibold tracking-tight focus:outline-none ${theme === 'dark' ? 'text-white placeholder:text-zinc-800' : 'text-zinc-900 placeholder:text-zinc-200'}`}
               />
               <textarea
                 value={activeNote.content}
                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
                 placeholder="Write your thoughts..."
-                className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] theme-transition ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
+                className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
               />
             </div>
           ) : (
@@ -357,7 +357,7 @@ const App = () => {
                 href="https://ko-fi.com/lumnr" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className={`flex items-center justify-center gap-2 w-full py-3 rounded-lg text-[10px] uppercase tracking-[0.15em] font-bold transition-all duration-300 ${theme === 'dark' ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'}`}
+                className={`flex items-center justify-center gap-2 w-full py-3 rounded-lg text-[10px] uppercase tracking-[0.15em] font-bold transition-all ${theme === 'dark' ? 'bg-white text-black hover:bg-zinc-200' : 'bg-black text-white hover:bg-zinc-800'}`}
               >
                 <Coffee size={14} /> Support the Project
               </a>
@@ -382,13 +382,23 @@ const App = () => {
       )}
 
       <style>{`
-        .theme-transition {
-          transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-                      color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Global theme transition rule to ensure everything moves at once */
+        .theme-transition * {
+          transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
+                      color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                      fill 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                      stroke 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
+        
+        /* Base transition for the container */
+        .theme-transition {
+          transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(4px); }
           to { opacity: 1; transform: translateY(0); }
