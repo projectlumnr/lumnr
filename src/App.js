@@ -28,7 +28,9 @@ import {
   Coffee,
   Heart,
   Pin,
-  PinOff
+  PinOff,
+  RotateCcw,
+  Trash
 } from 'lucide-react';
 
 const App = () => {
@@ -36,18 +38,28 @@ const App = () => {
   const [notes, setNotes] = useState(() => {
     if (typeof window === 'undefined') return [];
     const saved = localStorage.getItem('lumnr_notes');
-    return saved ? JSON.parse(saved) : [{
+    let parsed = saved ? JSON.parse(saved) : [{
       id: '1',
       title: 'Welcome to lumnr',
       content: 'lumnr is a minimal digital notebook designed for focus.\n\nEverything you write is saved locally in your browser. Start typing to begin your journey.',
       updatedAt: Date.now(),
-      pinned: false
+      pinned: false,
+      deletedAt: null
     }];
+
+    // Auto-purge notes older than 30 days from trash
+    const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000;
+    const now = Date.now();
+    return parsed.filter(note => {
+      if (!note.deletedAt) return true;
+      return (now - note.deletedAt) < thirtyDaysInMs;
+    });
   });
 
-  const [activeNoteId, setActiveNoteId] = useState(notes[0]?.id);
+  const [activeNoteId, setActiveNoteId] = useState(notes.find(n => !n.deletedAt)?.id);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showTrash, setShowTrash] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (typeof window === 'undefined') return 'dark';
     return localStorage.getItem('lumnr_theme') || 'dark';
@@ -62,7 +74,7 @@ const App = () => {
   const moreMenuRef = useRef(null);
   const settingsRef = useRef(null);
   
-  const activeNote = notes.find(n => n.id === activeNoteId) || notes[0];
+  const activeNote = notes.find(n => n.id === activeNoteId);
 
   // Persistence
   useEffect(() => {
@@ -95,10 +107,12 @@ const App = () => {
       title: '',
       content: '',
       updatedAt: Date.now(),
-      pinned: false
+      pinned: false,
+      deletedAt: null
     };
     setNotes([newNote, ...notes]);
     setActiveNoteId(newNote.id);
+    setShowTrash(false);
   };
 
   const updateNote = (id, fields) => {
@@ -106,9 +120,8 @@ const App = () => {
       const updated = prev.map(note => 
         note.id === id ? { ...note, ...fields, updatedAt: Date.now() } : note
       );
-      // Sort: Pinned first, then by updatedAt
       return updated.sort((a, b) => {
-        if (a.pinned !== b.pinned) return b.pinned ? 1 : -1;
+        if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
@@ -121,18 +134,37 @@ const App = () => {
         note.id === id ? { ...note, pinned: !note.pinned } : note
       );
       return updated.sort((a, b) => {
-        if (a.pinned !== b.pinned) return b.pinned ? 1 : -1;
+        if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
   };
 
-  const deleteNote = (id, e) => {
+  const moveNoteToTrash = (id, e) => {
+    e.stopPropagation();
+    setNotes(prev => prev.map(note => 
+      note.id === id ? { ...note, deletedAt: Date.now(), pinned: false } : note
+    ));
+    if (activeNoteId === id) {
+      const nextNote = notes.find(n => n.id !== id && !n.deletedAt);
+      setActiveNoteId(nextNote ? nextNote.id : null);
+    }
+  };
+
+  const restoreNote = (id, e) => {
+    e.stopPropagation();
+    setNotes(prev => prev.map(note => 
+      note.id === id ? { ...note, deletedAt: null } : note
+    ));
+    setActiveNoteId(id);
+  };
+
+  const permanentlyDeleteNote = (id, e) => {
     e.stopPropagation();
     const filtered = notes.filter(n => n.id !== id);
     setNotes(filtered);
-    if (activeNoteId === id && filtered.length > 0) {
-      setActiveNoteId(filtered[0].id);
+    if (activeNoteId === id) {
+      setActiveNoteId(filtered.length > 0 ? filtered[0].id : null);
     }
   };
 
@@ -170,10 +202,12 @@ const App = () => {
     setShareMenuOpen(false);
   };
 
-  const filteredNotes = notes.filter(n => 
-    n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    n.content.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredNotes = notes.filter(n => {
+    const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         n.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSection = showTrash ? !!n.deletedAt : !n.deletedAt;
+    return matchesSearch && matchesSection;
+  });
 
   const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
   const charCount = activeNote?.content.length || 0;
@@ -225,7 +259,7 @@ const App = () => {
           </button>
         </div>
 
-        <div className="px-4 mb-4">
+        <div className="px-4 mb-4 space-y-2">
           <div className="relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={14} />
             <input 
@@ -236,44 +270,78 @@ const App = () => {
               className={`w-full border rounded-md py-1.5 pl-9 pr-3 text-sm focus:outline-none ${inputClasses}`}
             />
           </div>
+          
+          <div className={`flex gap-1 p-1 rounded-lg border ${theme === 'dark' ? 'border-[#1f1f1f] bg-black/40' : 'border-zinc-100 bg-zinc-50'}`}>
+            <button 
+              onClick={() => setShowTrash(false)}
+              className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash ? (theme === 'dark' ? 'bg-[#1f1f1f] text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-zinc-500 hover:text-zinc-700'}`}
+            >
+              <PenLine size={12} /> Notes
+            </button>
+            <button 
+              onClick={() => setShowTrash(true)}
+              className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${showTrash ? (theme === 'dark' ? 'bg-[#1f1f1f] text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-zinc-500 hover:text-zinc-700'}`}
+            >
+              <Trash size={12} /> Trash
+            </button>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto px-2 space-y-0.5 scrollbar-hide">
-          {filteredNotes.map(note => (
-            <div
-              key={note.id}
-              onClick={() => setActiveNoteId(note.id)}
-              className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-300 ${
-                activeNoteId === note.id 
-                  ? (theme === 'dark' ? 'bg-[#111] text-white' : 'bg-zinc-100 text-black') 
-                  : (theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500')
-              }`}
-            >
-              <div className="flex justify-between items-start mb-0.5">
-                <div className="flex items-center gap-2 overflow-hidden">
-                  {note.pinned && <Pin size={10} className="flex-shrink-0 text-zinc-500 fill-current" />}
-                  <span className={`text-sm font-medium truncate ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
-                    {note.title || 'Untitled'}
-                  </span>
-                </div>
-                <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={(e) => togglePin(note.id, e)} className={`p-1 transition-colors ${note.pinned ? 'text-zinc-300' : 'text-zinc-500 hover:text-zinc-300'}`}>
-                    {note.pinned ? <PinOff size={12} /> : <Pin size={12} />}
-                  </button>
-                  <button onClick={(e) => deleteNote(note.id, e)} className="p-1 text-zinc-500 hover:text-red-400 transition-colors">
-                    <Trash2 size={12} />
-                  </button>
-                </div>
-              </div>
-              <span className="text-[11px] text-zinc-500 line-clamp-1 truncate uppercase tracking-wider font-mono">
-                {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
-              </span>
+          {filteredNotes.length === 0 ? (
+            <div className="mt-8 text-center text-[10px] uppercase tracking-widest text-zinc-500 opacity-50">
+              {showTrash ? "Trash is empty" : "No notes found"}
             </div>
-          ))}
+          ) : (
+            filteredNotes.map(note => (
+              <div
+                key={note.id}
+                onClick={() => setActiveNoteId(note.id)}
+                className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-300 ${
+                  activeNoteId === note.id 
+                    ? (theme === 'dark' ? 'bg-[#111] text-white' : 'bg-zinc-100 text-black') 
+                    : (theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500')
+                }`}
+              >
+                <div className="flex justify-between items-start mb-0.5">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    {note.pinned && <Pin size={10} className="flex-shrink-0 text-zinc-500 fill-current" />}
+                    <span className={`text-sm font-medium truncate ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
+                      {note.title || 'Untitled'}
+                    </span>
+                  </div>
+                  <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    {showTrash ? (
+                      <>
+                        <button onClick={(e) => restoreNote(note.id, e)} className="p-1 text-zinc-500 hover:text-blue-400 transition-colors" title="Restore">
+                          <RotateCcw size={12} />
+                        </button>
+                        <button onClick={(e) => permanentlyDeleteNote(note.id, e)} className="p-1 text-zinc-500 hover:text-red-400 transition-colors" title="Delete Permanently">
+                          <Trash2 size={12} />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={(e) => togglePin(note.id, e)} className={`p-1 transition-colors ${note.pinned ? 'text-zinc-300' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                          {note.pinned ? <PinOff size={12} /> : <Pin size={12} />}
+                        </button>
+                        <button onClick={(e) => moveNoteToTrash(note.id, e)} className="p-1 text-zinc-500 hover:text-red-400 transition-colors">
+                          <Trash size={12} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <span className="text-[11px] text-zinc-500 line-clamp-1 truncate uppercase tracking-wider font-mono">
+                  {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                </span>
+              </div>
+            ))
+          )}
         </div>
 
         <div className={`p-4 border-t text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
-          <span>{notes.length} Docs</span>
+          <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
           <div ref={settingsRef}>
             <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-800'}`}>
               <Settings size={14} />
@@ -309,30 +377,38 @@ const App = () => {
             <span>{wordCount} words</span>
             <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
             <span>{charCount} characters</span>
+            {activeNote?.deletedAt && (
+              <>
+                <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
+                <span className="text-red-400">Archived Document</span>
+              </>
+            )}
           </div>
           
           <div className="flex items-center gap-3">
-            <div className="relative" ref={shareMenuRef}>
-              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
-                <Share2 size={12} /> Share
-              </button>
-              {shareMenuOpen && (
-                <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
-                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                    <Download size={12} /> Download .txt
-                  </button>
-                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
-                    <Copy size={12} /> Copy Text
-                  </button>
-                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                    <Twitter size={12} /> X (Twitter)
-                  </button>
-                  <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                    <ExternalLink size={12} /> WhatsApp
-                  </button>
-                </div>
-              )}
-            </div>
+            {!activeNote?.deletedAt && (
+              <div className="relative" ref={shareMenuRef}>
+                <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
+                  <Share2 size={12} /> Share
+                </button>
+                {shareMenuOpen && (
+                  <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                    <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                      <Download size={12} /> Download .txt
+                    </button>
+                    <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
+                      <Copy size={12} /> Copy Text
+                    </button>
+                    <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                      <Twitter size={12} /> X (Twitter)
+                    </button>
+                    <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                      <ExternalLink size={12} /> WhatsApp
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="relative" ref={moreMenuRef}>
               <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'}`}>
@@ -357,18 +433,20 @@ const App = () => {
 
         <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto scrollbar-hide">
           {activeNote ? (
-            <div className="space-y-10 animate-in">
+            <div className={`space-y-10 animate-in ${activeNote.deletedAt ? 'opacity-50 pointer-events-none' : ''}`}>
               <input
                 type="text"
                 value={activeNote.title}
                 onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
                 placeholder="Untitled"
+                disabled={!!activeNote.deletedAt}
                 className={`w-full bg-transparent text-4xl font-semibold tracking-tight focus:outline-none ${theme === 'dark' ? 'text-white placeholder:text-zinc-800' : 'text-zinc-900 placeholder:text-zinc-200'}`}
               />
               <textarea
                 value={activeNote.content}
                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
                 placeholder="Write your thoughts..."
+                disabled={!!activeNote.deletedAt}
                 className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
               />
             </div>
