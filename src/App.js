@@ -1,3 +1,9 @@
+/* PROJECT: Lumnr (v1.2 - Stable)
+  DESCRIPTION: Minimalist digital notebook with local persistence.
+  TECH STACK: React, Tailwind CSS, Lucide Icons.
+  STORAGE: Browser localStorage.
+*/
+
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Plus, 
@@ -24,7 +30,7 @@ import {
 } from 'lucide-react';
 
 const App = () => {
-  // Initialize state with safety checks for SSR/Build environments
+  // Initialize state with safety checks
   const [notes, setNotes] = useState(() => {
     if (typeof window === 'undefined') return [];
     const saved = localStorage.getItem('lumnr_notes');
@@ -387,7 +393,7 @@ const App = () => {
       )}
 
       <style>{`
-        /* Global theme transition rule to ensure everything moves at once */
+        /* Global theme transition rule */
         .theme-transition * {
           transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
                       color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
@@ -396,7 +402,6 @@ const App = () => {
                       stroke 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
         
-        /* Base transition for the container */
         .theme-transition {
           transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
