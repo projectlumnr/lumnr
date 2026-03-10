@@ -30,7 +30,8 @@ import {
   Pin,
   PinOff,
   RotateCcw,
-  Trash
+  Trash,
+  Palette
 } from 'lucide-react';
 
 const App = () => {
@@ -64,6 +65,11 @@ const App = () => {
     if (typeof window === 'undefined') return 'dark';
     return localStorage.getItem('lumnr_theme') || 'dark';
   });
+
+  const [accentColor, setAccentColor] = useState(() => {
+    if (typeof window === 'undefined') return 'zinc';
+    return localStorage.getItem('lumnr_accent') || 'zinc';
+  });
   
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -85,6 +91,10 @@ const App = () => {
     localStorage.setItem('lumnr_theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    localStorage.setItem('lumnr_accent', accentColor);
+  }, [accentColor]);
+
   // Click Outside Handlers
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -98,7 +108,6 @@ const App = () => {
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-    setSettingsOpen(false);
   };
 
   const createNote = () => {
@@ -212,6 +221,35 @@ const App = () => {
   const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
   const charCount = activeNote?.content.length || 0;
 
+  // Accents Configuration
+  const accents = {
+    zinc: {
+      light: 'bg-zinc-100 text-black',
+      dark: 'bg-[#111] text-white',
+      dot: 'bg-zinc-500',
+    },
+    sage: {
+      light: 'bg-emerald-50 text-emerald-900',
+      dark: 'bg-emerald-950/40 text-emerald-100',
+      dot: 'bg-emerald-500',
+    },
+    amber: {
+      light: 'bg-amber-50 text-amber-900',
+      dark: 'bg-amber-950/40 text-amber-100',
+      dot: 'bg-amber-500',
+    },
+    blue: {
+      light: 'bg-blue-50 text-blue-900',
+      dark: 'bg-blue-950/40 text-blue-100',
+      dot: 'bg-blue-500',
+    }
+  };
+
+  const getAccentClass = (isActive) => {
+    if (!isActive) return theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500';
+    return theme === 'dark' ? accents[accentColor].dark : accents[accentColor].light;
+  };
+
   // Custom Modal Component
   const Modal = ({ title, children, onClose }) => (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 animate-in">
@@ -274,7 +312,7 @@ const App = () => {
           <div className={`flex gap-1 p-1 rounded-lg border ${theme === 'dark' ? 'border-[#1f1f1f] bg-black/40' : 'border-zinc-100 bg-zinc-50'}`}>
             <button 
               onClick={() => setShowTrash(false)}
-              className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash ? (theme === 'dark' ? 'bg-[#1f1f1f] text-white shadow-sm' : 'bg-white text-black shadow-sm') : 'text-zinc-500 hover:text-zinc-700'}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash ? getAccentClass(true) + ' shadow-sm' : 'text-zinc-500 hover:text-zinc-700'}`}
             >
               <PenLine size={12} /> Notes
             </button>
@@ -297,16 +335,12 @@ const App = () => {
               <div
                 key={note.id}
                 onClick={() => setActiveNoteId(note.id)}
-                className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-300 ${
-                  activeNoteId === note.id 
-                    ? (theme === 'dark' ? 'bg-[#111] text-white' : 'bg-zinc-100 text-black') 
-                    : (theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500')
-                }`}
+                className={`group flex flex-col p-3 rounded-md cursor-pointer transition-all duration-300 ${getAccentClass(activeNoteId === note.id)}`}
               >
                 <div className="flex justify-between items-start mb-0.5">
                   <div className="flex items-center gap-2 overflow-hidden">
-                    {note.pinned && <Pin size={10} className="flex-shrink-0 text-zinc-500 fill-current" />}
-                    <span className={`text-sm font-medium truncate ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
+                    {note.pinned && <Pin size={10} className={`flex-shrink-0 fill-current ${activeNoteId === note.id ? '' : 'text-zinc-500'}`} />}
+                    <span className={`text-sm font-medium truncate ${activeNoteId === note.id ? '' : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
                       {note.title || 'Untitled'}
                     </span>
                   </div>
@@ -322,7 +356,7 @@ const App = () => {
                       </>
                     ) : (
                       <>
-                        <button onClick={(e) => togglePin(note.id, e)} className={`p-1 transition-colors ${note.pinned ? 'text-zinc-300' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                        <button onClick={(e) => togglePin(note.id, e)} className={`p-1 transition-colors ${note.pinned ? (activeNoteId === note.id ? 'text-current' : 'text-zinc-300') : 'text-zinc-500 hover:text-zinc-300'}`}>
                           {note.pinned ? <PinOff size={12} /> : <Pin size={12} />}
                         </button>
                         <button onClick={(e) => moveNoteToTrash(note.id, e)} className="p-1 text-zinc-500 hover:text-red-400 transition-colors">
@@ -332,7 +366,7 @@ const App = () => {
                     )}
                   </div>
                 </div>
-                <span className="text-[11px] text-zinc-500 line-clamp-1 truncate uppercase tracking-wider font-mono">
+                <span className={`text-[11px] line-clamp-1 truncate uppercase tracking-wider font-mono ${activeNoteId === note.id ? 'opacity-70' : 'text-zinc-500'}`}>
                   {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
                 </span>
               </div>
@@ -347,11 +381,27 @@ const App = () => {
               <Settings size={14} />
             </button>
             {settingsOpen && (
-              <div className={`absolute bottom-12 right-0 w-44 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+              <div className={`absolute bottom-12 right-0 w-56 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
                 <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                   {theme === 'dark' ? <Sun size={12} /> : <Moon size={12} />}
                   {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
                 </button>
+                
+                <div className={`mx-4 my-2 border-t pt-3 flex flex-col gap-2 ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-100'}`}>
+                  <div className="flex items-center gap-2 text-[9px] text-zinc-500 font-bold tracking-[0.2em]">
+                    <Palette size={10} /> Accent Color
+                  </div>
+                  <div className="flex gap-2">
+                    {Object.keys(accents).map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setAccentColor(color)}
+                        className={`w-5 h-5 rounded-full transition-all ring-offset-2 ${theme === 'dark' ? 'ring-offset-black' : 'ring-offset-white'} ${accentColor === color ? 'ring-2 ring-zinc-500 scale-110' : 'hover:scale-105'} ${accents[color].dot}`}
+                        title={color.charAt(0).toUpperCase() + color.slice(1)}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
