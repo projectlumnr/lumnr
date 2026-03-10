@@ -26,7 +26,9 @@ import {
   Sun,
   Moon,
   Coffee,
-  Heart
+  Heart,
+  Pin,
+  PinOff
 } from 'lucide-react';
 
 const App = () => {
@@ -38,7 +40,8 @@ const App = () => {
       id: '1',
       title: 'Welcome to lumnr',
       content: 'lumnr is a minimal digital notebook designed for focus.\n\nEverything you write is saved locally in your browser. Start typing to begin your journey.',
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
+      pinned: false
     }];
   });
 
@@ -91,16 +94,37 @@ const App = () => {
       id: Date.now().toString(),
       title: '',
       content: '',
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
+      pinned: false
     };
     setNotes([newNote, ...notes]);
     setActiveNoteId(newNote.id);
   };
 
   const updateNote = (id, fields) => {
-    setNotes(prev => prev.map(note => 
-      note.id === id ? { ...note, ...fields, updatedAt: Date.now() } : note
-    ).sort((a, b) => b.updatedAt - a.updatedAt));
+    setNotes(prev => {
+      const updated = prev.map(note => 
+        note.id === id ? { ...note, ...fields, updatedAt: Date.now() } : note
+      );
+      // Sort: Pinned first, then by updatedAt
+      return updated.sort((a, b) => {
+        if (a.pinned !== b.pinned) return b.pinned ? 1 : -1;
+        return b.updatedAt - a.updatedAt;
+      });
+    });
+  };
+
+  const togglePin = (id, e) => {
+    e.stopPropagation();
+    setNotes(prev => {
+      const updated = prev.map(note => 
+        note.id === id ? { ...note, pinned: !note.pinned } : note
+      );
+      return updated.sort((a, b) => {
+        if (a.pinned !== b.pinned) return b.pinned ? 1 : -1;
+        return b.updatedAt - a.updatedAt;
+      });
+    });
   };
 
   const deleteNote = (id, e) => {
@@ -226,12 +250,20 @@ const App = () => {
               }`}
             >
               <div className="flex justify-between items-start mb-0.5">
-                <span className={`text-sm font-medium truncate pr-4 ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
-                  {note.title || 'Untitled'}
-                </span>
-                <button onClick={(e) => deleteNote(note.id, e)} className="opacity-0 group-hover:opacity-100 p-1 hover:text-red-400 transition-opacity">
-                  <Trash2 size={12} />
-                </button>
+                <div className="flex items-center gap-2 overflow-hidden">
+                  {note.pinned && <Pin size={10} className="flex-shrink-0 text-zinc-500 fill-current" />}
+                  <span className={`text-sm font-medium truncate ${activeNoteId === note.id ? (theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900') : (theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600')}`}>
+                    {note.title || 'Untitled'}
+                  </span>
+                </div>
+                <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={(e) => togglePin(note.id, e)} className={`p-1 transition-colors ${note.pinned ? 'text-zinc-300' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                    {note.pinned ? <PinOff size={12} /> : <Pin size={12} />}
+                  </button>
+                  <button onClick={(e) => deleteNote(note.id, e)} className="p-1 text-zinc-500 hover:text-red-400 transition-colors">
+                    <Trash2 size={12} />
+                  </button>
+                </div>
               </div>
               <span className="text-[11px] text-zinc-500 line-clamp-1 truncate uppercase tracking-wider font-mono">
                 {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
