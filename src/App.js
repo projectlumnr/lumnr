@@ -5,9 +5,6 @@
 */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { 
   Plus, 
   Trash2, 
@@ -34,15 +31,8 @@ import {
   PinOff,
   RotateCcw,
   Trash,
-  Palette,
-  Cloud
+  Palette
 } from 'lucide-react';
-
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-const firebaseApp = firebaseConfig ? initializeApp(firebaseConfig) : null;
-const auth = firebaseApp ? getAuth(firebaseApp) : null;
-const db = firebaseApp ? getFirestore(firebaseApp) : null;
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const App = () => {
   // Initialize state with safety checks
@@ -85,14 +75,10 @@ const App = () => {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
-  const [user, setUser] = useState(null);
-  const isRemoteUpdate = useRef(false);
   
   const shareMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
   const settingsRef = useRef(null);
-  const textareaRef = useRef(null);
-  const overlayRef = useRef(null);
   
   const activeNote = notes.find(n => n.id === activeNoteId);
 
@@ -100,51 +86,6 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('lumnr_notes', JSON.stringify(notes));
   }, [notes]);
-
-  // Cloud Auth & Sync
-  useEffect(() => {
-    if (!auth) return;
-    const initAuth = async () => {
-      try {
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
-        }
-      } catch(e) { console.error("Auth error", e); }
-    };
-    initAuth();
-    const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (!user || !db) return;
-    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'lumnrData', 'notes');
-    const unsubscribe = onSnapshot(docRef, (snapshot) => {
-      if (snapshot.exists() && snapshot.data().notes) {
-        isRemoteUpdate.current = true;
-        setNotes(snapshot.data().notes);
-      }
-    }, (err) => console.error(err));
-    return () => unsubscribe();
-  }, [user]);
-
-  useEffect(() => {
-    if (!user || !db) return;
-    if (isRemoteUpdate.current) {
-      isRemoteUpdate.current = false;
-      return;
-    }
-    const pushData = async () => {
-      try {
-        const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'lumnrData', 'notes');
-        await setDoc(docRef, { notes });
-      } catch(e) { console.error(e) }
-    };
-    const timeout = setTimeout(pushData, 1000);
-    return () => clearTimeout(timeout);
-  }, [notes, user]);
 
   useEffect(() => {
     localStorage.setItem('lumnr_theme', theme);
@@ -279,75 +220,6 @@ const App = () => {
 
   const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
   const charCount = activeNote?.content.length || 0;
-
-  const handleScroll = () => {
-    if (textareaRef.current && overlayRef.current) {
-      overlayRef.current.scrollTop = textareaRef.current.scrollTop;
-      overlayRef.current.scrollLeft = textareaRef.current.scrollLeft;
-    }
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      const textarea = e.target;
-      const { selectionStart, selectionEnd, value } = textarea;
-
-      // Only run auto-formatting if no text is actively highlighted
-      if (selectionStart !== selectionEnd) return;
-
-      const lastNewline = value.lastIndexOf('\n', selectionStart - 1);
-      const currentLine = value.substring(lastNewline + 1, selectionStart);
-
-      const emptyBulletMatch = currentLine.match(/^(\s*-\s+)$/);
-      const bulletMatch = currentLine.match(/^(\s*-\s+)(.*)$/);
-
-      if (emptyBulletMatch) {
-        // Hitting enter on an empty bullet: Escape the list
-        e.preventDefault();
-        const prefixLength = emptyBulletMatch[1].length;
-        const newValue = value.substring(0, selectionStart - prefixLength) + '\n' + value.substring(selectionStart);
-        
-        updateNote(activeNote.id, { content: newValue });
-        
-        // Restore cursor position
-        setTimeout(() => {
-          if (textareaRef.current) {
-            textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart - prefixLength + 1;
-          }
-        }, 0);
-      } else if (bulletMatch) {
-        // Hitting enter on a populated bullet: Continue the list
-        e.preventDefault();
-        const prefix = bulletMatch[1];
-        const newValue = value.substring(0, selectionStart) + '\n' + prefix + value.substring(selectionStart);
-        
-        updateNote(activeNote.id, { content: newValue });
-        
-        // Restore cursor position
-        setTimeout(() => {
-          if (textareaRef.current) {
-            textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart + 1 + prefix.length;
-          }
-        }, 0);
-      }
-    }
-  };
-
-  const renderMarkdown = (text) => {
-    if (!text) return { __html: '' };
-    let html = text
-      // Basic sanitization
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      // Bold syntax (Dims the asterisks, bolds the text)
-      .replace(/(\*\*)(.*?)(\*\*)/g, '<span class="opacity-40">$1</span><strong class="font-bold">$2</strong><span class="opacity-40">$3</span>')
-      // Headings (Uses boldness and color rather than size to keep cursor alignment perfect)
-      .replace(/(^###\s)(.*$)/gim, `<span class="opacity-40">$1</span><span class="font-bold ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}">$2</span>`)
-      .replace(/(^##\s)(.*$)/gim, `<span class="opacity-40">$1</span><span class="font-extrabold ${theme === 'dark' ? 'text-zinc-50' : 'text-black'}">$2</span>`)
-      .replace(/(^#\s)(.*$)/gim, `<span class="opacity-40">$1</span><span class="font-black ${theme === 'dark' ? 'text-white' : 'text-black'}">$2</span>`)
-      // Bulleted lists
-      .replace(/(^-\s)(.*$)/gim, `<span class="opacity-40 font-bold">$1</span><span class="font-medium ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}">$2</span>`);
-    return { __html: html };
-  };
 
   // Accents Configuration
   const accents = {
@@ -503,14 +375,7 @@ const App = () => {
         </div>
 
         <div className={`p-4 border-t text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
-          <div className="flex items-center gap-3">
-            <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
-            {user && (
-              <span className="flex items-center gap-1 opacity-60" title={`Syncing securely as ${user.uid.slice(0, 6)}...`}>
-                <Cloud size={10} /> Synced
-              </span>
-            )}
-          </div>
+          <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
           <div ref={settingsRef}>
             <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-800'}`}>
               <Settings size={14} />
@@ -572,29 +437,27 @@ const App = () => {
           
           <div className="flex items-center gap-3">
             {!activeNote?.deletedAt && (
-              <>
-                <div className="relative" ref={shareMenuRef}>
-                  <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
-                    <Share2 size={12} /> Share
-                  </button>
-                  {shareMenuOpen && (
-                    <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
-                      <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                        <Download size={12} /> Download .txt
-                      </button>
-                      <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
-                        <Copy size={12} /> Copy Text
-                      </button>
-                      <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                        <Twitter size={12} /> X (Twitter)
-                      </button>
-                      <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                        <ExternalLink size={12} /> WhatsApp
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
+              <div className="relative" ref={shareMenuRef}>
+                <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
+                  <Share2 size={12} /> Share
+                </button>
+                {shareMenuOpen && (
+                  <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                    <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                      <Download size={12} /> Download .txt
+                    </button>
+                    <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
+                      <Copy size={12} /> Copy Text
+                    </button>
+                    <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                      <Twitter size={12} /> X (Twitter)
+                    </button>
+                    <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                      <ExternalLink size={12} /> WhatsApp
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
 
             <div className="relative" ref={moreMenuRef}>
@@ -629,25 +492,13 @@ const App = () => {
                 disabled={!!activeNote.deletedAt}
                 className={`w-full bg-transparent text-4xl font-semibold tracking-tight focus:outline-none ${theme === 'dark' ? 'text-white placeholder:text-zinc-800' : 'text-zinc-900 placeholder:text-zinc-200'}`}
               />
-              <div className="relative w-full h-full min-h-[60vh]">
-                <div 
-                  ref={overlayRef}
-                  className={`absolute inset-0 w-full h-full bg-transparent text-lg leading-relaxed whitespace-pre-wrap break-words overflow-hidden pointer-events-none ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-700'} ${!activeNote.content ? (theme === 'dark' ? 'text-zinc-800' : 'text-zinc-200') : ''}`}
-                  dangerouslySetInnerHTML={activeNote.content ? renderMarkdown(activeNote.content) : { __html: 'Write your thoughts...' }}
-                  aria-hidden="true"
-                />
-                <textarea
-                  ref={textareaRef}
-                  value={activeNote.content}
-                  onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
-                  onScroll={handleScroll}
-                  onKeyDown={handleKeyDown}
-                  disabled={!!activeNote.deletedAt}
-                  spellCheck="false"
-                  className={`absolute inset-0 w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none overflow-y-auto ${theme === 'dark' ? 'caret-white' : 'caret-black'}`}
-                  style={{ color: 'transparent', WebkitTextFillColor: 'transparent' }}
-                />
-              </div>
+              <textarea
+                value={activeNote.content}
+                onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
+                placeholder="Write your thoughts..."
+                disabled={!!activeNote.deletedAt}
+                className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
+              />
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-zinc-700 space-y-4">
@@ -687,30 +538,21 @@ const App = () => {
           )}
           {modalContent === 'privacy' && (
             <>
-              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data privacy and security.</p>
-              <p className="mb-4"><strong>Storage & Sync:</strong> Lumnr utilizes both local device storage and secure cloud synchronization to ensure your workspace remains seamless across your devices.</p>
-              <p className="mb-4"><strong>Data Usage:</strong> Your notes are fundamentally private. We do not track your keystrokes, analyze your personal content, or sell your information to third parties.</p>
+              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays with you.</p>
+              <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
+              <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
             </>
           )}
           {modalContent === 'terms' && (
             <>
-              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Terms of Service</p>
-              <p className="mb-4"><strong>Service Availability:</strong> By using Lumnr, you acknowledge that the application is provided on an "as-is" and "as-available" basis, without warranties of any kind.</p>
-              <p className="mb-4"><strong>Data Responsibility:</strong> While we provide cloud synchronization, you remain responsible for maintaining backups of your critical documents using the built-in export features. Clearing your browser data without an active synced session may result in local data loss.</p>
+              <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
+              <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
             </>
           )}
         </Modal>
       )}
 
       <style>{`
-        /* Styles from index.css */
-        body {
-          margin: 0;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          background-color: black;
-        }
-
         /* Global theme transition rule */
         .theme-transition * {
           transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
