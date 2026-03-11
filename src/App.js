@@ -5,6 +5,9 @@
 */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { 
   Plus, 
   Trash2, 
@@ -31,8 +34,15 @@ import {
   PinOff,
   RotateCcw,
   Trash,
-  Palette
+  Palette,
+  Cloud
 } from 'lucide-react';
+
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+const firebaseApp = firebaseConfig ? initializeApp(firebaseConfig) : null;
+const auth = firebaseApp ? getAuth(firebaseApp) : null;
+const db = firebaseApp ? getFirestore(firebaseApp) : null;
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const App = () => {
   // Initialize state with safety checks
@@ -75,6 +85,8 @@ const App = () => {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [user, setUser] = useState(null);
+  const isRemoteUpdate = useRef(false);
   
   const shareMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
@@ -86,6 +98,51 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('lumnr_notes', JSON.stringify(notes));
   }, [notes]);
+
+  // Cloud Auth & Sync
+  useEffect(() => {
+    if (!auth) return;
+    const initAuth = async () => {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch(e) { console.error("Auth error", e); }
+    };
+    initAuth();
+    const unsubscribe = onAuthStateChanged(auth, setUser);
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!user || !db) return;
+    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'lumnrData', 'notes');
+    const unsubscribe = onSnapshot(docRef, (snapshot) => {
+      if (snapshot.exists() && snapshot.data().notes) {
+        isRemoteUpdate.current = true;
+        setNotes(snapshot.data().notes);
+      }
+    }, (err) => console.error(err));
+    return () => unsubscribe();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user || !db) return;
+    if (isRemoteUpdate.current) {
+      isRemoteUpdate.current = false;
+      return;
+    }
+    const pushData = async () => {
+      try {
+        const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'lumnrData', 'notes');
+        await setDoc(docRef, { notes });
+      } catch(e) { console.error(e) }
+    };
+    const timeout = setTimeout(pushData, 1000);
+    return () => clearTimeout(timeout);
+  }, [notes, user]);
 
   useEffect(() => {
     localStorage.setItem('lumnr_theme', theme);
@@ -375,7 +432,14 @@ const App = () => {
         </div>
 
         <div className={`p-4 border-t text-[10px] text-zinc-500 uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-200'}`}>
-          <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
+          <div className="flex items-center gap-3">
+            <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
+            {user && (
+              <span className="flex items-center gap-1 opacity-60" title={`Syncing securely as ${user.uid.slice(0, 6)}...`}>
+                <Cloud size={10} /> Synced
+              </span>
+            )}
+          </div>
           <div ref={settingsRef}>
             <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-1 rounded-md transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-800'}`}>
               <Settings size={14} />
@@ -553,6 +617,14 @@ const App = () => {
       )}
 
       <style>{`
+        /* Styles from index.css */
+        body {
+          margin: 0;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          background-color: black;
+        }
+
         /* Global theme transition rule */
         .theme-transition * {
           transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
