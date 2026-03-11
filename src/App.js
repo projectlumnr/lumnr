@@ -91,6 +91,8 @@ const App = () => {
   const shareMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
   const settingsRef = useRef(null);
+  const textareaRef = useRef(null);
+  const overlayRef = useRef(null);
   
   const activeNote = notes.find(n => n.id === activeNoteId);
 
@@ -277,6 +279,75 @@ const App = () => {
 
   const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
   const charCount = activeNote?.content.length || 0;
+
+  const handleScroll = () => {
+    if (textareaRef.current && overlayRef.current) {
+      overlayRef.current.scrollTop = textareaRef.current.scrollTop;
+      overlayRef.current.scrollLeft = textareaRef.current.scrollLeft;
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      const textarea = e.target;
+      const { selectionStart, selectionEnd, value } = textarea;
+
+      // Only run auto-formatting if no text is actively highlighted
+      if (selectionStart !== selectionEnd) return;
+
+      const lastNewline = value.lastIndexOf('\n', selectionStart - 1);
+      const currentLine = value.substring(lastNewline + 1, selectionStart);
+
+      const emptyBulletMatch = currentLine.match(/^(\s*-\s+)$/);
+      const bulletMatch = currentLine.match(/^(\s*-\s+)(.*)$/);
+
+      if (emptyBulletMatch) {
+        // Hitting enter on an empty bullet: Escape the list
+        e.preventDefault();
+        const prefixLength = emptyBulletMatch[1].length;
+        const newValue = value.substring(0, selectionStart - prefixLength) + '\n' + value.substring(selectionStart);
+        
+        updateNote(activeNote.id, { content: newValue });
+        
+        // Restore cursor position
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart - prefixLength + 1;
+          }
+        }, 0);
+      } else if (bulletMatch) {
+        // Hitting enter on a populated bullet: Continue the list
+        e.preventDefault();
+        const prefix = bulletMatch[1];
+        const newValue = value.substring(0, selectionStart) + '\n' + prefix + value.substring(selectionStart);
+        
+        updateNote(activeNote.id, { content: newValue });
+        
+        // Restore cursor position
+        setTimeout(() => {
+          if (textareaRef.current) {
+            textareaRef.current.selectionStart = textareaRef.current.selectionEnd = selectionStart + 1 + prefix.length;
+          }
+        }, 0);
+      }
+    }
+  };
+
+  const renderMarkdown = (text) => {
+    if (!text) return { __html: '' };
+    let html = text
+      // Basic sanitization
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      // Bold syntax (Dims the asterisks, bolds the text)
+      .replace(/(\*\*)(.*?)(\*\*)/g, '<span class="opacity-40">$1</span><strong class="font-bold">$2</strong><span class="opacity-40">$3</span>')
+      // Headings (Uses boldness and color rather than size to keep cursor alignment perfect)
+      .replace(/(^###\s)(.*$)/gim, `<span class="opacity-40">$1</span><span class="font-bold ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}">$2</span>`)
+      .replace(/(^##\s)(.*$)/gim, `<span class="opacity-40">$1</span><span class="font-extrabold ${theme === 'dark' ? 'text-zinc-50' : 'text-black'}">$2</span>`)
+      .replace(/(^#\s)(.*$)/gim, `<span class="opacity-40">$1</span><span class="font-black ${theme === 'dark' ? 'text-white' : 'text-black'}">$2</span>`)
+      // Bulleted lists
+      .replace(/(^-\s)(.*$)/gim, `<span class="opacity-40 font-bold">$1</span><span class="font-medium ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}">$2</span>`);
+    return { __html: html };
+  };
 
   // Accents Configuration
   const accents = {
@@ -501,27 +572,29 @@ const App = () => {
           
           <div className="flex items-center gap-3">
             {!activeNote?.deletedAt && (
-              <div className="relative" ref={shareMenuRef}>
-                <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
-                  <Share2 size={12} /> Share
-                </button>
-                {shareMenuOpen && (
-                  <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
-                    <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                      <Download size={12} /> Download .txt
-                    </button>
-                    <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
-                      <Copy size={12} /> Copy Text
-                    </button>
-                    <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                      <Twitter size={12} /> X (Twitter)
-                    </button>
-                    <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
-                      <ExternalLink size={12} /> WhatsApp
-                    </button>
-                  </div>
-                )}
-              </div>
+              <>
+                <div className="relative" ref={shareMenuRef}>
+                  <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border ${theme === 'dark' ? 'text-zinc-400 hover:text-white bg-[#0a0a0a] border-[#1f1f1f]' : 'text-zinc-500 hover:text-black bg-white border-zinc-200'}`}>
+                    <Share2 size={12} /> Share
+                  </button>
+                  {shareMenuOpen && (
+                    <div className={`absolute right-0 top-10 w-48 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                      <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                        <Download size={12} /> Download .txt
+                      </button>
+                      <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
+                        <Copy size={12} /> Copy Text
+                      </button>
+                      <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                        <Twitter size={12} /> X (Twitter)
+                      </button>
+                      <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                        <ExternalLink size={12} /> WhatsApp
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
 
             <div className="relative" ref={moreMenuRef}>
@@ -556,13 +629,25 @@ const App = () => {
                 disabled={!!activeNote.deletedAt}
                 className={`w-full bg-transparent text-4xl font-semibold tracking-tight focus:outline-none ${theme === 'dark' ? 'text-white placeholder:text-zinc-800' : 'text-zinc-900 placeholder:text-zinc-200'}`}
               />
-              <textarea
-                value={activeNote.content}
-                onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
-                placeholder="Write your thoughts..."
-                disabled={!!activeNote.deletedAt}
-                className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
-              />
+              <div className="relative w-full h-full min-h-[60vh]">
+                <div 
+                  ref={overlayRef}
+                  className={`absolute inset-0 w-full h-full bg-transparent text-lg leading-relaxed whitespace-pre-wrap break-words overflow-hidden pointer-events-none ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-700'} ${!activeNote.content ? (theme === 'dark' ? 'text-zinc-800' : 'text-zinc-200') : ''}`}
+                  dangerouslySetInnerHTML={activeNote.content ? renderMarkdown(activeNote.content) : { __html: 'Write your thoughts...' }}
+                  aria-hidden="true"
+                />
+                <textarea
+                  ref={textareaRef}
+                  value={activeNote.content}
+                  onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
+                  onScroll={handleScroll}
+                  onKeyDown={handleKeyDown}
+                  disabled={!!activeNote.deletedAt}
+                  spellCheck="false"
+                  className={`absolute inset-0 w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none overflow-y-auto ${theme === 'dark' ? 'caret-white' : 'caret-black'}`}
+                  style={{ color: 'transparent', WebkitTextFillColor: 'transparent' }}
+                />
+              </div>
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-zinc-700 space-y-4">
@@ -602,15 +687,16 @@ const App = () => {
           )}
           {modalContent === 'privacy' && (
             <>
-              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays with you.</p>
-              <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
-              <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
+              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data privacy and security.</p>
+              <p className="mb-4"><strong>Storage & Sync:</strong> Lumnr utilizes both local device storage and secure cloud synchronization to ensure your workspace remains seamless across your devices.</p>
+              <p className="mb-4"><strong>Data Usage:</strong> Your notes are fundamentally private. We do not track your keystrokes, analyze your personal content, or sell your information to third parties.</p>
             </>
           )}
           {modalContent === 'terms' && (
             <>
-              <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
-              <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
+              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Terms of Service</p>
+              <p className="mb-4"><strong>Service Availability:</strong> By using Lumnr, you acknowledge that the application is provided on an "as-is" and "as-available" basis, without warranties of any kind.</p>
+              <p className="mb-4"><strong>Data Responsibility:</strong> While we provide cloud synchronization, you remain responsible for maintaining backups of your critical documents using the built-in export features. Clearing your browser data without an active synced session may result in local data loss.</p>
             </>
           )}
         </Modal>
