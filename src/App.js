@@ -553,6 +553,14 @@ const App = () => {
       )}
 
       <style>{`
+        /* Added from index.css */
+        body {
+          margin: 0;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          background-color: black;
+        }
+
         /* Global theme transition rule */
         .theme-transition * {
           transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), 
