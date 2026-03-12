@@ -36,6 +36,55 @@ import {
 } from 'lucide-react';
 
 // ==========================================
+// COMPONENT: Home / Landing Page
+// ==========================================
+const HomePage = ({ theme, onStart, toggleTheme }) => (
+  <div className="flex-1 w-full h-full flex flex-col items-center justify-center p-6 relative animate-in">
+    <button 
+      onClick={toggleTheme} 
+      className={`absolute top-6 right-6 p-2 rounded-md transition-colors ${theme === 'dark' ? 'text-zinc-500 hover:text-zinc-100 hover:bg-zinc-900' : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100'}`}
+      title="Toggle Theme"
+    >
+      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+    </button>
+    
+    <div className="max-w-lg w-full text-center space-y-8">
+      <div className="flex flex-col items-center justify-center gap-4 mb-4">
+        <div className={`p-5 rounded-2xl ${theme === 'dark' ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-200 shadow-sm'}`}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>
+            <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <h1 className={`text-5xl font-bold tracking-tighter ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>lumnr</h1>
+      </div>
+      
+      <p className={`text-lg leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>
+        A minimalist digital workspace designed to remove distractions and let your ideas shine.
+      </p>
+      
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+        <button 
+          onClick={onStart}
+          className={`w-full sm:w-auto px-8 py-3.5 rounded-lg font-semibold tracking-wider uppercase text-xs flex items-center justify-center gap-2 transition-all shadow-sm ${theme === 'dark' ? 'bg-zinc-100 text-zinc-900 hover:bg-white hover:scale-105' : 'bg-zinc-900 text-white hover:bg-black hover:scale-105'}`}
+        >
+          <PenLine size={16} /> Start Writing
+        </button>
+        <a 
+          href="https://ko-fi.com/lumnr" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={`w-full sm:w-auto px-8 py-3.5 rounded-lg font-semibold tracking-wider uppercase text-xs flex items-center justify-center gap-2 transition-all border ${theme === 'dark' ? 'border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white' : 'border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'}`}
+        >
+          <Coffee size={16} /> Support the Project
+        </a>
+      </div>
+    </div>
+  </div>
+);
+
+// ==========================================
 // COMPONENT: Reusable Modal Wrapper
 // ==========================================
 const Modal = ({ title, children, onClose, theme }) => (
@@ -443,6 +492,7 @@ const App = () => {
     return localStorage.getItem('lumnr_theme') || 'dark';
   });
   
+  const [showHome, setShowHome] = useState(true); // New state for Home Page
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -695,55 +745,65 @@ const App = () => {
   return (
     <div className={`flex h-screen font-sans theme-transition ${themeClasses}`}>
       
-      {/* 1. Mobile Overlay Background */}
-      {sidebarOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black/20 z-30" 
-          onClick={() => setSidebarOpen(false)}
+      {showHome ? (
+        <HomePage 
+          theme={theme} 
+          onStart={() => setShowHome(false)} 
+          toggleTheme={toggleTheme} 
         />
+      ) : (
+        <>
+          {/* 1. Mobile Overlay Background */}
+          {sidebarOpen && (
+            <div 
+              className="md:hidden fixed inset-0 bg-black/20 z-30" 
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
+          {/* 2. Sidebar Component */}
+          <Sidebar 
+            sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} theme={theme}
+            sidebarClasses={sidebarClasses} inputClasses={inputClasses}
+            createNote={createNote} searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+            showTrash={showTrash} setShowTrash={setShowTrash} filteredNotes={filteredNotes}
+            activeNoteId={activeNoteId} setActiveNoteId={setActiveNoteId} restoreNote={restoreNote}
+            permanentlyDeleteNote={permanentlyDeleteNote} togglePin={togglePin} moveNoteToTrash={moveNoteToTrash}
+            notes={notes} settingsRef={settingsRef} settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen}
+            toggleTheme={toggleTheme} setModalContent={setModalContent}
+          />
+
+          {/* 3. Main Interface */}
+          <main className="flex-1 flex flex-col relative">
+            <button 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-1 border border-l-0 rounded-r-lg transition-all duration-500 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800' : 'bg-white border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50'}`}
+            >
+              <ChevronRight size={16} />
+            </button>
+
+            <Header 
+              theme={theme} activeNote={activeNote} wordCount={wordCount} charCount={charCount}
+              readingTime={readingTime} isSaving={isSaving} handleToggleCheckbox={handleToggleCheckbox}
+              shareMenuRef={shareMenuRef} shareMenuOpen={shareMenuOpen} setShareMenuOpen={setShareMenuOpen}
+              downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
+              moreMenuRef={moreMenuRef} moreMenuOpen={moreMenuOpen} setMoreMenuOpen={setMoreMenuOpen}
+              setModalContent={setModalContent}
+            />
+
+            <Editor 
+              activeNote={activeNote} updateNote={updateNote} 
+              handleTextareaClick={handleTextareaClick} theme={theme} 
+            />
+          </main>
+
+          {/* 4. Popups Component */}
+          <ContentModals 
+            modalContent={modalContent} setModalContent={setModalContent} 
+            theme={theme} activeNote={activeNote} updateNote={updateNote} 
+          />
+        </>
       )}
-
-      {/* 2. Sidebar Component */}
-      <Sidebar 
-        sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} theme={theme}
-        sidebarClasses={sidebarClasses} inputClasses={inputClasses}
-        createNote={createNote} searchQuery={searchQuery} setSearchQuery={setSearchQuery}
-        showTrash={showTrash} setShowTrash={setShowTrash} filteredNotes={filteredNotes}
-        activeNoteId={activeNoteId} setActiveNoteId={setActiveNoteId} restoreNote={restoreNote}
-        permanentlyDeleteNote={permanentlyDeleteNote} togglePin={togglePin} moveNoteToTrash={moveNoteToTrash}
-        notes={notes} settingsRef={settingsRef} settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen}
-        toggleTheme={toggleTheme} setModalContent={setModalContent}
-      />
-
-      {/* 3. Main Interface */}
-      <main className="flex-1 flex flex-col relative">
-        <button 
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-1 border border-l-0 rounded-r-lg transition-all duration-500 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800' : 'bg-white border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50'}`}
-        >
-          <ChevronRight size={16} />
-        </button>
-
-        <Header 
-          theme={theme} activeNote={activeNote} wordCount={wordCount} charCount={charCount}
-          readingTime={readingTime} isSaving={isSaving} handleToggleCheckbox={handleToggleCheckbox}
-          shareMenuRef={shareMenuRef} shareMenuOpen={shareMenuOpen} setShareMenuOpen={setShareMenuOpen}
-          downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
-          moreMenuRef={moreMenuRef} moreMenuOpen={moreMenuOpen} setMoreMenuOpen={setMoreMenuOpen}
-          setModalContent={setModalContent}
-        />
-
-        <Editor 
-          activeNote={activeNote} updateNote={updateNote} 
-          handleTextareaClick={handleTextareaClick} theme={theme} 
-        />
-      </main>
-
-      {/* 4. Popups Component */}
-      <ContentModals 
-        modalContent={modalContent} setModalContent={setModalContent} 
-        theme={theme} activeNote={activeNote} updateNote={updateNote} 
-      />
 
       {/* Global CSS */}
       <style>{`
