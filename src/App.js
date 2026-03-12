@@ -53,7 +53,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
   const iconColor = isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]';
 
   return (
-    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] ${bgWrapper} ${textMain}`}>
+    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative animate-in font-['Quicksand',sans-serif] custom-pen-cursor ${bgWrapper} ${textMain}`}>
       
       {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
       <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
@@ -238,6 +238,7 @@ const Modal = ({ title, children, onClose, theme, isHome }) => {
 const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updateNote, isHome }) => {
   if (!modalContent) return null;
   const title = modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : modalContent === 'terms' ? "Terms of Service" : modalContent === 'history' ? "Version History" : "";
+  const isDark = theme === 'dark';
 
   return (
     <Modal title={title} onClose={() => setModalContent(null)} theme={theme} isHome={isHome}>
@@ -263,15 +264,36 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
       
       {modalContent === 'privacy' && (
         isHome ? (
-          <div className="flex flex-col items-center text-center space-y-6">
-            <div className={`p-6 rounded-full ${theme === 'dark' ? 'bg-[#ff8da1]/20' : 'bg-[#ff9ebd]/20'} animate-bounce-slow`}>
-              <ShieldCheck size={56} className={theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
+          <div className="flex flex-col items-center space-y-8 py-2">
+            <div className="relative">
+              <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#ff8da1]/10 border-[#ff8da1]/20' : 'bg-[#ff9ebd]/10 border-[#ff9ebd]/20'}`}>
+                <ShieldCheck size={64} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} strokeWidth={2.5} />
+              </div>
+              <div className="absolute -bottom-2 -right-2 animate-bounce-slow">
+                <Sparkles size={28} className="text-[#ffd700]" />
+              </div>
             </div>
-            <h3 className={`font-black text-3xl mb-2 ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>Privacy Magic ✨</h3>
-            <p className="font-bold opacity-80 leading-relaxed text-lg">Your digital sanctuary is perfectly safe. Everything lives directly in your browser's local memory. We don't use tracking cookies, we don't have servers, and your words belong entirely to you.</p>
-            <div className={`mt-4 w-full p-6 rounded-[2.5rem] border-2 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]' : 'border-[#ffe4e9] bg-[#fffcfd]'}`}>
-              <Cloud size={32} className={`mx-auto mb-2 ${theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'}`} />
-              <p className="font-black text-sm uppercase tracking-widest">100% Client-Side</p>
+            
+            <div className="text-center">
+              <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
+                Privacy Magic ✨
+              </h3>
+              <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Your thoughts are yours alone.</p>
+            </div>
+
+            <div className="grid gap-4 w-full">
+              <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
+                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Cloud size={18}/> No Servers</h4>
+                 <p className="text-sm opacity-80 font-bold leading-relaxed">Lumnr doesn't have a database. Everything you write stays safely on your device.</p>
+              </div>
+              <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
+                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Sparkles size={18}/> No Cookies</h4>
+                 <p className="text-sm opacity-80 font-bold leading-relaxed">We don't track your behavior, use analytics, or sell your data. Pure, simple focus.</p>
+              </div>
+            </div>
+
+            <div className="w-full text-center opacity-40 animate-fade-up delay-400">
+               <p className="text-xs font-black uppercase tracking-[0.2em]">Verified Privacy Focus</p>
             </div>
           </div>
         ) : (
@@ -291,15 +313,36 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 
       {modalContent === 'terms' && (
         isHome ? (
-          <div className="flex flex-col items-center text-center space-y-6">
-            <div className={`p-6 rounded-full ${theme === 'dark' ? 'bg-[#a6c9ff]/20' : 'bg-[#87cefa]/20'} animate-bounce-slow`}>
-              <FileText size={56} className={theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} />
+          <div className="flex flex-col items-center space-y-8 py-2">
+            <div className="relative">
+              <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#a6c9ff]/10 border-[#a6c9ff]/20' : 'bg-[#87cefa]/10 border-[#87cefa]/20'}`}>
+                <FileText size={64} className={theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} strokeWidth={2.5} />
+              </div>
+              <div className="absolute -top-2 -left-2 animate-bounce-slow">
+                <Star size={28} className="text-[#ffd700] fill-current" />
+              </div>
             </div>
-            <h3 className={`font-black text-3xl mb-2 ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>Friendly Rules 📜</h3>
-            <p className="font-bold opacity-80 leading-relaxed text-lg">Since your documents live safely in your browser, clearing your cache will delete your notes! Please use the download button to keep your own copies.</p>
-            <div className={`mt-4 w-full p-6 rounded-[2.5rem] border-2 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]' : 'border-[#ffe4e9] bg-[#fffcfd]'}`}>
-              <Star size={32} className={`mx-auto mb-2 text-[#ffd700]`} />
-              <p className="font-black text-sm uppercase tracking-widest">Provided "As Is" with love.</p>
+
+            <div className="text-center">
+              <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
+                Friendly Rules 📜
+              </h3>
+              <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Simple ways to keep your notes safe.</p>
+            </div>
+
+            <div className="grid gap-4 w-full">
+              <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
+                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Trash2 size={18}/> Cache Risk</h4>
+                 <p className="text-sm opacity-80 font-bold leading-relaxed">Since data is local, clearing browser history deletes notes! Back up using Export often.</p>
+              </div>
+              <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5]'}`}>
+                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><ShieldCheck size={18}/> Provided "As Is"</h4>
+                 <p className="text-sm opacity-80 font-bold leading-relaxed">We built this with love, but you are the guardian of your words. We aren't liable for data loss.</p>
+              </div>
+            </div>
+
+            <div className="w-full text-center opacity-40 animate-fade-up delay-400">
+               <p className="text-xs font-black uppercase tracking-[0.2em]">Simple & Transparent</p>
             </div>
           </div>
         ) : (
@@ -309,7 +352,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
               <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
               <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
             </div>
-            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#e2d5f2] border-[#d0c1e5]'}`}>
+            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
               <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
               <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
             </div>
@@ -922,6 +965,15 @@ const App = () => {
         .theme-transition { transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Custom Pen Cursor for Home Page */
+        .custom-pen-cursor {
+          cursor: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='%23ff6b8b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z'%3E%3C/path%3E%3C/svg%3E") 3 29, auto;
+        }
+        /* Ensure interactive elements keep standard pointer on home page */
+        .custom-pen-cursor button, .custom-pen-cursor a {
+          cursor: pointer;
+        }
 
         /* Mimu Aesthetic Background Gridlines with smooth transitions */
         .bg-grid-light {
