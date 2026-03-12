@@ -103,160 +103,209 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
       {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
       <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transform-gpu transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
-      {/* Floating Background Decors */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-20 left-[10%] animate-float-mimu opacity-60"><Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" /></div>
-        <div className="absolute top-40 right-[10%] animate-bounce-slow opacity-80"><Star size={56} className="text-[#ffd700]" fill="currentColor" /></div>
-        <div className="absolute bottom-40 left-[15%] animate-float-mimu opacity-70"><Sparkles size={64} className="text-[#c1f2d5]" /></div>
-        <div className="absolute bottom-20 right-[15%] animate-bounce-slow opacity-50"><Heart size={48} className="text-[#ff9ebd]" fill="currentColor" /></div>
-      </div>
-
-      {/* Top Bar */}
-      <div className="w-full p-6 md:p-8 flex justify-between items-center z-20">
-        <div className="flex items-center gap-3">
-          <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
-            <Sparkles size={24} className={iconColor} />
+      {/* Section 1: Hero & Top Bar */}
+      <div className="relative w-full flex flex-col items-center z-10">
+        {/* Floating Decors for Hero */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-[15%] left-[10%] animate-float-mimu opacity-60 pointer-events-auto">
+            <Cloud size={80} className="text-[#a6c9ff] transition-transform duration-500 hover:scale-125 hover:-rotate-12 cursor-pointer" fill="currentColor" />
           </div>
-          <span className="font-black text-2xl tracking-tight">lumnr</span>
+          <div className="absolute top-[45%] right-[12%] animate-bounce-slow opacity-80 pointer-events-auto" style={{ animationDelay: '1s' }}>
+            <Star size={56} className="text-[#ffd700] transition-transform duration-500 hover:scale-125 hover:rotate-12 cursor-pointer" fill="currentColor" />
+          </div>
+          <div className="absolute top-[80%] left-[15%] animate-float-mimu opacity-70 pointer-events-auto" style={{ animationDelay: '2s' }}>
+            <Sparkles size={64} className="text-[#c1f2d5] transition-transform duration-500 hover:scale-125 hover:rotate-12 cursor-pointer" />
+          </div>
         </div>
-        <button 
-          onClick={toggleTheme} 
-          className={`p-3 rounded-full transition-transform hover:scale-110 active:scale-95 shadow-sm border-2 ${cardBg} ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}
-          title="Toggle Theme"
-        >
-          {theme === 'dark' ? <Sun size={20} className="text-[#ffd700]" /> : <Moon size={20} className="text-[#a6c9ff]" />}
-        </button>
-      </div>
-      
-      {/* Hero Section */}
-      <div className="flex flex-col items-center justify-center max-w-3xl w-full text-center px-6 pt-12 pb-16 z-10">
-        <div>
-           <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#ff9ebd] via-[#c1f2d5] to-[#a6c9ff]">
-            lumnr.
-          </h1>
-        </div>
-        <h2 className="text-2xl md:text-4xl font-bold mb-6 opacity-90">
-          welcome to your digital sanctuary.
-        </h2>
-        <p className="text-lg md:text-xl font-bold max-w-xl mx-auto opacity-70 mb-12">
-          a minimalist digital workspace designed to remove distractions and let your ideas shine.
-        </p>
-        <div>
+
+        {/* Top Bar */}
+        <div className="w-full p-6 md:p-8 flex justify-between items-center z-20 relative">
+          <div className="flex items-center gap-3">
+            <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
+              <Sparkles size={24} className={iconColor} />
+            </div>
+            <span className="font-black text-2xl tracking-tight">lumnr</span>
+          </div>
           <button 
-            onClick={onStart}
-            className={`group px-12 py-5 rounded-full font-black text-xl flex items-center justify-center gap-3 transition-all duration-150 text-white ${isDark ? 'bg-[#ff8da1] shadow-[0_8px_0_#d86a80]' : 'bg-[#ff9ebd] shadow-[0_8px_0_#e07a9b]'} active:translate-y-[8px] active:shadow-none hover:brightness-105`}
+            onClick={toggleTheme} 
+            className={`p-3 rounded-full transition-transform hover:scale-110 active:scale-95 shadow-sm border-2 ${cardBg} ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}
+            title="Toggle Theme"
           >
-            <PenLine size={26} className="group-hover:rotate-12 transition-transform" /> 
-            Start Writing
+            {theme === 'dark' ? <Sun size={20} className="text-[#ffd700]" /> : <Moon size={20} className="text-[#a6c9ff]" />}
           </button>
         </div>
+        
+        {/* Hero Section */}
+        <div className="flex flex-col items-center justify-center max-w-3xl w-full text-center px-6 pt-12 pb-16 z-20 relative">
+          <div>
+             <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#ff9ebd] via-[#c1f2d5] to-[#a6c9ff]">
+              lumnr.
+            </h1>
+          </div>
+          <h2 className="text-2xl md:text-4xl font-bold mb-6 opacity-90">
+            welcome to your digital sanctuary.
+          </h2>
+          <p className="text-lg md:text-xl font-bold max-w-xl mx-auto opacity-70 mb-12">
+            a minimalist digital workspace designed to remove distractions and let your ideas shine.
+          </p>
+          <div>
+            <button 
+              onClick={onStart}
+              className={`group px-12 py-5 rounded-full font-black text-xl flex items-center justify-center gap-3 transition-all duration-150 text-white ${isDark ? 'bg-[#ff8da1] shadow-[0_8px_0_#d86a80]' : 'bg-[#ff9ebd] shadow-[0_8px_0_#e07a9b]'} active:translate-y-[8px] active:shadow-none hover:brightness-105`}
+            >
+              <PenLine size={26} className="group-hover:rotate-12 transition-transform" /> 
+              Start Writing
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Sanctuary Grid */}
+      {/* Section 2: Sanctuary Grid */}
       {activeNotes.length > 0 && (
-        <div className="w-full max-w-5xl px-6 py-12 z-10 flex flex-col items-center">
-          <h3 className="text-xl font-black mb-10 uppercase tracking-[0.25em] opacity-40">Your Sanctuary</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-10 gap-y-14 w-full">
-            {activeNotes.map(note => (
-              <NotebookCover 
-                key={note.id}
-                color={note.color}
-                pattern={note.cover}
-                title={note.title}
-                isPinned={note.pinned}
-                onClick={() => onSelectNote(note.id)}
-              />
-            ))}
+        <div className="relative w-full flex flex-col items-center py-12 z-10">
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div className="absolute top-[10%] right-[10%] animate-bounce-slow opacity-50 pointer-events-auto" style={{ animationDelay: '0.5s' }}>
+              <Heart size={48} className="text-[#ff9ebd] transition-transform duration-500 hover:scale-125 hover:-rotate-12 cursor-pointer" fill="currentColor" />
+            </div>
+            <div className="absolute top-[50%] left-[12%] animate-float-mimu opacity-40 pointer-events-auto" style={{ animationDelay: '1.5s' }}>
+              <Cloud size={60} className="text-[#a6c9ff] transition-transform duration-500 hover:scale-125 hover:rotate-6 cursor-pointer" fill="currentColor" />
+            </div>
+            <div className="absolute bottom-[10%] right-[15%] animate-bounce-slow opacity-60 pointer-events-auto" style={{ animationDelay: '2.5s' }}>
+              <Star size={40} className="text-[#ffd700] transition-transform duration-500 hover:scale-150 hover:-rotate-12 cursor-pointer" fill="currentColor" />
+            </div>
+          </div>
+          <div className="w-full max-w-5xl px-6 flex flex-col items-center relative z-20">
+            <h3 className="text-xl font-black mb-10 uppercase tracking-[0.25em] opacity-40">Your Sanctuary</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-10 gap-y-14 w-full">
+              {activeNotes.map(note => (
+                <NotebookCover 
+                  key={note.id}
+                  color={note.color}
+                  pattern={note.cover}
+                  title={note.title}
+                  isPinned={note.pinned}
+                  onClick={() => onSelectNote(note.id)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* FAQ Section with Multi-color Pastel Tiles */}
-      <div className="w-full max-w-5xl px-6 py-24 z-10">
-        <h3 className="text-2xl font-black text-center mb-12 opacity-90">
-          ✨ Good to know ✨
-        </h3>
-        <div className="grid gap-8 md:grid-cols-2">
-          {/* Tile 1: Green */}
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
-            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
-              <Cloud size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} /> Local only.
-            </h4>
-            <p className="font-bold opacity-90 text-lg leading-relaxed">Everything is stored securely in your browser's local storage. Zero servers, zero tracking. Just you and your thoughts.</p>
+      {/* Section 3: FAQ Section with Multi-color Pastel Tiles */}
+      <div className="relative w-full flex flex-col items-center py-24 z-10">
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-[15%] left-[8%] animate-float-mimu opacity-50 pointer-events-auto" style={{ animationDelay: '0.8s' }}>
+            <Sparkles size={50} className="text-[#c1f2d5] transition-transform duration-500 hover:scale-125 hover:rotate-45 cursor-pointer" />
           </div>
-          
-          {/* Tile 2: Blue */}
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
-            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
-              <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
-            </h4>
-            <p className="font-bold opacity-90 text-lg leading-relaxed">Yes! Lumnr automatically saves your progress as you type, and quietly creates a backup snapshot every 5 minutes.</p>
+          <div className="absolute top-[45%] right-[8%] animate-bounce-slow opacity-45 pointer-events-auto" style={{ animationDelay: '3s' }}>
+            <Heart size={40} className="text-[#ff9ebd] transition-transform duration-500 hover:scale-150 hover:-rotate-12 cursor-pointer" fill="currentColor" />
           </div>
-          
-          {/* Tile 3: Yellow/Peach */}
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
-            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
-              <Trash2 size={24} className={isDark ? 'text-[#f2ecd5]' : 'text-[#bcac75]'} /> Cache care.
-            </h4>
-            <p className="font-bold opacity-90 text-lg leading-relaxed">Clearing your browser cache will delete local documents. Use the "Export" feature to keep physical backups of important work.</p>
+          <div className="absolute bottom-[15%] left-[18%] animate-float-mimu opacity-35 pointer-events-auto" style={{ animationDelay: '1.2s' }}>
+            <Cloud size={70} className="text-[#a6c9ff] transition-transform duration-500 hover:scale-110 hover:-rotate-6 cursor-pointer" fill="currentColor" />
           </div>
-          
-          {/* Tile 4: Purple */}
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
-            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
-              <History size={24} className={isDark ? 'text-[#e2d5f2]' : 'text-[#a388c9]'} /> Versions.
-            </h4>
-            <p className="font-bold opacity-90 text-lg leading-relaxed">Mistakes happen! Access previous versions of your document at any time from the settings gear in your editor.</p>
+        </div>
+        <div className="w-full max-w-5xl px-6 relative z-20">
+          <h3 className="text-2xl font-black text-center mb-12 opacity-90">
+            ✨ Good to know ✨
+          </h3>
+          <div className="grid gap-8 md:grid-cols-2">
+            {/* Tile 1: Green */}
+            <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
+              <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+                <Cloud size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} /> Local only.
+              </h4>
+              <p className="font-bold opacity-90 text-lg leading-relaxed">Everything is stored securely in your browser's local storage. Zero servers, zero tracking. Just you and your thoughts.</p>
+            </div>
+            
+            {/* Tile 2: Blue */}
+            <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
+              <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+                <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
+              </h4>
+              <p className="font-bold opacity-90 text-lg leading-relaxed">Yes! Lumnr automatically saves your progress as you type, and quietly creates a backup snapshot every 5 minutes.</p>
+            </div>
+            
+            {/* Tile 3: Yellow/Peach */}
+            <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
+              <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+                <Trash2 size={24} className={isDark ? 'text-[#f2ecd5]' : 'text-[#bcac75]'} /> Cache care.
+              </h4>
+              <p className="font-bold opacity-90 text-lg leading-relaxed">Clearing your browser cache will delete local documents. Use the "Export" feature to keep physical backups of important work.</p>
+            </div>
+            
+            {/* Tile 4: Purple */}
+            <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
+              <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+                <History size={24} className={isDark ? 'text-[#e2d5f2]' : 'text-[#a388c9]'} /> Versions.
+              </h4>
+              <p className="font-bold opacity-90 text-lg leading-relaxed">Mistakes happen! Access previous versions of your document at any time from the settings gear in your editor.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Redesigned Supporters Section - Compact & Cozy */}
-      <div className={`w-full max-w-4xl px-6 pb-24 z-10`}>
-        <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
-          
-          {/* Floating Sticker Label */}
-          <div className={`absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest border-4 shadow-sm animate-bounce-slow ${isDark ? 'bg-[#ff8da1] border-[#d86a80] text-white' : 'bg-[#ff9ebd] border-[#e07a9b] text-white'}`}>
-             🌸 Supporters corner
+      {/* Section 4: Supporters Corner & Footer */}
+      <div className="relative w-full flex flex-col items-center pb-16 z-10">
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="absolute top-[10%] right-[20%] animate-bounce-slow opacity-70 pointer-events-auto" style={{ animationDelay: '2s' }}>
+            <Star size={48} className="text-[#ffd700] transition-transform duration-500 hover:scale-125 hover:rotate-12 cursor-pointer" fill="currentColor" />
           </div>
+          <div className="absolute top-[40%] left-[10%] animate-float-mimu opacity-60 pointer-events-auto" style={{ animationDelay: '0.5s' }}>
+            <Sparkles size={40} className="text-[#c1f2d5] transition-transform duration-500 hover:scale-125 hover:rotate-12 cursor-pointer" />
+          </div>
+          <div className="absolute bottom-[30%] right-[25%] animate-bounce-slow opacity-50 pointer-events-auto" style={{ animationDelay: '1.5s' }}>
+            <Heart size={56} className="text-[#ff9ebd] transition-transform duration-500 hover:scale-110 hover:-rotate-12 cursor-pointer" fill="currentColor" />
+          </div>
+        </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-            <div className="flex-1 text-center md:text-left">
-              <p className="text-xl md:text-2xl font-black mb-3">Support Lumnr ✨</p>
-              <p className="font-bold opacity-75 text-base leading-relaxed">
-                This is an individual project and it means a lot if you could support us on your will. Every act of kindness helps keep the project alive and blooming.
-                <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`inline-block ml-1 align-text-bottom transition-transform hover:scale-110 active:scale-95 ${isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`} title="Buy me a coffee!">
-                  <Coffee size={20} strokeWidth={2.5} />
-                </a>
-              </p>
+        {/* Supporters Corner */}
+        <div className={`w-full max-w-4xl px-6 pb-24 relative z-20`}>
+          <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
+            
+            {/* Floating Sticker Label */}
+            <div className={`absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest border-4 shadow-sm animate-bounce-slow ${isDark ? 'bg-[#ff8da1] border-[#d86a80] text-white' : 'bg-[#ff9ebd] border-[#e07a9b] text-white'}`}>
+               🌸 Supporters corner
             </div>
 
-            <div className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
-              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4 text-center">Recent Supporter</h4>
-              <div className="flex flex-wrap justify-center gap-3">
-                <div className={`px-4 py-2 rounded-xl font-black text-base border-2 shadow-sm transform hover:scale-105 transition-transform ${isDark ? 'bg-[#3b364c] border-[#ff8da1] text-[#fce4ec]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
-                  Tia Rose 🌸
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+              <div className="flex-1 text-center md:text-left">
+                <p className="text-xl md:text-2xl font-black mb-3">Support Lumnr ✨</p>
+                <p className="font-bold opacity-75 text-base leading-relaxed">
+                  This is an individual project and it means a lot if you could support us on your will. Every act of kindness helps keep the project alive and blooming.
+                  <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`inline-block ml-1 align-text-bottom transition-transform hover:scale-110 active:scale-95 ${isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`} title="Buy me a coffee!">
+                    <Coffee size={20} strokeWidth={2.5} />
+                  </a>
+                </p>
+              </div>
+
+              <div className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4 text-center">Recent Supporter</h4>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <div className={`px-4 py-2 rounded-xl font-black text-base border-2 shadow-sm transform hover:scale-105 transition-transform ${isDark ? 'bg-[#3b364c] border-[#ff8da1] text-[#fce4ec]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
+                    Tia Rose 🌸
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="w-full px-6 py-16 flex flex-col items-center justify-center gap-8 font-black z-10 opacity-80">
-        <div className="flex flex-wrap items-center justify-center gap-10">
-          <button onClick={() => setModalContent('about')} className="hover:opacity-60 transition-all hover:-translate-y-1">About</button>
-          <button onClick={() => setModalContent('privacy')} className="hover:opacity-60 transition-all hover:-translate-y-1">Privacy</button>
-          <button onClick={() => setModalContent('terms')} className="hover:opacity-60 transition-all hover:-translate-y-1">Terms</button>
-          <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 hover:opacity-60 transition-all hover:-translate-y-1 ${iconColor}`}>
-            <Coffee size={20} /> Support
-          </a>
-        </div>
-        <div className="flex items-center gap-3 mt-4 text-xl">
-          crafted with <Heart size={24} className="text-[#ff6b8b] fill-current animate-soft-blink" /> by Aayaam
-        </div>
-      </footer>
+        {/* Footer */}
+        <footer className="w-full px-6 py-16 flex flex-col items-center justify-center gap-8 font-black opacity-80 relative z-20">
+          <div className="flex flex-wrap items-center justify-center gap-10">
+            <button onClick={() => setModalContent('about')} className="hover:opacity-60 transition-all hover:-translate-y-1">About</button>
+            <button onClick={() => setModalContent('privacy')} className="hover:opacity-60 transition-all hover:-translate-y-1">Privacy</button>
+            <button onClick={() => setModalContent('terms')} className="hover:opacity-60 transition-all hover:-translate-y-1">Terms</button>
+            <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 hover:opacity-60 transition-all hover:-translate-y-1 ${iconColor}`}>
+              <Coffee size={20} /> Support
+            </a>
+          </div>
+          <div className="flex items-center gap-3 mt-4 text-xl">
+            crafted with <Heart size={24} className="text-[#ff6b8b] fill-current animate-soft-blink" /> by Aayaam
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };
