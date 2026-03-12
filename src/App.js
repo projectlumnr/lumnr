@@ -213,7 +213,7 @@ const App = () => {
 
   const filteredNotes = notes.filter(n => {
     const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         n.content.toLowerCase().includes(searchQuery.toLowerCase());
+                          n.content.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesSection = showTrash ? !!n.deletedAt : !n.deletedAt;
     return matchesSearch && matchesSection;
   });
@@ -481,9 +481,9 @@ const App = () => {
           </div>
         </header>
 
-        <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto scrollbar-hide">
+        <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto scrollbar-hide flex flex-col">
           {activeNote ? (
-            <div className={`space-y-10 animate-in ${activeNote.deletedAt ? 'opacity-50 pointer-events-none' : ''}`}>
+            <div className={`flex-1 flex flex-col space-y-10 animate-in ${activeNote.deletedAt ? 'opacity-50 pointer-events-none' : ''}`}>
               <input
                 type="text"
                 value={activeNote.title}
@@ -497,11 +497,11 @@ const App = () => {
                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
                 placeholder="Write your thoughts..."
                 disabled={!!activeNote.deletedAt}
-                className={`w-full h-full bg-transparent text-lg leading-relaxed focus:outline-none resize-none min-h-[60vh] ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
+                className={`w-full flex-1 bg-transparent text-lg leading-relaxed focus:outline-none resize-none ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
               />
             </div>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-zinc-700 space-y-4">
+            <div className="flex-1 flex flex-col items-center justify-center text-zinc-700 space-y-4">
               <PenLine size={48} strokeWidth={1} />
               <p className="text-xs uppercase tracking-[0.2em]">Select a document to begin</p>
             </div>
