@@ -15,7 +15,7 @@ import {
   Search, 
   MoreHorizontal,
   Settings,
-  Share2,
+  Share2, 
   Download,
   Copy,
   Twitter,
@@ -94,11 +94,12 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
   const activeNotes = notes.filter(n => !n.deletedAt);
 
   return (
-    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative animate-in font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
+    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
       
-      <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
+      {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
+      <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transform-gpu transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
-      {/* Floating Decors */}
+      {/* Floating Background Decors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-20 left-[10%] animate-float-mimu opacity-60"><Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" /></div>
         <div className="absolute top-40 right-[10%] animate-bounce-slow opacity-80"><Star size={56} className="text-[#ffd700]" fill="currentColor" /></div>
@@ -125,18 +126,18 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
       
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center max-w-3xl w-full text-center px-6 pt-12 pb-16 z-10">
-        <div className="animate-fade-up">
+        <div>
            <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#ff9ebd] via-[#c1f2d5] to-[#a6c9ff]">
             lumnr.
           </h1>
         </div>
-        <h2 className="text-2xl md:text-4xl font-bold mb-6 opacity-90 animate-fade-up delay-100">
+        <h2 className="text-2xl md:text-4xl font-bold mb-6 opacity-90">
           welcome to your digital sanctuary.
         </h2>
-        <p className="text-lg md:text-xl font-bold max-w-xl mx-auto opacity-70 mb-12 animate-fade-up delay-200">
+        <p className="text-lg md:text-xl font-bold max-w-xl mx-auto opacity-70 mb-12">
           a minimalist digital workspace designed to remove distractions and let your ideas shine.
         </p>
-        <div className="animate-fade-up delay-300">
+        <div>
           <button 
             onClick={onStart}
             className={`group px-12 py-5 rounded-full font-black text-xl flex items-center justify-center gap-3 transition-all duration-150 text-white ${isDark ? 'bg-[#ff8da1] shadow-[0_8px_0_#d86a80]' : 'bg-[#ff9ebd] shadow-[0_8px_0_#e07a9b]'} active:translate-y-[8px] active:shadow-none hover:brightness-105`}
@@ -150,8 +151,8 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
       {/* Sanctuary Grid */}
       {activeNotes.length > 0 && (
         <div className="w-full max-w-5xl px-6 py-12 z-10 flex flex-col items-center">
-          <h3 className="text-xl font-black mb-10 uppercase tracking-[0.25em] opacity-40 animate-fade-up">Your Sanctuary</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-10 gap-y-14 w-full animate-fade-up delay-400">
+          <h3 className="text-xl font-black mb-10 uppercase tracking-[0.25em] opacity-40">Your Sanctuary</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-10 gap-y-14 w-full">
             {activeNotes.map(note => (
               <NotebookCover 
                 key={note.id}
@@ -167,12 +168,12 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
 
       {/* FAQ Section with Multi-color Pastel Tiles */}
       <div className="w-full max-w-5xl px-6 py-24 z-10">
-        <h3 className="text-2xl font-black text-center mb-12 opacity-90 animate-fade-up">
+        <h3 className="text-2xl font-black text-center mb-12 opacity-90">
           ✨ Good to know ✨
         </h3>
         <div className="grid gap-8 md:grid-cols-2">
           {/* Tile 1: Green */}
-          <div className={`opacity-0 animate-fade-up delay-100 p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Cloud size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} /> Local only.
             </h4>
@@ -180,7 +181,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           </div>
           
           {/* Tile 2: Blue */}
-          <div className={`opacity-0 animate-fade-up delay-200 p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
             </h4>
@@ -188,7 +189,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           </div>
           
           {/* Tile 3: Yellow/Peach */}
-          <div className={`opacity-0 animate-fade-up delay-300 p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Trash2 size={24} className={isDark ? 'text-[#f2ecd5]' : 'text-[#bcac75]'} /> Cache care.
             </h4>
@@ -196,7 +197,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           </div>
           
           {/* Tile 4: Purple */}
-          <div className={`opacity-0 animate-fade-up delay-400 p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <History size={24} className={isDark ? 'text-[#e2d5f2]' : 'text-[#a388c9]'} /> Versions.
             </h4>
@@ -206,7 +207,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
       </div>
 
       {/* Redesigned Supporters Section - Compact & Cozy */}
-      <div className={`w-full max-w-4xl px-6 pb-24 z-10 opacity-0 animate-fade-up`} style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}>
+      <div className={`w-full max-w-4xl px-6 pb-24 z-10`}>
         <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
           
           {/* Floating Sticker Label */}
@@ -1097,11 +1098,11 @@ const App = () => {
         }
         .animate-in { animation: fadeIn 0.4s ease-out forwards; will-change: opacity, transform; }
         
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
-          to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        @keyframes fadeInUpShort {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform, filter; }
+        .animate-fade-up-short { animation: fadeInUpShort 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform; }
         
         @keyframes popIn { 
           0% { opacity: 0; transform: scale(0.85) translateY(20px); } 
@@ -1109,9 +1110,10 @@ const App = () => {
         }
         .animate-pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform, scale; }
 
+        .delay-75 { animation-delay: 75ms; }
         .delay-100 { animation-delay: 100ms; }
+        .delay-150 { animation-delay: 150ms; }
         .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
         .delay-400 { animation-delay: 400ms; }
 
         /* Mimu Floating Animations */
