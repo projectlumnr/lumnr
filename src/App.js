@@ -55,8 +55,8 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
   return (
     <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] ${bgWrapper} ${textMain}`}>
       
-      {/* Aesthetic Mimu Gridline Layer */}
-      <div className={`absolute inset-0 z-0 opacity-30 pointer-events-none transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
+      {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
+      <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
       {/* Floating Background Decors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -161,7 +161,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
 
       {/* Redesigned Supporters Section - Compact & Cozy */}
       <div className={`w-full max-w-4xl px-6 pb-24 z-10 opacity-0 animate-fade-up`} style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}>
-        <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_10px_0_#e07a9b]'}`}>
+        <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
           
           {/* Floating Sticker Label */}
           <div className={`absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest border-4 shadow-sm animate-bounce-slow ${isDark ? 'bg-[#ff8da1] border-[#d86a80] text-white' : 'bg-[#ff9ebd] border-[#e07a9b] text-white'}`}>
@@ -198,7 +198,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
           </a>
         </div>
         <div className="flex items-center gap-3 mt-4 text-xl">
-          crafted with <Heart size={24} className="text-[#ff6b8b] fill-current animate-bounce-slow" /> by Aayaam
+          crafted with <Heart size={24} className="text-[#ff6b8b] fill-current animate-soft-blink" /> by Aayaam
         </div>
       </footer>
     </div>
@@ -971,6 +971,12 @@ const App = () => {
           50% { transform: translateY(-18px); }
         }
         .animate-bounce-slow { animation: bounce-mimu 5s ease-in-out infinite; }
+
+        @keyframes softBlink {
+          0%, 85%, 100% { opacity: 1; }
+          92.5% { opacity: 0.3; }
+        }
+        .animate-soft-blink { animation: softBlink 4s ease-in-out infinite; }
       `}</style>
     </div>
   );
