@@ -159,20 +159,29 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
         </div>
       </div>
 
-      {/* Supporters Section */}
-      <div className={`w-full max-w-5xl px-6 pb-24 z-10 opacity-0 animate-fade-up`} style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}>
-        <div className={`p-10 md:p-16 rounded-[3.5rem] text-center border-4 ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_12px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
-          <Heart size={48} className="mx-auto mb-6 text-[#ff6b8b] fill-current animate-bounce-slow" />
-          <p className="text-2xl md:text-3xl font-black mb-4">Support Lumnr ✨</p>
-          <p className="font-bold opacity-80 leading-relaxed mb-10 max-w-2xl mx-auto text-lg">
-            This is an individual project and it means a lot if you could support us on your will. Every act of kindness helps keep the digital sanctuary alive and blooming.
-          </p>
+      {/* Redesigned Supporters Section - Compact & Cozy */}
+      <div className={`w-full max-w-4xl px-6 pb-24 z-10 opacity-0 animate-fade-up`} style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}>
+        <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_10px_0_#e07a9b]'}`}>
           
-          <div className={`pt-10 border-t-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] opacity-50 mb-6">Top Supporters</h4>
-            <div className="flex flex-wrap justify-center gap-4">
-              <div className={`px-6 py-3 rounded-2xl font-black text-lg border-2 transform rotate-2 hover:rotate-0 transition-transform ${isDark ? 'bg-[#2b2738] border-[#ff8da1] text-[#fce4ec]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
-                Tia Rose 🌸
+          {/* Floating Sticker Label */}
+          <div className={`absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest border-4 shadow-sm animate-bounce-slow ${isDark ? 'bg-[#ff8da1] border-[#d86a80] text-white' : 'bg-[#ff9ebd] border-[#e07a9b] text-white'}`}>
+             🌸 Supporters corner
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="flex-1 text-center md:text-left">
+              <p className="text-xl md:text-2xl font-black mb-3">Support Lumnr ✨</p>
+              <p className="font-bold opacity-75 text-base leading-relaxed">
+                This is an individual project and it means a lot if you could support us on your will. Every act of kindness helps keep the project alive and blooming.
+              </p>
+            </div>
+
+            <div className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4 text-center">Recent Supporter</h4>
+              <div className="flex flex-wrap justify-center gap-3">
+                <div className={`px-4 py-2 rounded-xl font-black text-base border-2 shadow-sm transform hover:scale-105 transition-transform ${isDark ? 'bg-[#3b364c] border-[#ff8da1] text-[#fce4ec]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
+                  Tia Rose 🌸
+                </div>
               </div>
             </div>
           </div>
