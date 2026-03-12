@@ -123,10 +123,23 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           <div className="flex items-center gap-3">
             <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
-                <rect x="22" y="15" width="56" height="70" rx="8" fill="#ff9ebd"/>
-                <rect x="22" y="15" width="12" height="70" rx="4" fill="#e07a9b"/>
-                <rect x="45" y="30" width="20" height="12" rx="3" fill="#ffffff"/>
-                <line x1="49" y1="36" x2="61" y2="36" stroke="#e07a9b" strokeWidth="2" strokeLinecap="round"/>
+                <rect x="24" y="17" width="56" height="70" rx="6" fill="rgba(0,0,0,0.1)"/>
+                <rect x="22" y="15" width="56" height="70" rx="6" fill="#ff9ebd"/>
+                <rect x="22" y="15" width="10" height="70" rx="3" fill="#e07a9b"/>
+                <path d="M 55 15 L 55 35 L 50 30 L 45 35 L 45 15 Z" fill="#ffd700"/>
+                <path d="M 50 45 Q 50 55 40 55 Q 50 55 50 65 Q 50 55 60 55 Q 50 55 50 45 Z" fill="#ffffff" opacity="0.6"/>
+                <g transform="translate(52, 62) rotate(-35)">
+                  <rect x="-38" y="-4" width="65" height="8" fill="rgba(0,0,0,0.1)" rx="4"/>
+                </g>
+                <g transform="translate(50, 60) rotate(-35)">
+                  <rect x="-30" y="-5" width="45" height="10" fill="#c1f2d5" />
+                  <rect x="-30" y="-1.5" width="45" height="3" fill="#a3d9b8" />
+                  <polygon points="15,-5 15,5 28,0" fill="#f2ecd5"/>
+                  <polygon points="23,-1.9 23,1.9 28,0" fill="#5d4037"/>
+                  <rect x="-36" y="-5" width="6" height="10" fill="#e5e7eb"/>
+                  <rect x="-34" y="-5" width="2" height="10" fill="#9ca3af"/>
+                  <path d="M -36 -5 L -40 -5 A 5 5 0 0 0 -40 5 L -36 5 Z" fill="#ffb7c5"/>
+                </g>
               </svg>
             </div>
             <span className="font-black text-2xl tracking-tight">lumnr</span>
