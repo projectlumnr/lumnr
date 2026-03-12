@@ -246,6 +246,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
       {/* Footer */}
       <footer className="w-full px-6 py-16 flex flex-col items-center justify-center gap-8 font-black z-10 opacity-80">
         <div className="flex flex-wrap items-center justify-center gap-10">
+          <button onClick={() => setModalContent('about')} className="hover:opacity-60 transition-all hover:-translate-y-1">About</button>
           <button onClick={() => setModalContent('privacy')} className="hover:opacity-60 transition-all hover:-translate-y-1">Privacy</button>
           <button onClick={() => setModalContent('terms')} className="hover:opacity-60 transition-all hover:-translate-y-1">Terms</button>
           <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 hover:opacity-60 transition-all hover:-translate-y-1 ${iconColor}`}>
@@ -334,101 +335,31 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
       )}
       
       {modalContent === 'privacy' && (
-        isHome ? (
-          <div className="flex flex-col items-center space-y-8 py-2">
-            <div className="relative">
-              <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#ff8da1]/10 border-[#ff8da1]/20' : 'bg-[#ff9ebd]/10 border-[#ff9ebd]/20'}`}>
-                <ShieldCheck size={64} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} strokeWidth={2.5} />
-              </div>
-              <div className="absolute -bottom-2 -right-2 animate-bounce-slow">
-                <Sparkles size={28} className="text-[#ffd700]" />
-              </div>
-            </div>
-            
-            <div className="text-center">
-              <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
-                Privacy Magic ✨
-              </h3>
-              <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Your thoughts are yours alone.</p>
-            </div>
-
-            <div className="grid gap-4 w-full">
-              <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
-                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Cloud size={18}/> No Servers</h4>
-                 <p className="text-sm opacity-80 font-bold leading-relaxed">Lumnr doesn't have a database. Everything you write stays safely on your device.</p>
-              </div>
-              <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
-                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Sparkles size={18}/> No Cookies</h4>
-                 <p className="text-sm opacity-80 font-bold leading-relaxed">We don't track your behavior, use analytics, or sell your data. Pure, simple focus.</p>
-              </div>
-            </div>
-
-            <div className="w-full text-center opacity-40 animate-fade-up delay-400">
-               <p className="text-xs font-black uppercase tracking-[0.2em]">Verified Privacy Focus</p>
-            </div>
+        <div className="flex flex-col space-y-6">
+          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ Your data stays strictly with you.</p>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
+            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Cloud size={16}/> Local Storage</h3>
+            <p className="font-bold text-sm opacity-80">All your notes and settings are saved directly in your device's browser memory. We never see your content.</p>
           </div>
-        ) : (
-          <div className="flex flex-col space-y-6">
-            <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ Your data stays strictly with you.</p>
-            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
-              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Cloud size={16}/> Local Storage</h3>
-              <p className="font-bold text-sm opacity-80">All your notes and settings are saved directly in your device's browser memory. We never see your content.</p>
-            </div>
-            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
-              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Sparkles size={16}/> Data Collection</h3>
-              <p className="font-bold text-sm opacity-80">We do not track your typing or use tracking cookies. We have absolutely zero access to your documents.</p>
-            </div>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
+            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Sparkles size={16}/> Data Collection</h3>
+            <p className="font-bold text-sm opacity-80">We do not track your typing or use tracking cookies. We have absolutely zero access to your documents.</p>
           </div>
-        )
+        </div>
       )}
 
       {modalContent === 'terms' && (
-        isHome ? (
-          <div className="flex flex-col items-center space-y-8 py-2">
-            <div className="relative">
-              <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#a6c9ff]/10 border-[#a6c9ff]/20' : 'bg-[#87cefa]/10 border-[#87cefa]/20'}`}>
-                <FileText size={64} className={theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} strokeWidth={2.5} />
-              </div>
-              <div className="absolute -top-2 -left-2 animate-bounce-slow">
-                <Star size={28} className="text-[#ffd700] fill-current" />
-              </div>
-            </div>
-
-            <div className="text-center">
-              <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
-                Friendly Rules 📜
-              </h3>
-              <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Simple ways to keep your notes safe.</p>
-            </div>
-
-            <div className="grid gap-4 w-full">
-              <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
-                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Trash2 size={18}/> Cache Risk</h4>
-                 <p className="text-sm opacity-80 font-bold leading-relaxed">Since data is local, clearing browser history deletes notes! Back up using Export often.</p>
-              </div>
-              <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5]'}`}>
-                 <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><ShieldCheck size={18}/> Provided "As Is"</h4>
-                 <p className="text-sm opacity-80 font-bold leading-relaxed">We built this with love, but you are the guardian of your words. We aren't liable for data loss.</p>
-              </div>
-            </div>
-
-            <div className="w-full text-center opacity-40 animate-fade-up delay-400">
-               <p className="text-xs font-black uppercase tracking-[0.2em]">Simple & Transparent</p>
-            </div>
+        <div className="flex flex-col space-y-6">
+          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
+            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
+            <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
           </div>
-        ) : (
-          <div className="flex flex-col space-y-6">
-            <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
-            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
-              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
-              <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
-            </div>
-            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
-              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
-              <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
-            </div>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
+            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
+            <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
           </div>
-        )
+        </div>
       )}
 
       {modalContent === 'history' && (
@@ -506,7 +437,6 @@ const Header = ({
   theme, activeNote, wordCount, charCount, readingTime, isSaving, 
   shareMenuRef, shareMenuOpen, setShareMenuOpen, 
   downloadNote, copyToClipboard, shareToSocial, 
-  moreMenuRef, moreMenuOpen, setMoreMenuOpen, setModalContent,
   onGoHome, updateNote
 }) => {
   const [styleMenuOpen, setStyleMenuOpen] = useState(false);
@@ -593,25 +523,6 @@ const Header = ({
             </div>
           </>
         )}
-
-        <div className="relative" ref={moreMenuRef}>
-          <button onClick={(e) => { e.stopPropagation(); setMoreMenuOpen(!moreMenuOpen); }} className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${isDark ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`}>
-            <MoreHorizontal size={18} strokeWidth={2.5} />
-          </button>
-          {moreMenuOpen && (
-            <div className={`absolute right-0 top-11 w-48 border-2 rounded-[1.5rem] shadow-xl py-2 z-50 animate-in ${isDark ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
-              <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <Info size={14} strokeWidth={2.5} /> About
-              </button>
-              <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <ShieldCheck size={14} strokeWidth={2.5} /> Privacy
-              </button>
-              <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <FileText size={14} strokeWidth={2.5} /> Terms
-              </button>
-            </div>
-          )}
-        </div>
       </div>
     </header>
   );
@@ -797,13 +708,11 @@ const App = () => {
   
   const [showHome, setShowHome] = useState(true); // New state for Home Page
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
-  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   
   const shareMenuRef = useRef(null);
-  const moreMenuRef = useRef(null);
   const settingsRef = useRef(null);
   const saveTimeoutRef = useRef(null);
   
@@ -822,7 +731,6 @@ const App = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (shareMenuRef.current && !shareMenuRef.current.contains(event.target)) setShareMenuOpen(false);
-      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) setMoreMenuOpen(false);
       if (settingsRef.current && !settingsRef.current.contains(event.target)) setSettingsOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -1043,8 +951,6 @@ const App = () => {
               readingTime={readingTime} isSaving={isSaving} 
               shareMenuRef={shareMenuRef} shareMenuOpen={shareMenuOpen} setShareMenuOpen={setShareMenuOpen}
               downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
-              moreMenuRef={moreMenuRef} moreMenuOpen={moreMenuOpen} setMoreMenuOpen={setMoreMenuOpen}
-              setModalContent={setModalContent}
               onGoHome={() => setShowHome(true)}
               updateNote={updateNote}
             />
