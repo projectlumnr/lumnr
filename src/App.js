@@ -36,6 +36,27 @@ import {
 } from 'lucide-react';
 
 // ==========================================
+// COMPONENT: Staggered Text Animation
+// ==========================================
+const StaggeredText = ({ text, baseDelay = 0, className = "" }) => {
+  const words = text.split(" ");
+  return (
+    <span className={`inline-block ${className}`}>
+      {words.map((word, i) => (
+        <span key={i} className="inline-block overflow-hidden align-bottom pb-2 -mb-2">
+          <span 
+            className="inline-block animate-reveal opacity-0" 
+            style={{ animationDelay: `${baseDelay + (i * 60)}ms`, animationFillMode: 'forwards' }}
+          >
+            {word}&nbsp;
+          </span>
+        </span>
+      ))}
+    </span>
+  );
+};
+
+// ==========================================
 // COMPONENT: Home / Landing Page
 // ==========================================
 const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
@@ -54,33 +75,41 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
 
     {/* Massive Editorial Hero */}
     <section className="w-full pt-32 md:pt-40 px-6 md:px-10 flex flex-col min-h-[90vh] justify-between z-10">
-      <div className="flex flex-col animate-slide-up">
-        <h1 className="text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0">
-          Think.
-        </h1>
-        <h1 className="text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 text-outline">
-          Write.
-        </h1>
-        <h1 className="text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 flex items-center gap-4 md:gap-8">
-          Create.
-          <div className={`hidden md:block h-[8vw] w-[20vw] rounded-full ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`}></div>
-        </h1>
+      <div className="flex flex-col">
+        <div className="overflow-hidden">
+          <h1 className="animate-reveal opacity-0 text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 origin-bottom-left" style={{ animationFillMode: 'forwards' }}>
+            Think.
+          </h1>
+        </div>
+        <div className="overflow-hidden">
+          <h1 className="animate-reveal opacity-0 text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 text-outline origin-bottom-left" style={{ animationDelay: '150ms', animationFillMode: 'forwards' }}>
+            Write.
+          </h1>
+        </div>
+        <div className="overflow-hidden flex items-center gap-4 md:gap-8">
+          <h1 className="animate-reveal opacity-0 text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 flex items-center origin-bottom-left" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+            Create.
+          </h1>
+          <div className={`hidden md:block h-[8vw] w-[20vw] rounded-full animate-reveal opacity-0 origin-left ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`} style={{ animationDelay: '450ms', animationFillMode: 'forwards' }}></div>
+        </div>
       </div>
 
-      <div className="w-full flex flex-col md:flex-row items-start md:items-end justify-between mt-20 md:mt-10 pb-20 gap-10 animate-slide-up delay-200">
-        <p className="text-xl md:text-3xl font-medium max-w-2xl leading-tight">
-          a minimalist digital workspace designed to remove distractions and let your ideas shine.
-        </p>
-        <button 
-          onClick={onStart}
-          className={`group relative flex items-center justify-center w-40 h-40 md:w-56 md:h-56 rounded-full font-bold tracking-[0.15em] uppercase text-sm md:text-lg transition-transform duration-500 hover:scale-105 overflow-hidden shrink-0 ${theme === 'dark' ? 'bg-[#f4f4f0] text-[#0f0f0f]' : 'bg-[#0f0f0f] text-[#f4f4f0]'}`}
-        >
-          <div className={`absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 rounded-full ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`}></div>
-          <span className="relative z-10 flex flex-col items-center gap-2 group-hover:text-white transition-colors duration-500">
-            <PenLine size={32} strokeWidth={2} className="group-hover:-rotate-12 transition-transform duration-500" />
-            Start
-          </span>
-        </button>
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-end mt-16 md:mt-24 pb-20 z-20">
+        <div className="max-w-2xl text-2xl md:text-4xl font-medium leading-tight">
+          <StaggeredText text="a minimalist digital workspace designed to remove distractions and let your ideas shine." baseDelay={600} />
+        </div>
+        <div className="flex justify-start lg:justify-end animate-fade-in opacity-0" style={{ animationDelay: '1200ms', animationFillMode: 'forwards' }}>
+          <button 
+            onClick={onStart}
+            className={`group relative flex items-center justify-center p-12 md:p-16 aspect-square rounded-full font-bold tracking-[0.15em] uppercase text-sm md:text-lg transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-110 overflow-hidden shrink-0 shadow-2xl ${theme === 'dark' ? 'bg-[#f4f4f0] text-[#0f0f0f]' : 'bg-[#0f0f0f] text-[#f4f4f0]'}`}
+          >
+            <div className={`absolute inset-0 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`}></div>
+            <span className="relative z-10 flex flex-col items-center gap-3 group-hover:text-white transition-colors duration-500">
+              <PenLine size={32} strokeWidth={2} className="group-hover:-rotate-12 group-hover:scale-110 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+              <span>Start</span>
+            </span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -839,6 +868,19 @@ const App = () => {
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .animate-in { animation: fadeIn 0.4s ease-out forwards; }
+        
+        /* Griflan-style Text Reveals & Animations */
+        @keyframes reveal {
+          0% { transform: translateY(120%) rotate(4deg); opacity: 0; }
+          100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        }
+        .animate-reveal { animation: reveal 1s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        @keyframes fadeInScale {
+          0% { opacity: 0; transform: scale(0.9); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in { animation: fadeInScale 1s cubic-bezier(0.16, 1, 0.3, 1); }
         
         /* Griflan-style Bold Animations */
         @keyframes slideUp {
