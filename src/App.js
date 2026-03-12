@@ -122,7 +122,12 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
         <div className="w-full p-6 md:p-8 flex justify-between items-center z-20 relative">
           <div className="flex items-center gap-3">
             <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
-              <Sparkles size={24} className={iconColor} />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
+                <rect x="22" y="15" width="56" height="70" rx="8" fill="#ff9ebd"/>
+                <rect x="22" y="15" width="12" height="70" rx="4" fill="#e07a9b"/>
+                <rect x="45" y="30" width="20" height="12" rx="3" fill="#ffffff"/>
+                <line x1="49" y1="36" x2="61" y2="36" stroke="#e07a9b" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
             </div>
             <span className="font-black text-2xl tracking-tight">lumnr</span>
           </div>
