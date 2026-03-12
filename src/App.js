@@ -32,143 +32,168 @@ import {
   RotateCcw,
   Trash,
   History,
-  Home
+  Home,
+  Star
 } from 'lucide-react';
 
 // ==========================================
-// COMPONENT: Staggered Text Animation
+// COMPONENT: Home / Landing Page (Agency Brutalism)
 // ==========================================
-const StaggeredText = ({ text, baseDelay = 0, className = "" }) => {
-  const words = text.split(" ");
+const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
+  const isDark = theme === 'dark';
+  const borderClass = isDark ? 'border-[#f4f4f0]' : 'border-[#0f0f0f]';
+  const textClass = isDark ? 'text-[#f4f4f0]' : 'text-[#0f0f0f]';
+  const bgClass = isDark ? 'bg-[#0f0f0f]' : 'bg-[#f4f4f0]';
+  const brutalShadow = isDark ? 'brutal-shadow-dark' : 'brutal-shadow-light';
+  const textOutline = isDark ? 'text-outline-brutal-dark' : 'text-outline-brutal-light';
+
   return (
-    <span className={`inline-block ${className}`}>
-      {words.map((word, i) => (
-        <span key={i} className="inline-block overflow-hidden align-bottom pb-2 -mb-2">
-          <span 
-            className="inline-block animate-reveal opacity-0" 
-            style={{ animationDelay: `${baseDelay + (i * 60)}ms`, animationFillMode: 'forwards' }}
-          >
-            {word}&nbsp;
-          </span>
-        </span>
-      ))}
-    </span>
-  );
-};
-
-// ==========================================
-// COMPONENT: Home / Landing Page
-// ==========================================
-const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
-  <div className={`flex-1 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto relative selection:bg-violet-500 selection:text-white ${theme === 'dark' ? 'bg-[#0f0f0f] text-[#f4f4f0]' : 'bg-[#f4f4f0] text-[#0f0f0f]'}`}>
-    
-    {/* Griflan-style Navbar */}
-    <nav className="w-full p-6 md:p-10 flex justify-between items-center z-50 absolute top-0 left-0">
-      <div className="font-black text-2xl tracking-tighter flex items-center gap-3">
-        <div className={`w-3 h-3 rounded-full animate-pulse ${theme === 'dark' ? 'bg-violet-400' : 'bg-violet-600'}`}></div>
-        lumnr©
-      </div>
-      <button onClick={toggleTheme} className={`p-4 rounded-full border-2 transition-all duration-300 hover:scale-110 ${theme === 'dark' ? 'border-[#f4f4f0] hover:bg-[#f4f4f0] hover:text-[#0f0f0f]' : 'border-[#0f0f0f] hover:bg-[#0f0f0f] hover:text-[#f4f4f0]'}`}>
-        {theme === 'dark' ? <Sun size={20} strokeWidth={3} /> : <Moon size={20} strokeWidth={3} />}
-      </button>
-    </nav>
-
-    {/* Massive Editorial Hero */}
-    <section className="w-full pt-32 md:pt-40 px-6 md:px-10 flex flex-col min-h-[90vh] justify-between z-10">
-      <div className="flex flex-col">
-        <div className="overflow-hidden">
-          <h1 className="animate-reveal opacity-0 text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 origin-bottom-left" style={{ animationFillMode: 'forwards' }}>
-            Think.
-          </h1>
-        </div>
-        <div className="overflow-hidden">
-          <h1 className="animate-reveal opacity-0 text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 text-outline origin-bottom-left" style={{ animationDelay: '150ms', animationFillMode: 'forwards' }}>
-            Write.
-          </h1>
-        </div>
-        <div className="overflow-hidden flex items-center gap-4 md:gap-8">
-          <h1 className="animate-reveal opacity-0 text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 flex items-center origin-bottom-left" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-            Create.
-          </h1>
-          <div className={`hidden md:block h-[8vw] w-[20vw] rounded-full animate-reveal opacity-0 origin-left ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`} style={{ animationDelay: '450ms', animationFillMode: 'forwards' }}></div>
-        </div>
+    <div className={`flex-1 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto relative selection:bg-pink-500 selection:text-white ${bgClass} ${textClass}`}>
+      
+      {/* Animated Brutalist Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-20 dark:opacity-20 z-0">
+         <div className="absolute top-32 left-10 md:left-20 animate-spin-slow">
+            <Star size={120} fill="currentColor" />
+         </div>
+         <div className="absolute bottom-40 right-10 md:right-32 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }}>
+            <Star size={240} fill="currentColor" />
+         </div>
       </div>
 
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-end mt-16 md:mt-24 pb-20 z-20">
-        <div className="max-w-2xl text-2xl md:text-4xl font-medium leading-tight">
-          <StaggeredText text="a minimalist digital workspace designed to remove distractions and let your ideas shine." baseDelay={600} />
+      {/* Griflan-style Navbar */}
+      <nav className={`w-full p-6 md:p-8 flex justify-between items-center z-50 absolute top-0 left-0 border-b-4 ${borderClass} ${bgClass}`}>
+        <div className="font-black text-2xl md:text-3xl tracking-tighter flex items-center gap-3">
+          <div className={`w-4 h-4 rounded-full animate-pulse ${isDark ? 'bg-pink-500' : 'bg-pink-500'}`}></div>
+          LUMNR<span className="text-pink-500">.</span>
         </div>
-        <div className="flex justify-start lg:justify-end animate-fade-in opacity-0" style={{ animationDelay: '1200ms', animationFillMode: 'forwards' }}>
-          <button 
-            onClick={onStart}
-            className={`group relative flex items-center justify-center p-12 md:p-16 aspect-square rounded-full font-bold tracking-[0.15em] uppercase text-sm md:text-lg transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-110 overflow-hidden shrink-0 shadow-2xl ${theme === 'dark' ? 'bg-[#f4f4f0] text-[#0f0f0f]' : 'bg-[#0f0f0f] text-[#f4f4f0]'}`}
-          >
-            <div className={`absolute inset-0 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-full ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`}></div>
-            <span className="relative z-10 flex flex-col items-center gap-3 group-hover:text-white transition-colors duration-500">
-              <PenLine size={32} strokeWidth={2} className="group-hover:-rotate-12 group-hover:scale-110 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-              <span>Start</span>
-            </span>
-          </button>
+        <button onClick={toggleTheme} className={`p-3 md:p-4 rounded-full border-4 transition-all duration-300 ${borderClass} ${brutalShadow} ${isDark ? 'bg-yellow-400 text-black' : 'bg-yellow-400 text-black'}`}>
+          {theme === 'dark' ? <Sun size={24} strokeWidth={3} /> : <Moon size={24} strokeWidth={3} />}
+        </button>
+      </nav>
+
+      {/* Massive Editorial Hero */}
+      <main className="pt-24 md:pt-32 z-10 w-full flex flex-col justify-center min-h-[90vh]">
+        <section className="px-6 md:px-10 py-10 md:py-20 flex flex-col items-center text-center">
+          
+          <div className="flex flex-col items-center">
+            <div className="overflow-hidden">
+              <h1 className="animate-reveal opacity-0 text-[18vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 origin-bottom-left" style={{ animationFillMode: 'forwards' }}>
+                We Make
+              </h1>
+            </div>
+            <div className="overflow-hidden flex items-center justify-center gap-4 md:gap-8 mt-2 md:mt-4">
+              <h1 className={`animate-reveal opacity-0 text-[18vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 ${textOutline} origin-bottom-left`} style={{ animationDelay: '150ms', animationFillMode: 'forwards' }}>
+                Loud
+              </h1>
+              <h1 className="animate-reveal opacity-0 text-[18vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 origin-bottom-left" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+                Ideas
+              </h1>
+            </div>
+          </div>
+
+          <div className="mt-16 md:mt-24 max-w-3xl z-20 animate-fade-in opacity-0" style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}>
+            <p className={`text-xl md:text-3xl font-bold uppercase leading-tight p-6 md:p-10 border-4 transform -rotate-2 ${borderClass} ${brutalShadow} ${isDark ? 'bg-violet-600 text-white' : 'bg-violet-400 text-black'}`}>
+              a minimalist digital workspace designed to remove distractions and let your ideas shine.
+            </p>
+          </div>
+          
+          <div className="mt-20 md:mt-24 z-20 animate-fade-in opacity-0" style={{ animationDelay: '900ms', animationFillMode: 'forwards' }}>
+            <button 
+              onClick={onStart}
+              className={`group relative flex items-center justify-center px-10 py-6 md:px-16 md:py-8 rounded-full font-black tracking-[0.15em] uppercase text-xl md:text-3xl transition-all duration-300 border-4 overflow-hidden shrink-0 ${borderClass} ${brutalShadow} ${isDark ? 'bg-pink-600 text-white' : 'bg-pink-400 text-black'}`}
+            >
+              <span className="relative z-10 flex items-center gap-4 transition-transform duration-300 group-hover:scale-105">
+                Start Writing
+                <PenLine size={36} strokeWidth={3} className="group-hover:rotate-12 transition-transform duration-300" />
+              </span>
+            </button>
+          </div>
+        </section>
+      </main>
+
+      {/* Fixed Infinite Marquee */}
+      <section className={`w-full py-5 md:py-8 overflow-hidden flex border-y-4 my-10 transform -rotate-2 scale-105 z-20 shadow-2xl ${borderClass} ${isDark ? 'bg-lime-500 text-black' : 'bg-lime-400 text-black'}`}>
+        <div className="animate-marquee-brutal flex w-max shrink-0">
+          {/* Duplicate blocks exactly 4 times for a flawless infinite loop */}
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="flex items-center text-4xl md:text-6xl font-black uppercase tracking-widest shrink-0">
+              <span className="mx-6 md:mx-10">NO DISTRACTIONS</span><Star className="mx-2" size={40} fill="currentColor" />
+              <span className="mx-6 md:mx-10">PURE FOCUS</span><Star className="mx-2" size={40} fill="currentColor" />
+              <span className="mx-6 md:mx-10">LOCAL STORAGE</span><Star className="mx-2" size={40} fill="currentColor" />
+              <span className="mx-6 md:mx-10">YOUR DATA</span><Star className="mx-2" size={40} fill="currentColor" />
+            </div>
+          ))}
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* Griflan Infinite Marquee */}
-    <section className={`w-full py-6 md:py-8 overflow-hidden flex rotate-[-2deg] scale-[1.05] z-20 shadow-2xl ${theme === 'dark' ? 'bg-violet-600 text-white' : 'bg-violet-600 text-white'}`}>
-      <div className="animate-marquee font-black text-5xl md:text-7xl uppercase tracking-tighter flex whitespace-nowrap">
-        <span className="mx-6 md:mx-10">NO DISTRACTIONS</span><span className="mx-6 md:mx-10">•</span>
-        <span className="mx-6 md:mx-10">PURE FOCUS</span><span className="mx-6 md:mx-10">•</span>
-        <span className="mx-6 md:mx-10">LOCAL STORAGE</span><span className="mx-6 md:mx-10">•</span>
-        <span className="mx-6 md:mx-10">YOUR DATA</span><span className="mx-6 md:mx-10">•</span>
-        {/* Duplicated for seamless scrolling */}
-        <span className="mx-6 md:mx-10">NO DISTRACTIONS</span><span className="mx-6 md:mx-10">•</span>
-        <span className="mx-6 md:mx-10">PURE FOCUS</span><span className="mx-6 md:mx-10">•</span>
-        <span className="mx-6 md:mx-10">LOCAL STORAGE</span><span className="mx-6 md:mx-10">•</span>
-        <span className="mx-6 md:mx-10">YOUR DATA</span><span className="mx-6 md:mx-10">•</span>
-      </div>
-    </section>
-
-    {/* Big Block FAQs (Agency Brutalism) */}
-    <section className="w-full px-6 md:px-10 py-32 md:py-48 z-10">
-      <div className="max-w-7xl mx-auto flex flex-col gap-10 md:gap-16">
-        <div className="w-full flex justify-between items-end mb-8">
-            <h3 className="text-5xl md:text-8xl font-black tracking-tighter leading-none">
+      {/* Big Block FAQs (Agency Brutalism) */}
+      <section className="w-full px-6 md:px-10 py-24 md:py-32 z-10 max-w-7xl mx-auto">
+        <div className="flex justify-between items-end mb-12 border-b-4 pb-6 md:pb-10 border-current">
+            <h3 className="text-6xl md:text-8xl font-black tracking-tighter leading-none uppercase">
               Good to<br/>know.
             </h3>
-            <Heart size={64} className="hidden md:block text-rose-500 animate-pulse mb-4" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-          <div className="col-span-1 md:col-span-2 p-10 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-violet-200 text-violet-950 transition-transform hover:-translate-y-2 duration-500">
-            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Local only.</h4>
-            <p className="text-xl md:text-3xl font-medium leading-tight">Everything is stored securely in your browser's local storage. Zero servers, zero tracking.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          <div className={`col-span-1 md:col-span-2 p-8 md:p-12 border-4 ${borderClass} ${brutalShadow} ${isDark ? 'bg-[#f4f4f0] text-black' : 'bg-white text-black'}`}>
+            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter uppercase">Local only.</h4>
+            <p className="text-xl md:text-3xl font-bold leading-tight">Everything is stored securely in your browser's local storage. Zero servers, zero tracking.</p>
           </div>
-          <div className="p-10 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-orange-200 text-orange-950 transition-transform hover:-translate-y-2 duration-500">
-            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Auto-save.</h4>
-            <p className="text-xl md:text-2xl font-medium leading-tight">Lumnr continuously saves your progress and quietly creates backup snapshots every 5 minutes.</p>
+          <div className={`p-8 md:p-12 border-4 ${borderClass} ${brutalShadow} ${isDark ? 'bg-orange-500 text-black' : 'bg-orange-400 text-black'}`}>
+            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter uppercase">Auto-save.</h4>
+            <p className="text-xl md:text-2xl font-bold leading-tight">Lumnr continuously saves your progress and quietly creates backup snapshots every 5 minutes.</p>
           </div>
-          <div className="p-10 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-lime-200 text-lime-950 transition-transform hover:-translate-y-2 duration-500">
-            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Cache care.</h4>
-            <p className="text-xl md:text-2xl font-medium leading-tight">Clearing your browser cache will delete notes. Use the "Export" feature to back up your work.</p>
+          <div className={`p-8 md:p-12 border-4 ${borderClass} ${brutalShadow} ${isDark ? 'bg-violet-500 text-black' : 'bg-violet-400 text-black'}`}>
+            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter uppercase">Cache care.</h4>
+            <p className="text-xl md:text-2xl font-bold leading-tight">Clearing your browser cache will delete notes. Use the "Export" feature to back up your work.</p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <footer className={`w-full px-6 md:px-10 py-16 flex flex-col items-center justify-center gap-10 text-sm font-bold tracking-widest uppercase z-10 border-t-2 ${theme === 'dark' ? 'border-[#222]' : 'border-[#e0e0e0]'}`}>
-      <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-        <button onClick={() => setModalContent('privacy')} className="hover:opacity-50 transition-opacity">Privacy</button>
-        <button onClick={() => setModalContent('terms')} className="hover:opacity-50 transition-opacity">Terms</button>
-        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-50 transition-opacity">
-          <Coffee size={18} /> Support
-        </a>
-      </div>
-      <div className="mt-8 font-black text-2xl md:text-4xl tracking-tighter flex items-center gap-3">
-          <span className="opacity-50">crafted by</span> AAYAAM
-      </div>
-    </footer>
-  </div>
-);
+      {/* Brutalist Footer */}
+      <footer className={`w-full border-t-4 pt-20 overflow-hidden relative z-10 ${borderClass} ${bgClass}`}>
+        <div className="px-6 max-w-7xl mx-auto mb-20 relative z-10">
+          <div className={`border-4 p-8 md:p-16 flex flex-col md:flex-row justify-between items-center gap-10 transform rotate-1 ${borderClass} ${brutalShadow} ${isDark ? 'bg-pink-600 text-white' : 'bg-pink-400 text-black'}`}>
+            <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-center md:text-left">
+              Let's build<br/>something<br/>wild.
+            </h2>
+            <button 
+              onClick={onStart}
+              className={`border-4 font-black text-2xl md:text-4xl px-8 py-6 uppercase transition-colors flex items-center gap-4 group ${borderClass} ${brutalShadow} ${isDark ? 'bg-[#f4f4f0] text-[#0f0f0f] hover:bg-violet-500 hover:text-white' : 'bg-[#0f0f0f] text-[#f4f4f0] hover:bg-violet-500 hover:text-white'}`}
+            >
+              <PenLine className="group-hover:scale-110 transition-transform" size={40} />
+              Start Writing
+            </button>
+          </div>
+        </div>
+
+        <div className={`w-full border-y-4 py-4 flex overflow-hidden ${borderClass} ${isDark ? 'bg-yellow-500 text-black' : 'bg-yellow-400 text-black'}`}>
+           <div className="animate-marquee-brutal flex w-max shrink-0 text-[12vw] font-black uppercase leading-none tracking-tighter">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center shrink-0">
+                  <span className="mx-8">LUMNR STUDIO</span>
+                  <span className="mx-8 text-outline-brutal-light">LUMNR STUDIO</span>
+                </div>
+              ))}
+           </div>
+        </div>
+
+        <div className="px-6 py-10 flex flex-col md:flex-row justify-between items-center gap-6 font-bold uppercase tracking-wide">
+          <div className="flex flex-wrap items-center justify-center gap-8">
+            <button onClick={() => setModalContent('privacy')} className="hover:opacity-50 transition-opacity">Privacy</button>
+            <button onClick={() => setModalContent('terms')} className="hover:opacity-50 transition-opacity">Terms</button>
+            <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-50 transition-opacity">
+              <Coffee size={20} /> Support
+            </a>
+          </div>
+          <div className="flex items-center gap-3 text-lg md:text-xl font-black">
+              <span className="opacity-50">© {new Date().getFullYear()}</span> AAYAAM
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
 
 // ==========================================
 // COMPONENT: Reusable Modal Wrapper
@@ -868,6 +893,40 @@ const App = () => {
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .animate-in { animation: fadeIn 0.4s ease-out forwards; }
+
+        /* BRUTALIST & AGENCY STYLES */
+        .brutal-shadow-light {
+          box-shadow: 8px 8px 0px 0px #0f0f0f;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .brutal-shadow-light:hover {
+          box-shadow: 12px 12px 0px 0px #0f0f0f;
+          transform: translate(-4px, -4px);
+        }
+        .brutal-shadow-dark {
+          box-shadow: 8px 8px 0px 0px #f4f4f0;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .brutal-shadow-dark:hover {
+          box-shadow: 12px 12px 0px 0px #f4f4f0;
+          transform: translate(-4px, -4px);
+        }
+
+        .text-outline-brutal-light {
+          -webkit-text-fill-color: transparent;
+          -webkit-text-stroke-width: 2px;
+          -webkit-text-stroke-color: #0f0f0f;
+        }
+        .text-outline-brutal-dark {
+          -webkit-text-fill-color: transparent;
+          -webkit-text-stroke-width: 2px;
+          -webkit-text-stroke-color: #f4f4f0;
+        }
+        @media (min-width: 768px) {
+          .text-outline-brutal-light, .text-outline-brutal-dark {
+            -webkit-text-stroke-width: 4px;
+          }
+        }
         
         /* Griflan-style Text Reveals & Animations */
         @keyframes reveal {
@@ -881,39 +940,22 @@ const App = () => {
           100% { opacity: 1; transform: scale(1); }
         }
         .animate-fade-in { animation: fadeInScale 1s cubic-bezier(0.16, 1, 0.3, 1); }
-        
-        /* Griflan-style Bold Animations */
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(80px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slide-up { animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        
-        @keyframes marquee {
+
+        @keyframes marquee-brutal {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        .animate-marquee {
-          display: flex;
-          width: 200%;
-          animation: marquee 15s linear infinite;
+        .animate-marquee-brutal {
+          animation: marquee-brutal 15s linear infinite;
         }
-
-        /* Outline Text Effect */
-        .text-outline {
-          -webkit-text-fill-color: transparent;
-          -webkit-text-stroke-width: 2px;
-          -webkit-text-stroke-color: currentColor;
+        
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
-        @media (min-width: 768px) {
-          .text-outline {
-            -webkit-text-stroke-width: 4px;
-          }
+        .animate-spin-slow {
+          animation: spin-slow 15s linear infinite;
         }
-
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
       `}</style>
     </div>
   );
