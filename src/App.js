@@ -32,7 +32,6 @@ import {
   RotateCcw,
   Trash,
   History,
-  CheckSquare,
   Home,
   Sparkles,
   Cloud,
@@ -130,12 +129,6 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
               <Star size={20} className={isDark ? 'text-[#ffd700]' : 'text-[#ffdf00]'} /> Auto-save.
             </h4>
             <p className="font-semibold opacity-80 leading-relaxed">Yes! Lumnr automatically saves your progress as you type, and creates a backup snapshot every 5 minutes.</p>
-          </div>
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm ${cardBg}`}>
-            <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
-              <CheckSquare size={20} className={iconColor} /> Checklists?
-            </h4>
-            <p className="font-semibold opacity-80 leading-relaxed">Simply click the checklist icon in the editor header, or type "- [ ]" to start a task. You can click the brackets directly!</p>
           </div>
           <div className={`p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm ${cardBg}`}>
             <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
@@ -277,7 +270,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 // ==========================================
 // COMPONENT: Main Editor Area
 // ==========================================
-const Editor = ({ activeNote, updateNote, handleTextareaClick, theme }) => {
+const Editor = ({ activeNote, updateNote, theme }) => {
   return (
     <div className="flex-1 w-full px-5 sm:px-8 lg:px-16 pt-8 sm:pt-12 lg:pt-20 flex flex-col">
       {activeNote ? (
@@ -294,7 +287,6 @@ const Editor = ({ activeNote, updateNote, handleTextareaClick, theme }) => {
             id="note-textarea"
             value={activeNote.content}
             onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
-            onClick={handleTextareaClick}
             placeholder="Write your thoughts..."
             disabled={!!activeNote.deletedAt}
             className={`w-full flex-1 bg-transparent text-base sm:text-lg leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${theme === 'dark' ? 'text-zinc-300 placeholder:text-zinc-700' : 'text-zinc-800 placeholder:text-zinc-400'}`}
@@ -315,7 +307,7 @@ const Editor = ({ activeNote, updateNote, handleTextareaClick, theme }) => {
 // ==========================================
 const Header = ({ 
   theme, activeNote, wordCount, charCount, readingTime, isSaving, 
-  handleToggleCheckbox, shareMenuRef, shareMenuOpen, setShareMenuOpen, 
+  shareMenuRef, shareMenuOpen, setShareMenuOpen, 
   downloadNote, copyToClipboard, shareToSocial, 
   moreMenuRef, moreMenuOpen, setMoreMenuOpen, setModalContent,
   onGoHome
@@ -352,9 +344,6 @@ const Header = ({
 
         {!activeNote?.deletedAt && (
           <>
-            <button onClick={handleToggleCheckbox} className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900'}`} title="Add/Toggle Checkbox">
-              <CheckSquare size={18} />
-            </button>
             <div className="relative" ref={shareMenuRef}>
               <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border shadow-sm ${theme === 'dark' ? 'text-zinc-300 hover:text-white bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'text-zinc-600 hover:text-zinc-900 bg-white border-zinc-200 hover:border-zinc-300'}`}>
                 <Share2 size={12} /> Share
@@ -407,7 +396,7 @@ const Header = ({
 // ==========================================
 const Sidebar = ({
   sidebarOpen, setSidebarOpen, theme, sidebarClasses, inputClasses,
-  createNote, searchQuery, setSearchQuery, showTrash, setShowTrash,
+  createNote, searchQuery, setSearchQuery, showTrash, setShowTrash, showPinned, setShowPinned,
   filteredNotes, activeNoteId, setActiveNoteId, restoreNote,
   permanentlyDeleteNote, togglePin, moveNoteToTrash, notes,
   settingsRef, settingsOpen, setSettingsOpen, toggleTheme, setModalContent
@@ -452,14 +441,20 @@ const Sidebar = ({
         
         <div className={`flex gap-1 p-1 rounded-lg border ${theme === 'dark' ? 'border-zinc-800 bg-zinc-950/50' : 'border-zinc-200/80 bg-zinc-50/50'}`}>
           <button 
-            onClick={() => setShowTrash(false)}
-            className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+            onClick={() => { setShowTrash(false); setShowPinned(false); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash && !showPinned ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
           >
             <PenLine size={12} /> Notes
           </button>
           <button 
-            onClick={() => setShowTrash(true)}
-            className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${showTrash ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+            onClick={() => { setShowTrash(false); setShowPinned(true); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash && showPinned ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+          >
+            <Pin size={12} /> Pinned
+          </button>
+          <button 
+            onClick={() => { setShowTrash(true); setShowPinned(false); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${showTrash ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
           >
             <Trash size={12} /> Trash
           </button>
@@ -469,7 +464,7 @@ const Sidebar = ({
       <div className="flex-1 overflow-y-auto px-2 space-y-0.5 scrollbar-hide">
         {filteredNotes.length === 0 ? (
           <div className="mt-8 text-center text-[10px] uppercase tracking-widest text-zinc-500 opacity-50">
-            {showTrash ? "Trash is empty" : "No notes found"}
+            {showTrash ? "Trash is empty" : (showPinned ? "No pinned notes" : "No notes found")}
           </div>
         ) : (
           filteredNotes.map(note => (
@@ -564,6 +559,9 @@ const App = () => {
     return parsed.filter(note => {
       if (!note.deletedAt) return true;
       return (now - note.deletedAt) < thirtyDaysInMs;
+    }).sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return b.updatedAt - a.updatedAt;
     });
   });
 
@@ -571,6 +569,7 @@ const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTrash, setShowTrash] = useState(false);
+  const [showPinned, setShowPinned] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (typeof window === 'undefined') return 'dark';
     return localStorage.getItem('lumnr_theme') || 'dark';
@@ -623,9 +622,16 @@ const App = () => {
       pinned: false,
       deletedAt: null
     };
-    setNotes([newNote, ...notes]);
+    setNotes(prev => {
+      const updated = [newNote, ...prev];
+      return updated.sort((a, b) => {
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+        return b.updatedAt - a.updatedAt;
+      });
+    });
     setActiveNoteId(newNote.id);
     setShowTrash(false);
+    setShowPinned(false);
   };
 
   const updateNote = (id, fields) => {
@@ -651,7 +657,7 @@ const App = () => {
         return note;
       });
       return updated.sort((a, b) => {
-        if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
@@ -668,7 +674,7 @@ const App = () => {
         note.id === id ? { ...note, pinned: !note.pinned } : note
       );
       return updated.sort((a, b) => {
-        if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
@@ -736,77 +742,10 @@ const App = () => {
     setShareMenuOpen(false);
   };
 
-  const handleToggleCheckbox = () => {
-    if (!activeNote || activeNote.deletedAt) return;
-    const textarea = document.getElementById('note-textarea');
-    if (!textarea) return;
-
-    const { selectionStart, selectionEnd, value } = textarea;
-    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-    let lineEnd = value.indexOf('\n', selectionEnd);
-    if (lineEnd === -1) lineEnd = value.length;
-
-    const line = value.substring(lineStart, lineEnd);
-    const checkboxMatch = line.match(/^(\s*-?\s*)\[([ xX])\](.*)/);
-
-    let newContent = '';
-    let newCursorPos = selectionStart;
-
-    if (checkboxMatch) {
-      const prefix = checkboxMatch[1];
-      const isChecked = checkboxMatch[2].toLowerCase() === 'x';
-      const remainder = checkboxMatch[3];
-      const newBox = isChecked ? '[ ]' : '[x]';
-      const newLine = `${prefix}${newBox}${remainder}`;
-      newContent = value.substring(0, lineStart) + newLine + value.substring(lineEnd);
-    } else {
-      const newLine = `- [ ] ${line}`;
-      newContent = value.substring(0, lineStart) + newLine + value.substring(lineEnd);
-      newCursorPos += 6;
-    }
-
-    updateNote(activeNote.id, { content: newContent });
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
-    }, 0);
-  };
-
-  const handleTextareaClick = (e) => {
-    const { selectionStart, selectionEnd, value } = e.target;
-    if (selectionStart !== selectionEnd) return;
-
-    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-    let lineEnd = value.indexOf('\n', selectionStart);
-    if (lineEnd === -1) lineEnd = value.length;
-
-    const line = value.substring(lineStart, lineEnd);
-    const checkboxMatch = line.match(/^(\s*-?\s*)\[([ xX])\]/);
-
-    if (checkboxMatch) {
-      const prefixLength = checkboxMatch[1].length;
-      const checkboxStart = lineStart + prefixLength;
-      const checkboxEnd = checkboxStart + 3;
-
-      if (selectionStart >= checkboxStart && selectionStart <= checkboxEnd) {
-        const isChecked = checkboxMatch[2].toLowerCase() === 'x';
-        const newChar = isChecked ? ' ' : 'x';
-        const newContent = value.substring(0, checkboxStart + 1) + newChar + value.substring(checkboxStart + 2);
-
-        updateNote(activeNote.id, { content: newContent });
-
-        setTimeout(() => {
-          const textarea = document.getElementById('note-textarea');
-          if (textarea) textarea.setSelectionRange(selectionStart, selectionStart);
-        }, 0);
-      }
-    }
-  };
-
   const filteredNotes = notes.filter(n => {
     const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           n.content.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesSection = showTrash ? !!n.deletedAt : !n.deletedAt;
+    const matchesSection = showTrash ? !!n.deletedAt : (showPinned ? (!n.deletedAt && n.pinned) : !n.deletedAt);
     return matchesSearch && matchesSection;
   });
 
@@ -851,9 +790,10 @@ const App = () => {
             sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} theme={theme}
             sidebarClasses={sidebarClasses} inputClasses={inputClasses}
             createNote={createNote} searchQuery={searchQuery} setSearchQuery={setSearchQuery}
-            showTrash={showTrash} setShowTrash={setShowTrash} filteredNotes={filteredNotes}
-            activeNoteId={activeNoteId} setActiveNoteId={setActiveNoteId} restoreNote={restoreNote}
-            permanentlyDeleteNote={permanentlyDeleteNote} togglePin={togglePin} moveNoteToTrash={moveNoteToTrash}
+            showTrash={showTrash} setShowTrash={setShowTrash} showPinned={showPinned} setShowPinned={setShowPinned}
+            filteredNotes={filteredNotes} activeNoteId={activeNoteId} setActiveNoteId={setActiveNoteId} 
+            restoreNote={restoreNote} permanentlyDeleteNote={permanentlyDeleteNote} 
+            togglePin={togglePin} moveNoteToTrash={moveNoteToTrash}
             notes={notes} settingsRef={settingsRef} settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen}
             toggleTheme={toggleTheme} setModalContent={setModalContent}
           />
@@ -869,7 +809,7 @@ const App = () => {
 
             <Header 
               theme={theme} activeNote={activeNote} wordCount={wordCount} charCount={charCount}
-              readingTime={readingTime} isSaving={isSaving} handleToggleCheckbox={handleToggleCheckbox}
+              readingTime={readingTime} isSaving={isSaving} 
               shareMenuRef={shareMenuRef} shareMenuOpen={shareMenuOpen} setShareMenuOpen={setShareMenuOpen}
               downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
               moreMenuRef={moreMenuRef} moreMenuOpen={moreMenuOpen} setMoreMenuOpen={setMoreMenuOpen}
@@ -879,7 +819,7 @@ const App = () => {
 
             <Editor 
               activeNote={activeNote} updateNote={updateNote} 
-              handleTextareaClick={handleTextareaClick} theme={theme} 
+              theme={theme} 
             />
           </main>
 
