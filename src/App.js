@@ -831,7 +831,10 @@ const App = () => {
     return localStorage.getItem('lumnr_theme') || 'light';
   });
   
-  const [showHome, setShowHome] = useState(true); // New state for Home Page
+  const [showHome, setShowHome] = useState(() => {
+    if (typeof window !== 'undefined') return window.location.hash !== '#editor';
+    return true;
+  });
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
@@ -866,6 +869,15 @@ const App = () => {
     };
   }, []);
 
+  // Browser Back Button Handler
+  useEffect(() => {
+    const handlePopState = () => {
+      setShowHome(window.location.hash !== '#editor');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
@@ -891,9 +903,35 @@ const App = () => {
       });
     });
     setActiveNoteId(newNote.id);
+    if (window.location.hash !== '#editor') {
+      try {
+        window.history.pushState(null, '', '#editor');
+      } catch (e) {
+        window.location.hash = 'editor';
+      }
+    }
     setShowHome(false);
     setShowTrash(false);
     setShowPinned(false);
+  };
+
+  const handleStartWriting = () => {
+    const activeNotes = notes.filter(n => !n.deletedAt);
+    if (activeNotes.length > 0) {
+      if (!activeNoteId || !notes.find(n => n.id === activeNoteId && !n.deletedAt)) {
+        setActiveNoteId(activeNotes[0].id);
+      }
+      if (window.location.hash !== '#editor') {
+        try {
+          window.history.pushState(null, '', '#editor');
+        } catch (e) {
+          window.location.hash = 'editor';
+        }
+      }
+      setShowHome(false);
+    } else {
+      createNote();
+    }
   };
 
   const updateNote = (id, fields) => {
@@ -1033,11 +1071,21 @@ const App = () => {
       {showHome ? (
         <HomePage 
           theme={theme} 
-          onStart={createNote} 
+          onStart={handleStartWriting} 
           toggleTheme={toggleTheme} 
           setModalContent={setModalContent}
           notes={notes}
-          onSelectNote={(id) => { setActiveNoteId(id); setShowHome(false); }}
+          onSelectNote={(id) => { 
+            setActiveNoteId(id); 
+            if (window.location.hash !== '#editor') {
+              try {
+                window.history.pushState(null, '', '#editor');
+              } catch (e) {
+                window.location.hash = 'editor';
+              }
+            }
+            setShowHome(false); 
+          }}
         />
       ) : (
         <>
@@ -1076,7 +1124,14 @@ const App = () => {
               readingTime={readingTime} isSaving={isSaving} 
               shareMenuRef={shareMenuRef} shareMenuOpen={shareMenuOpen} setShareMenuOpen={setShareMenuOpen}
               downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
-              onGoHome={() => setShowHome(true)}
+              onGoHome={() => {
+                try {
+                  window.history.pushState(null, '', '#');
+                } catch (e) {
+                  window.location.hash = '';
+                }
+                setShowHome(true);
+              }}
               updateNote={updateNote}
             />
 
