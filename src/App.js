@@ -32,7 +32,6 @@ import {
   RotateCcw,
   Trash,
   History,
-  CheckSquare,
   Home
 } from 'lucide-react';
 
@@ -40,78 +39,82 @@ import {
 // COMPONENT: Home / Landing Page
 // ==========================================
 const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
-  <div className="flex-1 w-full h-full flex flex-col items-center overflow-y-auto scrollbar-hide relative animate-in">
+  <div className={`flex-1 w-full h-full flex flex-col items-center overflow-y-auto scrollbar-hide relative animate-in ${theme === 'dark' ? 'bg-[#0a0a0a]' : 'bg-[#FAFAF8]'}`}>
+    
+    {/* Lively Background Blobs (Griflan-inspired aesthetic vibes) */}
+    <div className="absolute inset-0 overflow-hidden pointer-events-none flex justify-center items-center opacity-50 dark:opacity-30">
+      <div className="absolute w-[50vw] h-[50vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-pulse bg-orange-400/40 dark:bg-orange-600/30 -top-20 -left-20"></div>
+      <div className="absolute w-[40vw] h-[40vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-pulse bg-rose-400/40 dark:bg-rose-600/30 top-40 right-10" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute w-[60vw] h-[60vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-pulse bg-amber-300/40 dark:bg-amber-600/20 -bottom-32 left-1/4" style={{ animationDelay: '4s' }}></div>
+    </div>
+
     <button 
       onClick={toggleTheme} 
-      className={`absolute top-6 right-6 p-2 rounded-md transition-colors z-10 ${theme === 'dark' ? 'text-zinc-500 hover:text-zinc-100 hover:bg-zinc-900' : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100'}`}
+      className={`absolute top-6 right-6 p-2 rounded-md transition-colors z-20 ${theme === 'dark' ? 'text-zinc-400 hover:text-white hover:bg-white/10' : 'text-zinc-500 hover:text-black hover:bg-black/5'}`}
       title="Toggle Theme"
     >
       {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
     </button>
     
-    <div className="flex-1 flex flex-col items-center justify-center max-w-3xl w-full text-center px-6 py-20 mt-8 space-y-10">
-      <div className="flex flex-col items-center justify-center gap-5">
-        <div className={`p-6 rounded-3xl ${theme === 'dark' ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-200 shadow-sm'}`}>
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>
+    <div className="flex-1 flex flex-col items-center justify-center max-w-4xl w-full text-center px-6 py-20 mt-8 space-y-10 z-10">
+      <div className="flex flex-col items-center justify-center gap-6">
+        <div className={`p-6 rounded-3xl backdrop-blur-md ${theme === 'dark' ? 'bg-white/5 border border-white/10' : 'bg-black/5 border border-black/10 shadow-sm'}`}>
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}>
             <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
             <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h1 className={`text-6xl font-bold tracking-tighter ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>lumnr</h1>
+        <h1 className={`text-7xl md:text-8xl font-black tracking-tighter ${theme === 'dark' ? 'text-white' : 'text-black'}`}>lumnr</h1>
       </div>
       
-      <h2 className={`text-4xl md:text-5xl font-medium tracking-wide ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600'}`} style={{ fontFamily: "'Caveat', cursive" }}>
+      <h2 className={`text-5xl md:text-6xl font-medium tracking-wide ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`} style={{ fontFamily: "'Caveat', cursive" }}>
         Welcome to your digital sanctuary.
       </h2>
 
-      <p className={`text-lg md:text-xl leading-relaxed max-w-xl mx-auto ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>
-        A minimalist workspace designed to remove distractions and let your ideas shine.
+      <p className={`text-xl md:text-2xl font-medium max-w-2xl mx-auto leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-600'}`}>
+        A beautifully lively workspace designed to remove distractions and let your ideas shine.
       </p>
       
       <div className="pt-8">
         <button 
           onClick={onStart}
-          className={`px-10 py-4 rounded-xl font-bold tracking-widest uppercase text-sm flex items-center justify-center gap-3 transition-all shadow-md hover:shadow-xl ${theme === 'dark' ? 'bg-zinc-100 text-zinc-900 hover:bg-white hover:scale-105' : 'bg-zinc-900 text-white hover:bg-black hover:scale-105'}`}
+          className={`px-12 py-5 rounded-2xl font-black tracking-widest uppercase text-sm flex items-center justify-center gap-3 transition-all hover:-translate-y-1 hover:shadow-2xl ${theme === 'dark' ? 'bg-white text-black shadow-white/10' : 'bg-black text-white shadow-black/20'}`}
         >
-          <PenLine size={18} /> Start Writing
+          <PenLine size={20} /> Start Writing
         </button>
       </div>
     </div>
 
-    <div className={`w-full max-w-4xl px-6 py-16 mt-auto border-t ${theme === 'dark' ? 'border-zinc-800/50' : 'border-zinc-200/80'}`}>
-      <h3 className={`text-xs font-bold tracking-widest uppercase text-center mb-10 opacity-50 ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>Frequently Asked Questions</h3>
-      <div className="grid gap-6 md:grid-cols-2 text-left">
-        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
-          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>Where are my notes saved?</h4>
-          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Everything is stored securely in your browser's local storage. We don't use servers, and your data never leaves your device.</p>
+    <div className={`w-full max-w-5xl px-6 py-20 mt-auto border-t z-10 backdrop-blur-sm ${theme === 'dark' ? 'border-white/10' : 'border-black/5'}`}>
+      <h3 className={`text-sm font-black tracking-widest uppercase text-center mb-12 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Frequently Asked Questions</h3>
+      <div className="grid gap-6 md:grid-cols-3 text-left">
+        <div className={`p-8 rounded-3xl transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-white/5 border border-white/5 hover:bg-white/10' : 'bg-white/60 border border-black/5 hover:bg-white shadow-sm hover:shadow-md'}`}>
+          <h4 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Where are my notes saved?</h4>
+          <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-600'}`}>Everything is stored securely in your browser's local storage. We don't use servers, and your data never leaves your device.</p>
         </div>
-        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
-          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>Is there an auto-save feature?</h4>
-          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Yes! Lumnr automatically saves your progress as you type, and creates a backup snapshot every 5 minutes in case you make a mistake.</p>
+        <div className={`p-8 rounded-3xl transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-white/5 border border-white/5 hover:bg-white/10' : 'bg-white/60 border border-black/5 hover:bg-white shadow-sm hover:shadow-md'}`}>
+          <h4 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Is there an auto-save feature?</h4>
+          <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-600'}`}>Yes! Lumnr automatically saves your progress as you type, and creates a backup snapshot every 5 minutes in case you make a mistake.</p>
         </div>
-        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
-          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>How do I use checklists?</h4>
-          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Simply click the checklist icon in the editor header, or type " - [ ] " to start a task. You can click the brackets directly to check them off!</p>
-        </div>
-        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
-          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>What if I clear my browser cache?</h4>
-          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Clearing your cache will delete your notes. Be sure to use the "Export .txt" feature in the share menu to back up important documents.</p>
+        <div className={`p-8 rounded-3xl transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-white/5 border border-white/5 hover:bg-white/10' : 'bg-white/60 border border-black/5 hover:bg-white shadow-sm hover:shadow-md'}`}>
+          <h4 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>What if I clear my browser cache?</h4>
+          <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-600'}`}>Clearing your cache will delete your notes. Be sure to use the "Export .txt" feature in the share menu to back up important documents.</p>
         </div>
       </div>
     </div>
 
-    <footer className={`w-full max-w-4xl px-6 py-8 flex flex-col md:flex-row items-center justify-between text-[10px] sm:text-xs font-medium tracking-wider uppercase border-t ${theme === 'dark' ? 'border-zinc-800/50 text-zinc-500' : 'border-zinc-200/80 text-zinc-400'}`}>
-      <div className="flex items-center flex-wrap justify-center gap-6 mb-6 md:mb-0">
-        <button onClick={() => setModalContent('privacy')} className={`transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-600'}`}>Privacy</button>
-        <button onClick={() => setModalContent('terms')} className={`transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-600'}`}>Terms</button>
-        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-1.5 transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-600'}`}>
-          <Coffee size={14} /> Support
+    <footer className={`w-full max-w-5xl px-6 py-10 flex flex-col md:flex-row items-center justify-between text-xs font-bold tracking-wider uppercase border-t z-10 backdrop-blur-sm ${theme === 'dark' ? 'border-white/10 text-zinc-500' : 'border-black/5 text-zinc-500'}`}>
+      <div className="flex items-center flex-wrap justify-center gap-8 mb-6 md:mb-0">
+        <button onClick={() => setModalContent('privacy')} className={`transition-colors ${theme === 'dark' ? 'hover:text-white' : 'hover:text-black'}`}>Privacy</button>
+        <button onClick={() => setModalContent('terms')} className={`transition-colors ${theme === 'dark' ? 'hover:text-white' : 'hover:text-black'}`}>Terms</button>
+        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 transition-colors ${theme === 'dark' ? 'hover:text-white' : 'hover:text-black'}`}>
+          <Coffee size={16} /> Support
         </a>
       </div>
-      <div className="flex items-center gap-1.5 opacity-80">
+      <div className="flex items-center gap-2 opacity-80">
         <span>Made with</span>
-        <Heart size={12} className="text-red-500 fill-current" />
+        <Heart size={14} className="text-red-500 fill-current" />
         <span>by Aayaam</span>
       </div>
     </footer>
@@ -232,7 +235,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 // ==========================================
 // COMPONENT: Main Editor Area
 // ==========================================
-const Editor = ({ activeNote, updateNote, handleTextareaClick, theme }) => {
+const Editor = ({ activeNote, updateNote, theme }) => {
   return (
     <div className="flex-1 w-full px-5 sm:px-8 lg:px-16 pt-8 sm:pt-12 lg:pt-20 flex flex-col">
       {activeNote ? (
@@ -249,7 +252,6 @@ const Editor = ({ activeNote, updateNote, handleTextareaClick, theme }) => {
             id="note-textarea"
             value={activeNote.content}
             onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
-            onClick={handleTextareaClick}
             placeholder="Write your thoughts..."
             disabled={!!activeNote.deletedAt}
             className={`w-full flex-1 bg-transparent text-base sm:text-lg leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${theme === 'dark' ? 'text-zinc-300 placeholder:text-zinc-700' : 'text-zinc-800 placeholder:text-zinc-400'}`}
@@ -270,7 +272,7 @@ const Editor = ({ activeNote, updateNote, handleTextareaClick, theme }) => {
 // ==========================================
 const Header = ({ 
   theme, activeNote, wordCount, charCount, readingTime, isSaving, 
-  handleToggleCheckbox, shareMenuRef, shareMenuOpen, setShareMenuOpen, 
+  shareMenuRef, shareMenuOpen, setShareMenuOpen, 
   downloadNote, copyToClipboard, shareToSocial, 
   moreMenuRef, moreMenuOpen, setMoreMenuOpen, setModalContent,
   onGoHome
@@ -307,9 +309,6 @@ const Header = ({
 
         {!activeNote?.deletedAt && (
           <>
-            <button onClick={handleToggleCheckbox} className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900'}`} title="Add/Toggle Checkbox">
-              <CheckSquare size={18} />
-            </button>
             <div className="relative" ref={shareMenuRef}>
               <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] uppercase tracking-widest transition-all px-3 py-1.5 rounded-md border shadow-sm ${theme === 'dark' ? 'text-zinc-300 hover:text-white bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'text-zinc-600 hover:text-zinc-900 bg-white border-zinc-200 hover:border-zinc-300'}`}>
                 <Share2 size={12} /> Share
@@ -691,73 +690,6 @@ const App = () => {
     setShareMenuOpen(false);
   };
 
-  const handleToggleCheckbox = () => {
-    if (!activeNote || activeNote.deletedAt) return;
-    const textarea = document.getElementById('note-textarea');
-    if (!textarea) return;
-
-    const { selectionStart, selectionEnd, value } = textarea;
-    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-    let lineEnd = value.indexOf('\n', selectionEnd);
-    if (lineEnd === -1) lineEnd = value.length;
-
-    const line = value.substring(lineStart, lineEnd);
-    const checkboxMatch = line.match(/^(\s*-?\s*)\[([ xX])\](.*)/);
-
-    let newContent = '';
-    let newCursorPos = selectionStart;
-
-    if (checkboxMatch) {
-      const prefix = checkboxMatch[1];
-      const isChecked = checkboxMatch[2].toLowerCase() === 'x';
-      const remainder = checkboxMatch[3];
-      const newBox = isChecked ? '[ ]' : '[x]';
-      const newLine = `${prefix}${newBox}${remainder}`;
-      newContent = value.substring(0, lineStart) + newLine + value.substring(lineEnd);
-    } else {
-      const newLine = `- [ ] ${line}`;
-      newContent = value.substring(0, lineStart) + newLine + value.substring(lineEnd);
-      newCursorPos += 6;
-    }
-
-    updateNote(activeNote.id, { content: newContent });
-    setTimeout(() => {
-      textarea.focus();
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
-    }, 0);
-  };
-
-  const handleTextareaClick = (e) => {
-    const { selectionStart, selectionEnd, value } = e.target;
-    if (selectionStart !== selectionEnd) return;
-
-    const lineStart = value.lastIndexOf('\n', selectionStart - 1) + 1;
-    let lineEnd = value.indexOf('\n', selectionStart);
-    if (lineEnd === -1) lineEnd = value.length;
-
-    const line = value.substring(lineStart, lineEnd);
-    const checkboxMatch = line.match(/^(\s*-?\s*)\[([ xX])\]/);
-
-    if (checkboxMatch) {
-      const prefixLength = checkboxMatch[1].length;
-      const checkboxStart = lineStart + prefixLength;
-      const checkboxEnd = checkboxStart + 3;
-
-      if (selectionStart >= checkboxStart && selectionStart <= checkboxEnd) {
-        const isChecked = checkboxMatch[2].toLowerCase() === 'x';
-        const newChar = isChecked ? ' ' : 'x';
-        const newContent = value.substring(0, checkboxStart + 1) + newChar + value.substring(checkboxStart + 2);
-
-        updateNote(activeNote.id, { content: newContent });
-
-        setTimeout(() => {
-          const textarea = document.getElementById('note-textarea');
-          if (textarea) textarea.setSelectionRange(selectionStart, selectionStart);
-        }, 0);
-      }
-    }
-  };
-
   const filteredNotes = notes.filter(n => {
     const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           n.content.toLowerCase().includes(searchQuery.toLowerCase());
@@ -824,7 +756,7 @@ const App = () => {
 
             <Header 
               theme={theme} activeNote={activeNote} wordCount={wordCount} charCount={charCount}
-              readingTime={readingTime} isSaving={isSaving} handleToggleCheckbox={handleToggleCheckbox}
+              readingTime={readingTime} isSaving={isSaving} 
               shareMenuRef={shareMenuRef} shareMenuOpen={shareMenuOpen} setShareMenuOpen={setShareMenuOpen}
               downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
               moreMenuRef={moreMenuRef} moreMenuOpen={moreMenuOpen} setMoreMenuOpen={setMoreMenuOpen}
@@ -834,7 +766,7 @@ const App = () => {
 
             <Editor 
               activeNote={activeNote} updateNote={updateNote} 
-              handleTextareaClick={handleTextareaClick} theme={theme} 
+              theme={theme} 
             />
           </main>
 
