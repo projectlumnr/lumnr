@@ -43,7 +43,7 @@ import {
 // ==========================================
 // COMPONENT: Notebook Cover
 // ==========================================
-const NotebookCover = ({ color, pattern, title, onClick }) => {
+const NotebookCover = ({ color, pattern, title, onClick, isPinned }) => {
   const patterns = {
     stripes: 'pattern-stripes',
     dots: 'pattern-dots',
@@ -67,6 +67,13 @@ const NotebookCover = ({ color, pattern, title, onClick }) => {
         {/* Spine Detail */}
         <div className="absolute left-0 top-0 bottom-0 w-3 bg-black/10 border-r border-white/5"></div>
         
+        {/* Pinned Indicator */}
+        {isPinned && (
+          <div className="absolute top-2 right-2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-sm border border-black/5 animate-pop-in">
+            <Pin size={10} className="text-[#ff6b8b] fill-current" strokeWidth={3} />
+          </div>
+        )}
+
         {/* Sticker Label */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[75%] aspect-[3/2] bg-white/90 backdrop-blur-sm rounded-md border border-black/5 flex items-center justify-center p-2 shadow-inner group-hover:bg-white transition-colors">
           <span className="text-[10px] font-black text-[#5d4037] line-clamp-3 text-center leading-tight">
@@ -94,15 +101,15 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
   const activeNotes = notes.filter(n => !n.deletedAt);
 
   return (
-    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
+    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative animate-in font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
       
       {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
       <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transform-gpu transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
       {/* Floating Background Decors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-20 left-[10%] animate-float-mimu opacity-60"><Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" /></div>
-        <div className="absolute top-40 right-[10%] animate-bounce-slow opacity-80"><Star size={56} className="text-[#ffd700]" fill="currentColor" /></div>
+        <div className="absolute top-20 lg:top-32 left-[10%] lg:left-[20%] animate-float-mimu opacity-60"><Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" /></div>
+        <div className="absolute top-40 lg:top-52 right-[10%] lg:right-[20%] animate-bounce-slow opacity-80"><Star size={56} className="text-[#ffd700]" fill="currentColor" /></div>
         <div className="absolute bottom-40 left-[15%] animate-float-mimu opacity-70"><Sparkles size={64} className="text-[#c1f2d5]" /></div>
         <div className="absolute bottom-20 right-[15%] animate-bounce-slow opacity-50"><Heart size={48} className="text-[#ff9ebd]" fill="currentColor" /></div>
       </div>
@@ -159,6 +166,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
                 color={note.color}
                 pattern={note.cover}
                 title={note.title}
+                isPinned={note.pinned}
                 onClick={() => onSelectNote(note.id)}
               />
             ))}
@@ -181,7 +189,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           </div>
           
           {/* Tile 2: Blue */}
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
             </h4>
@@ -290,20 +298,36 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
   return (
     <Modal title={title} onClose={() => setModalContent(null)} theme={theme} isHome={isHome}>
       {modalContent === 'about' && (
-        <div className="flex flex-col text-center items-center">
-          <p className="mb-4 text-lg font-black">lumnr is a cozy digital workspace designed to remove distractions and let your ideas shine.</p>
-          <p className="mb-10 opacity-70 font-bold">Built with a focus on speed, privacy, and absolute cuteness. A soft slate for your daily thoughts.</p>
+        <div className="flex flex-col items-center text-center py-2 animate-in">
+          <div className={`p-4 rounded-[2rem] border-2 mb-6 ${isDark ? 'bg-[#ffb7c5]/10 border-[#ffb7c5]/20' : 'bg-[#ff9ebd]/10 border-[#ff9ebd]/20'}`}>
+            <Sparkles size={40} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} strokeWidth={2.5} />
+          </div>
+          
+          <h3 className={`text-2xl font-black mb-3 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>Lumnr v1.2</h3>
+          
+          <p className="text-base font-bold opacity-80 leading-relaxed mb-6">
+            A minimal digital sanctuary designed to quiet the noise and let your creativity bloom. Built for speed, privacy, and the love of beautiful writing.
+          </p>
+
+          <div className="w-full flex flex-col gap-3 mb-10">
+            <div className={`p-4 rounded-2xl border-2 flex items-center justify-center gap-3 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fffcfd] border-[#ffe4e9]'}`}>
+              <ShieldCheck size={18} className="text-[#c1f2d5]" />
+              <span className="text-xs font-black uppercase tracking-widest opacity-60">100% Local & Private</span>
+            </div>
+          </div>
+
           <a 
             href="https://ko-fi.com/lumnr" 
             target="_blank" 
             rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-3 w-full py-5 rounded-3xl text-lg font-black transition-all shadow-sm active:translate-y-1 ${theme === 'dark' ? 'bg-[#ff8da1] text-white hover:brightness-110 shadow-[0_6px_0_#d86a80]' : 'bg-[#ff9ebd] text-white hover:brightness-105 shadow-[0_6px_0_#e07a9b]'}`}
+            className={`flex items-center justify-center gap-3 w-full py-4 rounded-3xl text-base font-black transition-all shadow-sm active:translate-y-1 ${isDark ? 'bg-[#ff8da1] text-white hover:brightness-110 shadow-[0_6px_0_#d86a80]' : 'bg-[#ff9ebd] text-white hover:brightness-105 shadow-[0_6px_0_#e07a9b]'}`}
           >
-            <Coffee size={22} /> Support the Project
+            <Coffee size={20} /> Support the Project
           </a>
-          <div className="flex items-center justify-center gap-2 opacity-50 text-sm font-black mt-10">
-            <span>Made with</span>
-            <Heart size={16} className="text-[#ff6b8b] fill-current" />
+
+          <div className="flex items-center justify-center gap-2 opacity-40 text-xs font-black mt-10 uppercase tracking-widest">
+            <span>Crafted with</span>
+            <Heart size={14} className="text-[#ff6b8b] fill-current animate-soft-blink" />
             <span>by Aayaam</span>
           </div>
         </div>
@@ -672,7 +696,8 @@ const Sidebar = ({
           >
             <div className="flex justify-between items-start mb-1">
               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="w-2.5 h-3.5 rounded-[2px] shadow-sm" style={{ backgroundColor: note.color || '#ff9ebd' }}></div>
+                <div className="w-2.5 h-3.5 rounded-[2px] shadow-sm flex-shrink-0" style={{ backgroundColor: note.color || '#ff9ebd' }}></div>
+                {note.pinned && <Pin size={10} strokeWidth={3} className="flex-shrink-0 text-[#ffb7c5] fill-current" />}
                 <span className={`text-sm font-black truncate ${activeNoteId === note.id ? '' : (theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]')}`}>
                   {note.title || 'Untitled'}
                 </span>
