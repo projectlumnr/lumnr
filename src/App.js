@@ -9,6 +9,7 @@ import {
   Plus, 
   Trash2, 
   ChevronRight, 
+  ChevronLeft,
   PenLine, 
   Clock, 
   Search, 
@@ -126,7 +127,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
         </h3>
         <div className="grid gap-8 md:grid-cols-2">
           {/* Tile 1: Green */}
-          <div className={`opacity-0 animate-fade-up delay-100 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
+          <div className={`opacity-0 animate-fade-up delay-100 p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Cloud size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} /> Local only.
             </h4>
@@ -134,7 +135,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
           </div>
           
           {/* Tile 2: Blue */}
-          <div className={`opacity-0 animate-fade-up delay-200 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
+          <div className={`opacity-0 animate-fade-up delay-200 p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
             </h4>
@@ -142,7 +143,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
           </div>
           
           {/* Tile 3: Yellow/Peach */}
-          <div className={`opacity-0 animate-fade-up delay-300 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
+          <div className={`opacity-0 animate-fade-up delay-300 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Trash2 size={24} className={isDark ? 'text-[#f2ecd5]' : 'text-[#bcac75]'} /> Cache care.
             </h4>
@@ -150,7 +151,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
           </div>
           
           {/* Tile 4: Purple */}
-          <div className={`opacity-0 animate-fade-up delay-400 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
+          <div className={`opacity-0 animate-fade-up delay-400 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <History size={24} className={isDark ? 'text-[#e2d5f2]' : 'text-[#a388c9]'} /> Versions.
             </h4>
@@ -537,8 +538,9 @@ const Sidebar = ({
           <button onClick={createNote} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
             <Plus size={16} strokeWidth={2.5} />
           </button>
-          <button onClick={() => setSidebarOpen(false)} className={`md:hidden p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
-            <X size={16} strokeWidth={2.5} />
+          {/* Close Sidebar Button for Desktop and Mobile */}
+          <button onClick={() => setSidebarOpen(false)} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
+            <ChevronLeft size={16} strokeWidth={2.5} />
           </button>
         </div>
       </div>
