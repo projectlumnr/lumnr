@@ -361,7 +361,7 @@ const Header = ({
 // ==========================================
 const Sidebar = ({
   sidebarOpen, setSidebarOpen, theme, sidebarClasses, inputClasses,
-  createNote, searchQuery, setSearchQuery, showTrash, setShowTrash,
+  createNote, searchQuery, setSearchQuery, showTrash, setShowTrash, showPinned, setShowPinned,
   filteredNotes, activeNoteId, setActiveNoteId, restoreNote,
   permanentlyDeleteNote, togglePin, moveNoteToTrash, notes,
   settingsRef, settingsOpen, setSettingsOpen, toggleTheme, setModalContent
@@ -406,14 +406,20 @@ const Sidebar = ({
         
         <div className={`flex gap-1 p-1 rounded-lg border ${theme === 'dark' ? 'border-zinc-800 bg-zinc-950/50' : 'border-zinc-200/80 bg-zinc-50/50'}`}>
           <button 
-            onClick={() => setShowTrash(false)}
-            className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+            onClick={() => { setShowTrash(false); setShowPinned(false); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash && !showPinned ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
           >
             <PenLine size={12} /> Notes
           </button>
           <button 
-            onClick={() => setShowTrash(true)}
-            className={`flex-1 flex items-center justify-center gap-2 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${showTrash ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+            onClick={() => { setShowTrash(false); setShowPinned(true); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${!showTrash && showPinned ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
+          >
+            <Pin size={12} /> Pinned
+          </button>
+          <button 
+            onClick={() => { setShowTrash(true); setShowPinned(false); }}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-wider font-semibold rounded-md transition-all ${showTrash ? getAccentClass(true) : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'}`}
           >
             <Trash size={12} /> Trash
           </button>
@@ -423,7 +429,7 @@ const Sidebar = ({
       <div className="flex-1 overflow-y-auto px-2 space-y-0.5 scrollbar-hide">
         {filteredNotes.length === 0 ? (
           <div className="mt-8 text-center text-[10px] uppercase tracking-widest text-zinc-500 opacity-50">
-            {showTrash ? "Trash is empty" : "No notes found"}
+            {showTrash ? "Trash is empty" : (showPinned ? "No pinned notes" : "No notes found")}
           </div>
         ) : (
           filteredNotes.map(note => (
@@ -518,6 +524,9 @@ const App = () => {
     return parsed.filter(note => {
       if (!note.deletedAt) return true;
       return (now - note.deletedAt) < thirtyDaysInMs;
+    }).sort((a, b) => {
+      if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+      return b.updatedAt - a.updatedAt;
     });
   });
 
@@ -525,6 +534,7 @@ const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showTrash, setShowTrash] = useState(false);
+  const [showPinned, setShowPinned] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (typeof window === 'undefined') return 'dark';
     return localStorage.getItem('lumnr_theme') || 'dark';
@@ -577,9 +587,16 @@ const App = () => {
       pinned: false,
       deletedAt: null
     };
-    setNotes([newNote, ...notes]);
+    setNotes(prev => {
+      const updated = [newNote, ...prev];
+      return updated.sort((a, b) => {
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+        return b.updatedAt - a.updatedAt;
+      });
+    });
     setActiveNoteId(newNote.id);
     setShowTrash(false);
+    setShowPinned(false);
   };
 
   const updateNote = (id, fields) => {
@@ -605,7 +622,7 @@ const App = () => {
         return note;
       });
       return updated.sort((a, b) => {
-        if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
@@ -622,7 +639,7 @@ const App = () => {
         note.id === id ? { ...note, pinned: !note.pinned } : note
       );
       return updated.sort((a, b) => {
-        if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
+        if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
@@ -693,7 +710,7 @@ const App = () => {
   const filteredNotes = notes.filter(n => {
     const matchesSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           n.content.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesSection = showTrash ? !!n.deletedAt : !n.deletedAt;
+    const matchesSection = showTrash ? !!n.deletedAt : (showPinned ? (!n.deletedAt && n.pinned) : !n.deletedAt);
     return matchesSearch && matchesSection;
   });
 
@@ -738,9 +755,10 @@ const App = () => {
             sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} theme={theme}
             sidebarClasses={sidebarClasses} inputClasses={inputClasses}
             createNote={createNote} searchQuery={searchQuery} setSearchQuery={setSearchQuery}
-            showTrash={showTrash} setShowTrash={setShowTrash} filteredNotes={filteredNotes}
-            activeNoteId={activeNoteId} setActiveNoteId={setActiveNoteId} restoreNote={restoreNote}
-            permanentlyDeleteNote={permanentlyDeleteNote} togglePin={togglePin} moveNoteToTrash={moveNoteToTrash}
+            showTrash={showTrash} setShowTrash={setShowTrash} showPinned={showPinned} setShowPinned={setShowPinned}
+            filteredNotes={filteredNotes} activeNoteId={activeNoteId} setActiveNoteId={setActiveNoteId} 
+            restoreNote={restoreNote} permanentlyDeleteNote={permanentlyDeleteNote} 
+            togglePin={togglePin} moveNoteToTrash={moveNoteToTrash}
             notes={notes} settingsRef={settingsRef} settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen}
             toggleTheme={toggleTheme} setModalContent={setModalContent}
           />
