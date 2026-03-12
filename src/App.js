@@ -31,7 +31,8 @@ import {
   PinOff,
   RotateCcw,
   Trash,
-  Palette
+  Palette,
+  History
 } from 'lucide-react';
 
 const App = () => {
@@ -75,10 +76,12 @@ const App = () => {
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
   
   const shareMenuRef = useRef(null);
   const moreMenuRef = useRef(null);
   const settingsRef = useRef(null);
+  const saveTimeoutRef = useRef(null);
   
   const activeNote = notes.find(n => n.id === activeNoteId);
 
@@ -126,14 +129,35 @@ const App = () => {
 
   const updateNote = (id, fields) => {
     setNotes(prev => {
-      const updated = prev.map(note => 
-        note.id === id ? { ...note, ...fields, updatedAt: Date.now() } : note
-      );
+      const updated = prev.map(note => {
+        if (note.id === id) {
+          const updatedNote = { ...note, ...fields, updatedAt: Date.now() };
+          if (fields.content !== undefined || fields.title !== undefined) {
+            const history = note.history || [];
+            const lastVersion = history[0];
+            if (!lastVersion || (Date.now() - lastVersion.timestamp > 300000)) {
+              updatedNote.history = [{
+                timestamp: Date.now(),
+                title: note.title,
+                content: note.content
+              }, ...history].slice(0, 50);
+            } else {
+              updatedNote.history = history;
+            }
+          }
+          return updatedNote;
+        }
+        return note;
+      });
       return updated.sort((a, b) => {
         if (a.pinned !== b.pinned) return b.pinned ? -1 : 1;
         return b.updatedAt - a.updatedAt;
       });
     });
+
+    setIsSaving(true);
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    saveTimeoutRef.current = setTimeout(() => setIsSaving(false), 1000);
   };
 
   const togglePin = (id, e) => {
@@ -430,6 +454,10 @@ const App = () => {
             <span>{charCount} characters</span>
             <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
             <span>{readingTime} min read</span>
+            <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
+            <span className={`transition-opacity duration-500 ${isSaving ? 'opacity-100' : 'opacity-50'}`}>
+              {isSaving ? 'Saving...' : 'Saved'}
+            </span>
             {activeNote?.deletedAt && (
               <>
                 <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
@@ -469,6 +497,9 @@ const App = () => {
               </button>
               {moreMenuOpen && (
                 <div className={`absolute right-0 top-10 w-40 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
+                  <button onClick={() => { setModalContent('history'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors border-b ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
+                    <History size={12} /> Version History
+                  </button>
                   <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Info size={12} /> About
                   </button>
@@ -515,7 +546,7 @@ const App = () => {
       {/* Modals */}
       {modalContent && (
         <Modal 
-          title={modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : "Terms of Service"} 
+          title={modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : modalContent === 'terms' ? "Terms of Service" : modalContent === 'history' ? "Version History" : ""} 
           onClose={() => setModalContent(null)}
         >
           {modalContent === 'about' && (
@@ -551,6 +582,32 @@ const App = () => {
               <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
               <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
             </>
+          )}
+          {modalContent === 'history' && (
+            <div className="flex flex-col gap-3">
+              <p className="mb-4 text-xs opacity-70">Restore previous versions of this document. Versions are saved automatically.</p>
+              {(!activeNote?.history || activeNote.history.length === 0) ? (
+                <div className="text-center py-8 opacity-50">No previous versions found.</div>
+              ) : (
+                activeNote.history.map((ver, idx) => (
+                  <div key={idx} className={`flex items-center justify-between p-3 rounded-lg border ${theme === 'dark' ? 'border-[#1f1f1f] bg-[#111]' : 'border-zinc-200 bg-zinc-50'}`}>
+                    <div className="flex flex-col">
+                      <span className={`font-medium ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-700'}`}>{new Date(ver.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                      <span className="text-xs opacity-50 truncate max-w-[200px]">{ver.title || 'Untitled'}</span>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        updateNote(activeNote.id, { title: ver.title, content: ver.content });
+                        setModalContent(null);
+                      }}
+                      className={`px-3 py-1.5 rounded text-xs font-semibold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'bg-[#1f1f1f] hover:bg-white hover:text-black' : 'bg-white border shadow-sm hover:bg-black hover:text-white'}`}
+                    >
+                      Restore
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
           )}
         </Modal>
       )}
