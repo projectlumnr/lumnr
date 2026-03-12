@@ -45,8 +45,8 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
   const isDark = theme === 'dark';
   
   // Mimu-inspired Soft Color Palette
-  const bgWrapper = isDark ? 'bg-[#2b2738]' : 'bg-[#fff0f5]';
-  const textMain = isDark ? 'text-[#fce4ec]' : 'text-[#6d4c41]';
+  const bgWrapper = isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]';
+  const textMain = isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]';
   const cardBg = isDark ? 'bg-[#3b364c]' : 'bg-white';
   const btnBg = isDark ? 'bg-[#ff8da1]' : 'bg-[#ff9ebd]';
   const btnShadow = isDark ? 'shadow-[0_8px_0_#d86a80]' : 'shadow-[0_8px_0_#e07a9b]';
@@ -55,36 +55,36 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
   return (
     <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative animate-in font-['Quicksand',sans-serif] ${bgWrapper} ${textMain}`}>
       
-      {/* Aesthetic Mimu Grid Layer */}
-      <div className={`absolute inset-0 z-0 opacity-40 pointer-events-none ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
+      {/* Aesthetic Mimu Gridline Layer */}
+      <div className={`absolute inset-0 z-0 opacity-30 pointer-events-none ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
       {/* Floating Background Decors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-20 lg:top-32 left-[10%] lg:left-[20%] animate-float-mimu opacity-60">
-          <Cloud size={80} className={iconColor} fill="currentColor" />
+          <Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" />
         </div>
         <div className="absolute top-40 lg:top-52 right-[10%] lg:right-[20%] animate-bounce-slow opacity-80" style={{ animationDelay: '1s' }}>
-          <Star size={56} className={isDark ? 'text-[#ffd700]' : 'text-[#ffdf00]'} fill="currentColor" />
+          <Star size={56} className="text-[#ffd700]" fill="currentColor" />
         </div>
         <div className="absolute bottom-40 lg:bottom-64 left-[15%] lg:left-[25%] animate-float-mimu opacity-70" style={{ animationDelay: '2s' }}>
-          <Sparkles size={64} className={isDark ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} />
+          <Sparkles size={64} className="text-[#c1f2d5]" />
         </div>
         <div className="absolute bottom-20 lg:bottom-32 right-[15%] lg:right-[25%] animate-bounce-slow opacity-50" style={{ animationDelay: '0.5s' }}>
-          <Heart size={48} className={iconColor} fill="currentColor" />
+          <Heart size={48} className="text-[#ff9ebd]" fill="currentColor" />
         </div>
       </div>
 
       {/* Top Bar */}
       <div className="w-full p-6 md:p-8 flex justify-between items-center z-20">
         <div className="flex items-center gap-3">
-          <div className={`p-3 rounded-[1rem] ${cardBg} shadow-sm animate-bounce-slow`}>
+          <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
             <Sparkles size={24} className={iconColor} />
           </div>
-          <span className="font-bold text-2xl tracking-tight">lumnr</span>
+          <span className="font-black text-2xl tracking-tight">lumnr</span>
         </div>
         <button 
           onClick={toggleTheme} 
-          className={`p-3 rounded-full transition-transform hover:scale-110 active:scale-95 shadow-sm ${cardBg}`}
+          className={`p-3 rounded-full transition-transform hover:scale-110 active:scale-95 shadow-sm border-2 ${cardBg} ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}
           title="Toggle Theme"
         >
           {theme === 'dark' ? <Sun size={20} className="text-[#ffd700]" /> : <Moon size={20} className="text-[#a6c9ff]" />}
@@ -93,15 +93,17 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
       
       {/* Hero Section */}
       <div className="flex-1 flex flex-col items-center justify-center max-w-3xl w-full text-center px-6 py-12 z-10">
-        <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-4 animate-fade-up">
-          lumnr.
-        </h1>
+        <div className="animate-fade-up">
+           <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[#ff9ebd] via-[#c1f2d5] to-[#a6c9ff]">
+            lumnr.
+          </h1>
+        </div>
         
         <h2 className="text-2xl md:text-4xl font-bold mb-6 opacity-90 animate-fade-up delay-100">
           welcome to your digital sanctuary.
         </h2>
 
-        <p className="text-lg md:text-xl font-semibold max-w-xl mx-auto leading-relaxed opacity-80 mb-12 animate-fade-up delay-200">
+        <p className="text-lg md:text-xl font-bold max-w-xl mx-auto leading-relaxed opacity-70 mb-12 animate-fade-up delay-200">
           a minimalist digital workspace designed to remove distractions and let your ideas shine.
         </p>
         
@@ -109,58 +111,65 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
         <div className="animate-fade-up delay-300">
           <button 
             onClick={onStart}
-            className={`group px-10 py-5 rounded-full font-bold text-xl flex items-center justify-center gap-3 transition-all duration-150 text-white ${btnBg} ${btnShadow} active:translate-y-[8px] active:shadow-none hover:brightness-105`}
+            className={`group px-12 py-5 rounded-full font-black text-xl flex items-center justify-center gap-3 transition-all duration-150 text-white ${btnBg} ${btnShadow} active:translate-y-[8px] active:shadow-none hover:brightness-105`}
           >
-            <PenLine size={24} className="group-hover:rotate-12 transition-transform" /> 
+            <PenLine size={26} className="group-hover:rotate-12 transition-transform" /> 
             Start Writing
           </button>
         </div>
       </div>
 
-      {/* FAQ Section */}
-      <div className="w-full max-w-5xl px-6 py-20 z-10">
-        <h3 className="text-2xl font-bold text-center mb-10 opacity-90 animate-fade-up">
+      {/* FAQ Section with Multi-color Pastel Tiles */}
+      <div className="w-full max-w-5xl px-6 py-24 z-10">
+        <h3 className="text-2xl font-black text-center mb-12 opacity-90 animate-fade-up">
           ✨ Good to know ✨
         </h3>
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className={`opacity-0 animate-fade-up delay-100 p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffccd5]'} ${cardBg}`}>
-            <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
-              <Cloud size={20} className={iconColor} /> Local only.
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Tile 1: Green */}
+          <div className={`opacity-0 animate-fade-up delay-100 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8] shadow-sm'}`}>
+            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+              <Cloud size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} /> Local only.
             </h4>
-            <p className="font-semibold opacity-80 leading-relaxed">Everything is stored securely in your browser's local storage. Zero servers, zero tracking.</p>
+            <p className="font-bold opacity-90 text-lg leading-relaxed">Everything is stored securely in your browser's local storage. Zero servers, zero tracking. Just you and your thoughts.</p>
           </div>
-          <div className={`opacity-0 animate-fade-up delay-200 p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffccd5]'} ${cardBg}`}>
-            <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
-              <Star size={20} className={isDark ? 'text-[#ffd700]' : 'text-[#ffdf00]'} /> Auto-save.
+          
+          {/* Tile 2: Blue */}
+          <div className={`opacity-0 animate-fade-up delay-200 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
+            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+              <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
             </h4>
-            <p className="font-semibold opacity-80 leading-relaxed">Yes! Lumnr automatically saves your progress as you type, and creates a backup snapshot every 5 minutes.</p>
+            <p className="font-bold opacity-90 text-lg leading-relaxed">Yes! Lumnr automatically saves your progress as you type, and quietly creates a backup snapshot every 5 minutes.</p>
           </div>
-          <div className={`opacity-0 animate-fade-up delay-300 p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffccd5]'} ${cardBg}`}>
-            <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
-              <Trash2 size={20} className={isDark ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} /> Cache care.
+          
+          {/* Tile 3: Yellow/Peach */}
+          <div className={`opacity-0 animate-fade-up delay-300 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1] shadow-sm'}`}>
+            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+              <Trash2 size={24} className={isDark ? 'text-[#f2ecd5]' : 'text-[#bcac75]'} /> Cache care.
             </h4>
-            <p className="font-semibold opacity-80 leading-relaxed">Clearing your cache will delete your notes. Be sure to use the "Export .txt" feature to back up important documents.</p>
+            <p className="font-bold opacity-90 text-lg leading-relaxed">Clearing your browser cache will delete local documents. Use the "Export" feature to keep physical backups of important work.</p>
           </div>
-          <div className={`opacity-0 animate-fade-up delay-400 p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffccd5]'} ${cardBg}`}>
-            <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
-              <History size={20} className={iconColor} /> Version history.
+          
+          {/* Tile 4: Purple */}
+          <div className={`opacity-0 animate-fade-up delay-400 p-8 md:p-10 rounded-[2.5rem] transition-all hover:-translate-y-2 border-b-[6px] ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5] shadow-sm'}`}>
+            <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
+              <History size={24} className={isDark ? 'text-[#e2d5f2]' : 'text-[#a388c9]'} /> Versions.
             </h4>
-            <p className="font-semibold opacity-80 leading-relaxed">Made a mistake? No problem. Access past versions of your current document directly from the settings menu.</p>
+            <p className="font-bold opacity-90 text-lg leading-relaxed">Mistakes happen! Access previous versions of your document at any time from the settings gear in your editor.</p>
           </div>
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="w-full px-6 py-12 flex flex-col items-center justify-center gap-6 font-bold z-10 opacity-80">
-        <div className="flex flex-wrap items-center justify-center gap-8">
-          <button onClick={() => setModalContent('privacy')} className="hover:opacity-60 transition-opacity hover:-translate-y-1">Privacy</button>
-          <button onClick={() => setModalContent('terms')} className="hover:opacity-60 transition-opacity hover:-translate-y-1">Terms</button>
-          <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 hover:opacity-60 transition-opacity hover:-translate-y-1 ${iconColor}`}>
-            <Coffee size={18} /> Support
+      <footer className="w-full px-6 py-16 flex flex-col items-center justify-center gap-8 font-black z-10 opacity-80">
+        <div className="flex flex-wrap items-center justify-center gap-10">
+          <button onClick={() => setModalContent('privacy')} className="hover:opacity-60 transition-all hover:-translate-y-1">Privacy</button>
+          <button onClick={() => setModalContent('terms')} className="hover:opacity-60 transition-all hover:-translate-y-1">Terms</button>
+          <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 hover:opacity-60 transition-all hover:-translate-y-1 ${iconColor}`}>
+            <Coffee size={20} /> Support
           </a>
         </div>
-        <div className="flex items-center gap-2 mt-4 text-lg">
-          crafted with <Heart size={20} className="text-red-400 fill-current animate-bounce-slow" /> by Aayaam
+        <div className="flex items-center gap-3 mt-4 text-xl">
+          crafted with <Heart size={24} className="text-[#ff6b8b] fill-current animate-bounce-slow" /> by Aayaam
         </div>
       </footer>
     </div>
@@ -172,21 +181,21 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
 // ==========================================
 const Modal = ({ title, children, onClose, theme, isHome }) => {
   const homeStyle = isHome 
-    ? `border-4 ${theme === 'dark' ? 'border-[#ff8da1] shadow-[0_12px_0_#d86a80]' : 'border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'} rounded-[3rem]`
+    ? `border-4 ${theme === 'dark' ? 'border-[#ff8da1] shadow-[0_12px_0_#d86a80]' : 'border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'} rounded-[3.5rem]`
     : `border-2 ${theme === 'dark' ? 'border-[#4a445d]' : 'border-[#ffccd5]'} rounded-[2.5rem] shadow-2xl`;
 
   const animationClass = isHome ? 'animate-pop-in' : 'animate-in';
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/20 backdrop-blur-sm p-6 ${animationClass}`}>
+    <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-sm p-6 ${animationClass}`}>
       <div className={`${theme === 'dark' ? 'bg-[#3b364c]' : 'bg-white'} w-full max-w-lg overflow-hidden ${homeStyle}`}>
-        <div className={`flex items-center justify-between p-6 ${isHome ? 'border-b-4' : 'border-b-2'} ${theme === 'dark' ? 'border-[#4a445d]' : 'border-[#ffccd5]'}`}>
-          <h2 className={`text-sm font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>{title}</h2>
-          <button onClick={onClose} className={`p-2 rounded-full transition-transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#6d4c41]'}`}>
+        <div className={`flex items-center justify-between p-6 ${isHome ? 'border-b-4' : 'border-b-2'} ${theme === 'dark' ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
+          <h2 className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{title}</h2>
+          <button onClick={onClose} className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#5d4037]'}`}>
             <X size={18} strokeWidth={2.5} />
           </button>
         </div>
-        <div className={`p-8 ${theme === 'dark' ? 'text-[#e6d5eb]' : 'text-[#8d6e63]'} text-sm font-medium leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
+        <div className={`p-10 ${theme === 'dark' ? 'text-[#e6d5eb]' : 'text-[#795548]'} text-base font-bold leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
           {children}
         </div>
       </div>
@@ -205,19 +214,19 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
     <Modal title={title} onClose={() => setModalContent(null)} theme={theme} isHome={isHome}>
       {modalContent === 'about' && (
         <div className="flex flex-col text-center items-center">
-          <p className="mb-4 text-base font-bold">lumnr is a cozy digital workspace designed to remove distractions and let your ideas shine.</p>
-          <p className="mb-8 opacity-80">Built with a focus on speed, privacy, and absolute cuteness. A soft slate for your daily thoughts.</p>
+          <p className="mb-4 text-lg font-black">lumnr is a cozy digital workspace designed to remove distractions and let your ideas shine.</p>
+          <p className="mb-10 opacity-70 font-bold">Built with a focus on speed, privacy, and absolute cuteness. A soft slate for your daily thoughts.</p>
           <a 
             href="https://ko-fi.com/lumnr" 
             target="_blank" 
             rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-2 w-full py-4 rounded-3xl text-sm font-bold transition-all shadow-sm active:translate-y-1 ${theme === 'dark' ? 'bg-[#ff8da1] text-white hover:brightness-110 shadow-[0_4px_0_#d86a80]' : 'bg-[#ff9ebd] text-white hover:brightness-105 shadow-[0_4px_0_#e07a9b]'}`}
+            className={`flex items-center justify-center gap-3 w-full py-5 rounded-3xl text-lg font-black transition-all shadow-sm active:translate-y-1 ${theme === 'dark' ? 'bg-[#ff8da1] text-white hover:brightness-110 shadow-[0_6px_0_#d86a80]' : 'bg-[#ff9ebd] text-white hover:brightness-105 shadow-[0_6px_0_#e07a9b]'}`}
           >
-            <Coffee size={18} /> Support the Project
+            <Coffee size={22} /> Support the Project
           </a>
-          <div className="flex items-center justify-center gap-1.5 opacity-60 text-xs font-bold mt-8">
+          <div className="flex items-center justify-center gap-2 opacity-50 text-sm font-black mt-10">
             <span>Made with</span>
-            <Heart size={14} className="text-[#ff6b8b] fill-current" />
+            <Heart size={16} className="text-[#ff6b8b] fill-current" />
             <span>by Aayaam</span>
           </div>
         </div>
@@ -225,31 +234,27 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
       
       {modalContent === 'privacy' && (
         isHome ? (
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className={`p-5 rounded-full ${theme === 'dark' ? 'bg-[#ff8da1]/20' : 'bg-[#ff9ebd]/20'} animate-bounce-slow`}>
-              <ShieldCheck size={48} className={theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
+          <div className="flex flex-col items-center text-center space-y-6">
+            <div className={`p-6 rounded-full ${theme === 'dark' ? 'bg-[#ff8da1]/20' : 'bg-[#ff9ebd]/20'} animate-bounce-slow`}>
+              <ShieldCheck size={56} className={theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
             </div>
-            <h3 className={`font-bold text-2xl mb-2 ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>Privacy Magic ✨</h3>
-            <p className="font-semibold opacity-80 leading-relaxed">Your digital sanctuary is perfectly safe. Everything lives directly in your browser's local memory. We don't use tracking cookies, we don't have servers, and your words belong entirely to you.</p>
-            <div className={`mt-4 w-full p-5 rounded-3xl border-2 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]' : 'border-[#ffccd5] bg-[#fff0f5]'}`}>
-              <Cloud size={28} className={`mx-auto mb-2 ${theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'}`} />
-              <p className="font-bold text-sm">100% Client-Side</p>
+            <h3 className={`font-black text-3xl mb-2 ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>Privacy Magic ✨</h3>
+            <p className="font-bold opacity-80 leading-relaxed text-lg">Your digital sanctuary is perfectly safe. Everything lives directly in your browser's local memory. We don't use tracking cookies, we don't have servers, and your words belong entirely to you.</p>
+            <div className={`mt-4 w-full p-6 rounded-[2.5rem] border-2 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]' : 'border-[#ffe4e9] bg-[#fffcfd]'}`}>
+              <Cloud size={32} className={`mx-auto mb-2 ${theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'}`} />
+              <p className="font-black text-sm uppercase tracking-widest">100% Client-Side</p>
             </div>
           </div>
         ) : (
           <div className="flex flex-col space-y-6">
-            <p className={`font-bold text-base ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>✨ Your data stays strictly with you.</p>
-            <div className={`p-4 rounded-2xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
-              <h3 className={`text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`}><Cloud size={14}/> Local Storage</h3>
-              <p>lumnr is a client-side application. All your notes, settings, and version histories are saved directly in your device's browser memory. We do not operate servers, and your data never leaves your device.</p>
+            <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ Your data stays strictly with you.</p>
+            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
+              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Cloud size={16}/> Local Storage</h3>
+              <p className="font-bold text-sm opacity-80">All your notes and settings are saved directly in your device's browser memory. We never see your content.</p>
             </div>
-            <div className={`p-4 rounded-2xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
-              <h3 className={`text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`}><Sparkles size={14}/> Data Collection</h3>
-              <p>We do not track your typing, employ analytics, use tracking cookies, or sell your information. We have absolutely zero access to the content you create.</p>
-            </div>
-            <div className={`p-4 rounded-2xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
-              <h3 className={`text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`}><ShieldCheck size={14}/> Security</h3>
-              <p>Because your data is stored locally, the privacy and security of your notes depend entirely on the physical and digital security of your own device.</p>
+            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
+              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Sparkles size={16}/> Data Collection</h3>
+              <p className="font-bold text-sm opacity-80">We do not track your typing or use tracking cookies. We have absolutely zero access to your documents.</p>
             </div>
           </div>
         )
@@ -257,31 +262,27 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 
       {modalContent === 'terms' && (
         isHome ? (
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className={`p-5 rounded-full ${theme === 'dark' ? 'bg-[#a6c9ff]/20' : 'bg-[#87cefa]/20'} animate-bounce-slow`}>
-              <FileText size={48} className={theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} />
+          <div className="flex flex-col items-center text-center space-y-6">
+            <div className={`p-6 rounded-full ${theme === 'dark' ? 'bg-[#a6c9ff]/20' : 'bg-[#87cefa]/20'} animate-bounce-slow`}>
+              <FileText size={56} className={theme === 'dark' ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} />
             </div>
-            <h3 className={`font-bold text-2xl mb-2 ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>Friendly Rules 📜</h3>
-            <p className="font-semibold opacity-80 leading-relaxed">Because your data lives safely in your browser, clearing your cache will clear your notes! Please use the download button to keep your own backups.</p>
-            <div className={`mt-4 w-full p-5 rounded-3xl border-2 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]' : 'border-[#ffccd5] bg-[#fff0f5]'}`}>
-              <Star size={28} className={`mx-auto mb-2 ${theme === 'dark' ? 'text-[#ffd700]' : 'text-[#ffdf00]'}`} />
-              <p className="font-bold text-sm">Provided "As Is" with love.</p>
+            <h3 className={`font-black text-3xl mb-2 ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>Friendly Rules 📜</h3>
+            <p className="font-bold opacity-80 leading-relaxed text-lg">Since your documents live safely in your browser, clearing your cache will delete your notes! Please use the download button to keep your own copies.</p>
+            <div className={`mt-4 w-full p-6 rounded-[2.5rem] border-2 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]' : 'border-[#ffe4e9] bg-[#fffcfd]'}`}>
+              <Star size={32} className={`mx-auto mb-2 text-[#ffd700]`} />
+              <p className="font-black text-sm uppercase tracking-widest">Provided "As Is" with love.</p>
             </div>
           </div>
         ) : (
           <div className="flex flex-col space-y-6">
-            <p className={`font-bold text-base ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>✨ By using lumnr, you agree to the following.</p>
-            <div className={`p-4 rounded-2xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
-              <h3 className={`text-xs font-bold uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`}>Data Loss & Backups</h3>
-              <p>As lumnr relies entirely on browser local storage, clearing your browser cache, using strict incognito modes, or switching devices will result in permanent data loss unless you manually export your documents. You are solely responsible for maintaining your own backups.</p>
+            <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
+            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
+              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
+              <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
             </div>
-            <div className={`p-4 rounded-2xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
-              <h3 className={`text-xs font-bold uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`}>"As Is" Service</h3>
-              <p>The software is provided "as is", without warranty of any kind, express or implied. We do not guarantee continuous availability or error-free operation.</p>
-            </div>
-            <div className={`p-4 rounded-2xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
-              <h3 className={`text-xs font-bold uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`}>Limitation of Liability</h3>
-              <p>Under no circumstances shall the creators of lumnr be held liable for any data loss, damages, or issues arising from the use or inability to use this application.</p>
+            <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#e2d5f2] border-[#d0c1e5]'}`}>
+              <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
+              <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
             </div>
           </div>
         )
@@ -289,22 +290,22 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 
       {modalContent === 'history' && (
         <div className="flex flex-col gap-3">
-          <p className="mb-4 text-xs opacity-70 font-bold text-center">Restore previous versions of this document. Versions are saved automatically.</p>
+          <p className="mb-4 text-sm font-black text-center opacity-70">Restore previous versions of this document.</p>
           {(!activeNote?.history || activeNote.history.length === 0) ? (
-            <div className={`text-center py-8 opacity-50 rounded-3xl ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>No previous versions found.</div>
+            <div className={`text-center py-12 font-bold opacity-50 rounded-[2.5rem] ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>No previous versions found ✨</div>
           ) : (
             activeNote.history.map((ver, idx) => (
-              <div key={idx} className={`flex items-center justify-between p-4 rounded-[1.5rem] border-2 transition-all ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738] hover:bg-[#3b364c]' : 'border-[#ffccd5] bg-white hover:bg-[#fff0f5]'}`}>
+              <div key={idx} className={`flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738] hover:bg-[#3b364c]' : 'border-[#ffe4e9] bg-white hover:bg-[#fff0f5]'}`}>
                 <div className="flex flex-col">
-                  <span className={`font-bold ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>{new Date(ver.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</span>
-                  <span className="text-xs opacity-60 truncate max-w-[180px] mt-0.5">{ver.title || 'Untitled'}</span>
+                  <span className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{new Date(ver.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                  <span className="text-sm font-bold opacity-60 truncate max-w-[180px] mt-0.5">{ver.title || 'Untitled'}</span>
                 </div>
                 <button 
                   onClick={() => {
                     updateNote(activeNote.id, { title: ver.title, content: ver.content });
                     setModalContent(null);
                   }}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'bg-[#4a445d] hover:bg-[#ff8da1] hover:text-white' : 'bg-[#fff0f5] border-2 border-[#ffccd5] hover:bg-[#ff9ebd] hover:border-[#ff9ebd] hover:text-white'}`}
+                  className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${theme === 'dark' ? 'bg-[#4a445d] hover:bg-[#ff8da1] hover:text-white' : 'bg-[#fff0f5] border-2 border-[#ffe4e9] hover:bg-[#ff9ebd] hover:border-[#ff9ebd] hover:text-white shadow-sm'}`}
                 >
                   Restore
                 </button>
@@ -322,16 +323,16 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 // ==========================================
 const Editor = ({ activeNote, updateNote, theme }) => {
   return (
-    <div className="flex-1 w-full px-5 sm:px-8 lg:px-16 pt-8 sm:pt-12 lg:pt-20 flex flex-col">
+    <div className="flex-1 w-full px-5 sm:px-12 lg:px-24 pt-8 sm:pt-12 lg:pt-16 flex flex-col">
       {activeNote ? (
-        <div className={`flex-1 flex flex-col space-y-6 sm:space-y-10 animate-in ${activeNote.deletedAt ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div className={`flex-1 flex flex-col space-y-4 sm:space-y-6 animate-in ${activeNote.deletedAt ? 'opacity-50 pointer-events-none' : ''}`}>
           <input
             type="text"
             value={activeNote.title}
             onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
             placeholder="Untitled"
             disabled={!!activeNote.deletedAt}
-            className={`w-full bg-transparent text-4xl sm:text-5xl font-bold tracking-tight focus:outline-none ${theme === 'dark' ? 'text-[#fce4ec] placeholder:text-[#4a445d]' : 'text-[#6d4c41] placeholder:text-[#ffccd5]'}`}
+            className={`w-full bg-transparent text-3xl sm:text-4xl font-black tracking-tight focus:outline-none ${theme === 'dark' ? 'text-[#fce4ec] placeholder:text-[#4a445d]' : 'text-[#5d4037] placeholder:text-[#ffe4e9]'}`}
           />
           <textarea
             id="note-textarea"
@@ -339,15 +340,15 @@ const Editor = ({ activeNote, updateNote, theme }) => {
             onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
             placeholder="Write your thoughts..."
             disabled={!!activeNote.deletedAt}
-            className={`w-full flex-1 bg-transparent text-lg sm:text-xl font-medium leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${theme === 'dark' ? 'text-[#e6d5eb] placeholder:text-[#4a445d]' : 'text-[#8d6e63] placeholder:text-[#ffccd5]'}`}
+            className={`w-full flex-1 bg-transparent text-base sm:text-lg font-bold leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${theme === 'dark' ? 'text-[#e6d5eb] placeholder:text-[#4a445d]' : 'text-[#795548] placeholder:text-[#ffe4e9]'}`}
           />
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center space-y-6 opacity-60">
-          <div className={`p-8 rounded-[2rem] shadow-sm ${theme === 'dark' ? 'bg-[#3b364c]' : 'bg-white'}`}>
-            <Sparkles size={64} className={`animate-float-mimu ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`} />
+          <div className={`p-8 rounded-[2rem] shadow-sm border-2 animate-float-mimu ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+            <Sparkles size={64} className={theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
           </div>
-          <p className={`text-sm font-bold tracking-widest uppercase animate-pulse ${theme === 'dark' ? 'text-[#e6d5eb]' : 'text-[#8d6e63]'}`}>Select a document to begin ✨</p>
+          <p className={`text-sm font-black tracking-widest uppercase animate-pulse ${theme === 'dark' ? 'text-[#e6d5eb]' : 'text-[#5d4037]'}`}>Select a document to begin ✨</p>
         </div>
       )}
     </div>
@@ -365,54 +366,45 @@ const Header = ({
   onGoHome
 }) => {
   return (
-    <header className={`h-16 flex-shrink-0 border-b-2 flex items-center justify-between px-4 sm:px-6 z-10 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]/80 backdrop-blur-md' : 'border-[#ffccd5] bg-[#fff0f5]/80 backdrop-blur-md'}`}>
-      <div className={`flex items-center gap-3 sm:gap-4 text-[10px] sm:text-[11px] font-bold uppercase tracking-widest whitespace-nowrap overflow-x-auto scrollbar-hide pr-2 ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]'}`}>
+    <header className={`h-14 flex-shrink-0 border-b-2 flex items-center justify-between px-4 sm:px-6 z-10 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]/80 backdrop-blur-md' : 'border-[#ffe4e9] bg-[#fffcfd]/80 backdrop-blur-md'}`}>
+      <div className={`flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] font-black uppercase tracking-widest whitespace-nowrap overflow-x-auto scrollbar-hide pr-2 ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]'}`}>
         <span className="flex items-center gap-1.5 flex-shrink-0">
           <Clock size={14} strokeWidth={2.5} />
           {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}
         </span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden sm:block ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffccd5]'}`}></div>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden sm:block ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className="hidden sm:inline flex-shrink-0">{wordCount} words</span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden md:block ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffccd5]'}`}></div>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden md:block ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className="hidden md:inline flex-shrink-0">{charCount} characters</span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden lg:block ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffccd5]'}`}></div>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden lg:block ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className="hidden lg:inline flex-shrink-0">{readingTime} min read</span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffccd5]'}`}></div>
-        <span className={`transition-opacity duration-500 flex-shrink-0 ${isSaving ? `opacity-100 ${theme === 'dark' ? 'text-[#ff8da1]' : 'text-[#ff6b8b]'}` : 'opacity-50'}`}>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
+        <span className={`transition-opacity duration-500 flex-shrink-0 ${isSaving ? `opacity-100 ${theme === 'dark' ? 'text-[#ff8da1]' : 'text-[#ff6b8b]'}` : 'opacity-40'}`}>
           {isSaving ? 'Saving ✨' : 'Saved'}
         </span>
-        {activeNote?.deletedAt && (
-          <>
-            <div className={`w-[2px] h-4 flex-shrink-0 rounded-full ${theme === 'dark' ? 'bg-[#4a445d]' : 'bg-[#ffccd5]'}`}></div>
-            <span className="text-[#ff6b8b] flex-shrink-0">Archived Document</span>
-          </>
-        )}
       </div>
       
       <div className="flex items-center gap-2 flex-shrink-0 pl-2">
-        <button onClick={onGoHome} className={`p-2.5 rounded-full transition-all active:scale-95 flex items-center ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#6d4c41] hover:bg-white shadow-sm'}`} title="Go Home">
-          <Home size={18} strokeWidth={2.5} />
+        <button onClick={onGoHome} className={`p-2 rounded-full transition-all active:scale-90 flex items-center border-2 ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`} title="Go Home">
+          <Home size={16} strokeWidth={2.5} />
         </button>
 
         {!activeNote?.deletedAt && (
           <>
             <div className="relative" ref={shareMenuRef}>
-              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest transition-all px-4 py-2.5 rounded-full active:scale-95 border-2 shadow-sm ${theme === 'dark' ? 'text-[#fce4ec] bg-[#3b364c] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#6d4c41] bg-white border-[#ffccd5] hover:bg-[#fff0f5]'}`}>
-                <Share2 size={14} strokeWidth={2.5} /> Share
+              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-all px-4 py-1.5 rounded-full active:scale-95 border-2 shadow-sm ${theme === 'dark' ? 'text-[#fce4ec] bg-[#3b364c] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#5d4037] bg-white border-[#ffe4e9] hover:bg-[#fff0f5]'}`}>
+                <Share2 size={13} strokeWidth={2.5} /> Share
               </button>
               {shareMenuOpen && (
-                <div className={`absolute right-0 top-12 w-48 border-2 rounded-3xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffccd5]'}`}>
-                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                    <Download size={16} /> Download .txt
+                <div className={`absolute right-0 top-11 w-48 border-2 rounded-[1.5rem] shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                    <Download size={14} strokeWidth={2.5} /> Download .txt
                   </button>
-                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold border-b-2 transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d] border-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b] border-[#ffccd5]'}`}>
-                    <Copy size={16} /> Copy Text
+                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black border-b-2 transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d] border-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b] border-[#ffe4e9]'}`}>
+                    <Copy size={14} strokeWidth={2.5} /> Copy Text
                   </button>
-                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                    <Twitter size={16} /> Twitter
-                  </button>
-                  <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                    <ExternalLink size={16} /> WhatsApp
+                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                    <Twitter size={14} strokeWidth={2.5} /> Twitter
                   </button>
                 </div>
               )}
@@ -421,19 +413,19 @@ const Header = ({
         )}
 
         <div className="relative" ref={moreMenuRef}>
-          <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`p-2.5 rounded-full transition-all active:scale-95 flex items-center ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#6d4c41] hover:bg-white shadow-sm'}`}>
-            <MoreHorizontal size={20} strokeWidth={2.5} />
+          <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`p-2 rounded-full transition-all active:scale-90 flex items-center border-2 ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`}>
+            <MoreHorizontal size={18} strokeWidth={2.5} />
           </button>
           {moreMenuOpen && (
-            <div className={`absolute right-0 top-12 w-48 border-2 rounded-3xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffccd5]'}`}>
-              <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <Info size={16} /> About
+            <div className={`absolute right-0 top-11 w-48 border-2 rounded-[1.5rem] shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+              <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                <Info size={14} strokeWidth={2.5} /> About
               </button>
-              <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <ShieldCheck size={16} /> Privacy
+              <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                <ShieldCheck size={14} strokeWidth={2.5} /> Privacy
               </button>
-              <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <FileText size={16} /> Terms
+              <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                <FileText size={14} strokeWidth={2.5} /> Terms
               </button>
             </div>
           )}
@@ -454,71 +446,71 @@ const Sidebar = ({
   settingsRef, settingsOpen, setSettingsOpen, toggleTheme, setModalContent
 }) => {
   const getAccentClass = (isActive) => {
-    if (!isActive) return theme === 'dark' ? 'hover:bg-[#2b2738]/80 text-[#9e96b3] hover:scale-[1.02]' : 'hover:bg-[#fff0f5]/80 text-[#a1887f] hover:scale-[1.02]';
+    if (!isActive) return theme === 'dark' ? 'hover:bg-[#2b2738]/80 text-[#9e96b3]' : 'hover:bg-[#fff5f7]/80 text-[#a1887f]';
     return theme === 'dark' 
-      ? 'bg-[#2b2738] text-[#fce4ec] border-2 border-[#4a445d] shadow-sm scale-[1.02]' 
-      : 'bg-[#fff0f5] text-[#6d4c41] border-2 border-[#ffccd5] shadow-sm scale-[1.02]';
+      ? 'bg-[#2b2738] text-[#fce4ec] border-2 border-[#4a445d] shadow-sm' 
+      : 'bg-white text-[#5d4037] border-2 border-[#ffe4e9] shadow-sm';
   };
 
   return (
-    <aside className={`${sidebarOpen ? 'w-[85vw] sm:w-80' : 'w-0'} absolute md:relative z-40 h-full transition-[width] duration-500 ease-in-out flex flex-col overflow-hidden ${sidebarClasses} ${sidebarOpen ? 'shadow-2xl md:shadow-none' : ''}`}>
-      <div className="p-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className={`p-2.5 rounded-[1rem] shadow-sm animate-bounce-slow ${theme === 'dark' ? 'bg-[#2b2738] border border-[#4a445d]' : 'bg-white border border-[#ffccd5]'}`}>
-             <Sparkles size={20} className={theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
-          </div>
-          <span className={`font-bold tracking-tight text-2xl ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]'}`}>lumnr</span>
-        </div>
+    <aside className={`${sidebarOpen ? 'w-[80vw] sm:w-72' : 'w-0'} absolute md:relative z-40 h-full transition-[width] duration-500 ease-in-out flex flex-col overflow-hidden ${sidebarClasses} ${sidebarOpen ? 'shadow-2xl md:shadow-none' : ''}`}>
+      <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <button onClick={createNote} className={`p-2.5 rounded-full transition-transform active:scale-95 ${theme === 'dark' ? 'bg-[#2b2738] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white text-[#ff6b8b] hover:text-[#6d4c41] shadow-sm'}`}>
-            <Plus size={20} strokeWidth={2.5} />
+          <div className={`p-1.5 rounded-[0.8rem] shadow-sm animate-bounce-slow border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+             <Sparkles size={16} className={theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
+          </div>
+          <span className={`font-black tracking-tight text-xl ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>lumnr</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button onClick={createNote} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
+            <Plus size={16} strokeWidth={2.5} />
           </button>
-          <button onClick={() => setSidebarOpen(false)} className={`md:hidden p-2.5 rounded-full transition-transform active:scale-95 ${theme === 'dark' ? 'bg-[#2b2738] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white text-[#ff6b8b] hover:text-[#6d4c41] shadow-sm'}`}>
-            <X size={20} strokeWidth={2.5} />
+          <button onClick={() => setSidebarOpen(false)} className={`md:hidden p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
+            <X size={16} strokeWidth={2.5} />
           </button>
         </div>
       </div>
 
-      <div className="px-5 mb-6 space-y-4">
+      <div className="px-4 mb-4 space-y-4">
         <div className="relative group">
-          <Search className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#ffb7c5]'}`} size={18} />
+          <Search className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#ffccd5]'}`} size={16} strokeWidth={2.5} />
           <input 
             type="text"
-            placeholder="Search notes..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full rounded-2xl py-3.5 pl-12 pr-4 text-sm font-bold focus:outline-none transition-colors ${inputClasses}`}
+            className={`w-full rounded-xl py-2 pl-10 pr-4 text-sm font-bold focus:outline-none transition-colors border-2 ${inputClasses}`}
           />
         </div>
         
-        <div className={`flex gap-1.5 p-1.5 rounded-[1.2rem] ${theme === 'dark' ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>
+        <div className={`flex gap-1 p-1 rounded-xl border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
           <button 
             onClick={() => { setShowTrash(false); setShowPinned(false); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] uppercase tracking-widest font-bold rounded-xl transition-all ${!showTrash && !showPinned ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#6d4c41]')}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${!showTrash && !showPinned ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
           >
-            <PenLine size={14} /> Notes
+            <PenLine size={12} strokeWidth={2.5} />
           </button>
           <button 
             onClick={() => { setShowTrash(false); setShowPinned(true); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] uppercase tracking-widest font-bold rounded-xl transition-all ${!showTrash && showPinned ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#6d4c41]')}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${!showTrash && showPinned ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
           >
-            <Pin size={14} /> Pinned
+            <Pin size={12} strokeWidth={2.5} />
           </button>
           <button 
             onClick={() => { setShowTrash(true); setShowPinned(false); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 text-[11px] uppercase tracking-widest font-bold rounded-xl transition-all ${showTrash ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#6d4c41]')}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${showTrash ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
           >
-            <Trash size={14} /> Trash
+            <Trash size={12} strokeWidth={2.5} />
           </button>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 space-y-2 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto px-3 space-y-2 scrollbar-hide">
         {filteredNotes.length === 0 ? (
-          <div className="mt-12 flex flex-col items-center gap-4 opacity-50">
-            {showTrash ? <Trash size={40} className={theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#ffb7c5]'} /> : (showPinned ? <Star size={40} className={theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#ffb7c5]'} /> : <Cloud size={40} className={theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#ffb7c5]'} />)}
-            <span className={`text-[11px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]'}`}>
-              {showTrash ? "Trash is empty" : (showPinned ? "No pinned notes ✨" : "So empty here ✨")}
+          <div className="mt-8 flex flex-col items-center gap-3 opacity-50">
+            {showTrash ? <Trash size={32} className="text-[#a6c9ff]" strokeWidth={2.5} /> : (showPinned ? <Star size={32} className="text-[#ffd700]" strokeWidth={2.5} /> : <Cloud size={32} className="text-[#ff9ebd]" strokeWidth={2.5} />)}
+            <span className={`text-[10px] font-black uppercase tracking-widest ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]'}`}>
+              {showTrash ? "Trash is empty" : (showPinned ? "No pins ✨" : "So empty ✨")}
             </span>
           </div>
         ) : (
@@ -529,38 +521,38 @@ const Sidebar = ({
                 setActiveNoteId(note.id);
                 if (window.innerWidth < 768) setSidebarOpen(false);
               }}
-              className={`group flex flex-col p-4 rounded-2xl cursor-pointer transition-all duration-200 border-2 border-transparent ${getAccentClass(activeNoteId === note.id)}`}
+              className={`group flex flex-col p-3 rounded-2xl cursor-pointer transition-all duration-200 border-2 border-transparent ${getAccentClass(activeNoteId === note.id)}`}
             >
-              <div className="flex justify-between items-start mb-1.5">
-                <div className="flex items-center gap-2.5 overflow-hidden">
-                  {note.pinned && <Pin size={14} className={`flex-shrink-0 fill-current ${activeNoteId === note.id ? '' : 'text-[#ffb7c5]'}`} />}
-                  <span className={`text-[15px] font-bold truncate ${activeNoteId === note.id ? '' : (theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#6d4c41]')}`}>
+              <div className="flex justify-between items-start mb-1">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  {note.pinned && <Pin size={12} strokeWidth={2.5} className={`flex-shrink-0 fill-current ${activeNoteId === note.id ? '' : 'text-[#ffccd5]'}`} />}
+                  <span className={`text-sm font-black truncate ${activeNoteId === note.id ? '' : (theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]')}`}>
                     {note.title || 'Untitled'}
                   </span>
                 </div>
                 <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
                   {showTrash ? (
                     <>
-                      <button onClick={(e) => restoreNote(note.id, e)} className={`p-1.5 transition-colors ${theme === 'dark' ? 'text-[#9e96b3] hover:text-[#ffb7c5]' : 'text-[#ffb7c5] hover:text-[#ff6b8b]'}`} title="Restore">
+                      <button onClick={(e) => restoreNote(note.id, e)} className={`p-1 transition-colors text-[#5fa8d3]`} title="Restore">
                         <RotateCcw size={16} strokeWidth={2.5} />
                       </button>
-                      <button onClick={(e) => permanentlyDeleteNote(note.id, e)} className={`p-1.5 transition-colors ${theme === 'dark' ? 'text-[#9e96b3] hover:text-red-400' : 'text-[#ffb7c5] hover:text-red-500'}`} title="Delete Permanently">
+                      <button onClick={(e) => permanentlyDeleteNote(note.id, e)} className={`p-1 transition-colors text-[#ff6b8b]`} title="Delete Permanently">
                         <Trash2 size={16} strokeWidth={2.5} />
                       </button>
                     </>
                   ) : (
                     <>
-                      <button onClick={(e) => togglePin(note.id, e)} className={`p-1.5 transition-colors ${note.pinned ? (activeNoteId === note.id ? 'text-current' : 'text-[#ffb7c5]') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#ffb7c5]' : 'text-[#ffb7c5] hover:text-[#ff6b8b]')}`}>
+                      <button onClick={(e) => togglePin(note.id, e)} className={`p-1 transition-colors ${note.pinned ? (activeNoteId === note.id ? 'text-[#ff9ebd]' : 'text-[#ff9ebd]') : 'text-[#ffccd5] hover:text-[#ff9ebd]'}`}>
                         {note.pinned ? <PinOff size={16} strokeWidth={2.5} /> : <Pin size={16} strokeWidth={2.5} />}
                       </button>
-                      <button onClick={(e) => moveNoteToTrash(note.id, e)} className={`p-1.5 transition-colors ${theme === 'dark' ? 'text-[#9e96b3] hover:text-red-400' : 'text-[#ffb7c5] hover:text-red-500'}`}>
+                      <button onClick={(e) => moveNoteToTrash(note.id, e)} className={`p-1 transition-colors text-[#ffccd5] hover:text-[#ff6b8b]`}>
                         <Trash size={16} strokeWidth={2.5} />
                       </button>
                     </>
                   )}
                 </div>
               </div>
-              <span className={`text-[10px] line-clamp-1 truncate uppercase tracking-widest font-bold ${activeNoteId === note.id ? 'opacity-80' : (theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]')}`}>
+              <span className={`text-[9px] line-clamp-1 truncate uppercase tracking-widest font-black ${activeNoteId === note.id ? 'opacity-80' : (theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]')}`}>
                 {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
               </span>
             </div>
@@ -568,20 +560,20 @@ const Sidebar = ({
         )}
       </div>
 
-      <div className={`p-5 border-t-2 text-[11px] font-bold uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#4a445d] text-[#9e96b3]' : 'border-[#ffccd5] text-[#a1887f]'}`}>
+      <div className={`p-4 border-t-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#4a445d] text-[#9e96b3]' : 'border-[#ffe4e9] text-[#a1887f]'}`}>
         <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
         <div ref={settingsRef}>
-          <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-2 rounded-full transition-transform active:scale-95 ${theme === 'dark' ? 'hover:bg-[#2b2738] hover:text-[#fce4ec]' : 'hover:bg-white hover:text-[#ff6b8b] hover:shadow-sm'}`}>
-            <Settings size={18} strokeWidth={2.5} />
+          <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-2 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'border-[#4a445d] hover:bg-[#2b2738] hover:text-[#fce4ec]' : 'border-[#ffe4e9] hover:bg-white hover:text-[#ff6b8b] hover:shadow-sm'}`}>
+            <Settings size={16} strokeWidth={2.5} />
           </button>
           {settingsOpen && (
-            <div className={`absolute bottom-16 right-4 w-56 border-2 rounded-3xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffccd5]'}`}>
-              <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            <div className={`absolute bottom-14 right-4 w-48 border-2 rounded-2xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+              <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff5f7] hover:text-[#ff6b8b]'}`}>
+                {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
                 {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
               </button>
-              <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-5 py-3 text-xs font-bold transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#6d4c41] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
-                <History size={16} /> Version History
+              <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff5f7] hover:text-[#ff6b8b]'}`}>
+                <History size={14} /> Version History
               </button>
             </div>
           )}
@@ -810,15 +802,15 @@ const App = () => {
 
   const themeClasses = theme === 'dark' 
     ? 'bg-[#2b2738] text-[#fce4ec] selection:bg-[#ff8da1] selection:text-[#fff]' 
-    : 'bg-[#fff0f5] text-[#6d4c41] selection:bg-[#ffb7c5] selection:text-[#6d4c41]';
+    : 'bg-[#fffcfd] text-[#5d4037] selection:bg-[#ffb7c5] selection:text-[#5d4037]';
 
   const sidebarClasses = theme === 'dark'
     ? 'bg-[#3b364c]/95 border-[#4a445d] border-r-2 backdrop-blur-xl'
-    : 'bg-white/95 border-[#ffccd5] border-r-2 backdrop-blur-xl';
+    : 'bg-white/95 border-[#ffe4e9] border-r-4 backdrop-blur-xl';
 
   const inputClasses = theme === 'dark'
     ? 'bg-[#2b2738] border-2 border-[#4a445d] text-[#fce4ec] focus:border-[#ff8da1] placeholder:text-[#9e96b3] shadow-inner'
-    : 'bg-[#fff0f5] border-2 border-[#ffccd5] text-[#6d4c41] focus:border-[#ff9ebd] placeholder:text-[#a1887f] shadow-inner';
+    : 'bg-white border-2 border-[#ffe4e9] text-[#5d4037] focus:border-[#ff9ebd] placeholder:text-[#ffccd5] shadow-inner';
 
   return (
     <div className={`flex h-screen font-sans theme-transition font-['Quicksand',sans-serif] ${themeClasses}`}>
@@ -835,7 +827,7 @@ const App = () => {
           {/* 1. Mobile Overlay Background */}
           {sidebarOpen && (
             <div 
-              className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-30" 
+              className="md:hidden fixed inset-0 bg-black/10 backdrop-blur-sm z-30" 
               onClick={() => setSidebarOpen(false)}
             />
           )}
@@ -857,9 +849,9 @@ const App = () => {
           <main className="flex-1 flex flex-col relative">
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-2 border-y-2 border-r-2 rounded-r-2xl transition-transform active:scale-95 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d] text-[#ffb7c5]' : 'bg-white border-[#ffccd5] text-[#ff6b8b]'}`}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-1.5 border-y-4 border-r-4 rounded-r-2xl transition-transform active:scale-90 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d] text-[#ffb7c5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b]'}`}
             >
-              <ChevronRight size={20} strokeWidth={2.5} />
+              <ChevronRight size={18} strokeWidth={4} />
             </button>
 
             <Header 
@@ -881,7 +873,7 @@ const App = () => {
         </>
       )}
 
-      {/* 4. Popups Component (Passed isHome to change styling contextually) */}
+      {/* 4. Popups Component */}
       <ContentModals 
         modalContent={modalContent} setModalContent={setModalContent} 
         theme={theme} activeNote={activeNote} updateNote={updateNote} 
@@ -890,24 +882,24 @@ const App = () => {
 
       {/* Global CSS */}
       <style>{`
-        /* Added from index.css */
-        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
         
-        body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background-color: #fff0f5; }
-        .theme-transition * { transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), fill 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important; }
-        .theme-transition { transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background-color: #fffcfd; overflow: hidden; }
+        .theme-transition * { transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; }
+        .theme-transition { transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Mimu Aesthetic Background Grids */
+        /* Mimu Aesthetic Background Gridlines */
         .bg-grid-light {
-          background-size: 32px 32px;
-          background-image: radial-gradient(circle, #ff9ebd 1.5px, rgba(0, 0, 0, 0) 1.5px);
+          background-size: 40px 40px;
+          background-image: linear-gradient(to right, #ffe4e9 1px, transparent 1px),
+                            linear-gradient(to bottom, #ffe4e9 1px, transparent 1px);
         }
         .bg-grid-dark {
-          background-size: 32px 32px;
-          background-image: radial-gradient(circle, #ffb7c5 1.5px, rgba(0, 0, 0, 0) 1.5px);
+          background-size: 40px 40px;
+          background-image: linear-gradient(to right, #3b364c 1px, transparent 1px),
+                            linear-gradient(to bottom, #3b364c 1px, transparent 1px);
         }
 
         /* Smooth Entrance Animations */
@@ -915,17 +907,16 @@ const App = () => {
         .animate-in { animation: fadeIn 0.4s ease-out forwards; }
         
         @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
+          to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        .animate-fade-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
         @keyframes popIn { 
-          0% { opacity: 0; transform: scale(0.9) translateY(10px); } 
-          60% { opacity: 1; transform: scale(1.02) translateY(-2px); } 
+          0% { opacity: 0; transform: scale(0.85) translateY(20px); } 
           100% { opacity: 1; transform: scale(1) translateY(0); } 
         }
-        .animate-pop-in { animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
@@ -935,15 +926,15 @@ const App = () => {
         /* Mimu Floating Animations */
         @keyframes float-mimu {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(5deg); }
+          50% { transform: translateY(-25px) rotate(3deg); }
         }
-        .animate-float-mimu { animation: float-mimu 6s ease-in-out infinite; }
+        .animate-float-mimu { animation: float-mimu 8s ease-in-out infinite; }
         
         @keyframes bounce-mimu {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
+          50% { transform: translateY(-18px); }
         }
-        .animate-bounce-slow { animation: bounce-mimu 4s ease-in-out infinite; }
+        .animate-bounce-slow { animation: bounce-mimu 5s ease-in-out infinite; }
       `}</style>
     </div>
   );
