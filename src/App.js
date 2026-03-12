@@ -220,6 +220,7 @@ const App = () => {
 
   const wordCount = activeNote?.content.trim() ? activeNote.content.trim().split(/\s+/).length : 0;
   const charCount = activeNote?.content.length || 0;
+  const readingTime = Math.ceil(wordCount / 200);
 
   // Accents Configuration
   const accents = {
@@ -427,6 +428,8 @@ const App = () => {
             <span>{wordCount} words</span>
             <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
             <span>{charCount} characters</span>
+            <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
+            <span>{readingTime} min read</span>
             {activeNote?.deletedAt && (
               <>
                 <div className={`w-[1px] h-3 ${theme === 'dark' ? 'bg-[#1f1f1f]' : 'bg-zinc-200'}`}></div>
