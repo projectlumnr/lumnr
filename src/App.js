@@ -535,6 +535,8 @@ const Header = ({
         <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden sm:block ${isDark ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className="hidden sm:inline flex-shrink-0">{wordCount} words</span>
         <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden md:block ${isDark ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
+        <span className="hidden md:inline flex-shrink-0">{charCount} characters</span>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden lg:block ${isDark ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className={`transition-opacity duration-500 flex-shrink-0 ${isSaving ? `opacity-100 ${isDark ? 'text-[#ff8da1]' : 'text-[#ff6b8b]'}` : 'opacity-40'}`}>
           {isSaving ? 'Saving ✨' : 'Saved'}
         </span>
