@@ -39,94 +39,103 @@ import {
 // COMPONENT: Home / Landing Page
 // ==========================================
 const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
-  <div className={`flex-1 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto scrollbar-hide relative ${theme === 'dark' ? 'bg-[#1c1917] text-stone-100' : 'bg-[#faf8f5] text-stone-900'}`}>
+  <div className={`flex-1 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto relative selection:bg-violet-500 selection:text-white ${theme === 'dark' ? 'bg-[#0f0f0f] text-[#f4f4f0]' : 'bg-[#f4f4f0] text-[#0f0f0f]'}`}>
     
-    {/* Griflan-style Asymmetrical Blobs */}
-    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-80 dark:opacity-30">
-      <div className="absolute w-[70vw] h-[70vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] animate-float bg-orange-400/60 dark:bg-orange-500/40 -top-40 -left-20"></div>
-      <div className="absolute w-[50vw] h-[50vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-float bg-rose-400/60 dark:bg-rose-500/40 top-[20%] -right-32" style={{ animationDelay: '2s' }}></div>
-      <div className="absolute w-[80vw] h-[80vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[140px] animate-float bg-amber-300/60 dark:bg-amber-600/30 -bottom-60 left-[10%]" style={{ animationDelay: '4s' }}></div>
-    </div>
+    {/* Griflan-style Navbar */}
+    <nav className="w-full p-6 md:p-10 flex justify-between items-center z-50 absolute top-0 left-0">
+      <div className="font-black text-2xl tracking-tighter flex items-center gap-3">
+        <div className={`w-3 h-3 rounded-full animate-pulse ${theme === 'dark' ? 'bg-violet-400' : 'bg-violet-600'}`}></div>
+        lumnr©
+      </div>
+      <button onClick={toggleTheme} className={`p-4 rounded-full border-2 transition-all duration-300 hover:scale-110 ${theme === 'dark' ? 'border-[#f4f4f0] hover:bg-[#f4f4f0] hover:text-[#0f0f0f]' : 'border-[#0f0f0f] hover:bg-[#0f0f0f] hover:text-[#f4f4f0]'}`}>
+        {theme === 'dark' ? <Sun size={20} strokeWidth={3} /> : <Moon size={20} strokeWidth={3} />}
+      </button>
+    </nav>
 
-    <button 
-      onClick={toggleTheme} 
-      className={`absolute top-8 right-8 p-4 rounded-full transition-all duration-500 z-50 hover:scale-110 hover:-rotate-12 ${theme === 'dark' ? 'bg-stone-800/80 text-orange-300 hover:bg-orange-500 hover:text-white' : 'bg-white/80 text-orange-600 hover:bg-orange-500 hover:text-white shadow-xl backdrop-blur-md'}`}
-      title="Toggle Theme"
-    >
-      {theme === 'dark' ? <Sun size={24} strokeWidth={2.5} /> : <Moon size={24} strokeWidth={2.5} />}
-    </button>
-    
-    <div className="w-full min-h-[90vh] flex flex-col items-start justify-center px-8 md:px-20 lg:px-32 relative z-10">
-      
-      <div className="opacity-0 animate-slide-up w-full">
-        <h1 className="text-[20vw] md:text-[15vw] leading-[0.8] font-black tracking-tighter mix-blend-overlay dark:mix-blend-normal relative -left-2 md:-left-5">
-          lumnr<span className="text-orange-500">.</span>
+    {/* Massive Editorial Hero */}
+    <section className="w-full pt-32 md:pt-40 px-6 md:px-10 flex flex-col min-h-[90vh] justify-between z-10">
+      <div className="flex flex-col animate-slide-up">
+        <h1 className="text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0">
+          Think.
+        </h1>
+        <h1 className="text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 text-outline">
+          Write.
+        </h1>
+        <h1 className="text-[18vw] md:text-[12vw] leading-[0.85] font-black tracking-tighter uppercase m-0 p-0 flex items-center gap-4 md:gap-8">
+          Create.
+          <div className={`hidden md:block h-[8vw] w-[20vw] rounded-full ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`}></div>
         </h1>
       </div>
-      
-      <div className="opacity-0 animate-slide-up delay-100 mt-8 md:mt-0 md:absolute md:top-1/3 md:right-20 lg:right-32 max-w-md z-20 pointer-events-none">
-        <h2 className="text-6xl md:text-8xl font-medium tracking-tight mb-6" style={{ fontFamily: "'Caveat', cursive", transform: 'rotate(-6deg)' }}>
-          not your <br/> average <br/> notepad
-        </h2>
-      </div>
 
-      <div className="opacity-0 animate-slide-up delay-200 mt-16 max-w-2xl">
-        <p className={`text-2xl md:text-4xl font-medium leading-snug ${theme === 'dark' ? 'text-stone-400' : 'text-stone-600'}`}>
-          A digital sanctuary designed to remove distractions, break the grid, and let your ideas <i className="text-orange-500 font-serif">shine</i>.
+      <div className="w-full flex flex-col md:flex-row items-start md:items-end justify-between mt-20 md:mt-10 pb-20 gap-10 animate-slide-up delay-200">
+        <p className="text-xl md:text-3xl font-medium max-w-2xl leading-tight">
+          a minimalist digital workspace designed to remove distractions and let your ideas shine.
         </p>
-      </div>
-      
-      <div className="opacity-0 animate-slide-up delay-300 pt-20">
         <button 
           onClick={onStart}
-          className={`group relative px-12 py-6 rounded-full font-black tracking-[0.2em] uppercase text-sm md:text-base flex items-center justify-center gap-4 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl overflow-hidden ${theme === 'dark' ? 'bg-stone-100 text-stone-900 shadow-orange-900/20' : 'bg-stone-900 text-white shadow-orange-500/30'}`}
+          className={`group relative flex items-center justify-center w-40 h-40 md:w-56 md:h-56 rounded-full font-bold tracking-[0.15em] uppercase text-sm md:text-lg transition-transform duration-500 hover:scale-105 overflow-hidden shrink-0 ${theme === 'dark' ? 'bg-[#f4f4f0] text-[#0f0f0f]' : 'bg-[#0f0f0f] text-[#f4f4f0]'}`}
         >
-          <span className="relative z-10 flex items-center gap-3 group-hover:text-white dark:group-hover:text-stone-900 transition-colors duration-500">
-            <PenLine size={24} className="group-hover:rotate-12 transition-transform duration-500" /> Start Writing
+          <div className={`absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 rounded-full ${theme === 'dark' ? 'bg-violet-500' : 'bg-violet-600'}`}></div>
+          <span className="relative z-10 flex flex-col items-center gap-2 group-hover:text-white transition-colors duration-500">
+            <PenLine size={32} strokeWidth={2} className="group-hover:-rotate-12 transition-transform duration-500" />
+            Start
           </span>
-          <div className={`absolute inset-0 w-full h-full transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ${theme === 'dark' ? 'bg-orange-400' : 'bg-orange-500'}`}></div>
         </button>
       </div>
-    </div>
+    </section>
 
-    {/* Griflan-style Grid Breaker / Offset Layout for FAQs */}
-    <div className={`w-full px-8 md:px-20 lg:px-32 py-32 z-10 ${theme === 'dark' ? 'bg-stone-900/80 backdrop-blur-xl' : 'bg-white/60 backdrop-blur-3xl'}`}>
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20">
-        <div className="lg:w-1/3">
-          <h3 className="text-6xl md:text-7xl font-black tracking-tighter leading-none mb-8">
-            Good<br/>to know
-          </h3>
-          <p className={`text-2xl font-medium leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Everything works right in your browser. Fast, fluid, and completely private.</p>
+    {/* Griflan Infinite Marquee */}
+    <section className={`w-full py-6 md:py-8 overflow-hidden flex rotate-[-2deg] scale-[1.05] z-20 shadow-2xl ${theme === 'dark' ? 'bg-violet-600 text-white' : 'bg-violet-600 text-white'}`}>
+      <div className="animate-marquee font-black text-5xl md:text-7xl uppercase tracking-tighter flex whitespace-nowrap">
+        <span className="mx-6 md:mx-10">NO DISTRACTIONS</span><span className="mx-6 md:mx-10">•</span>
+        <span className="mx-6 md:mx-10">PURE FOCUS</span><span className="mx-6 md:mx-10">•</span>
+        <span className="mx-6 md:mx-10">LOCAL STORAGE</span><span className="mx-6 md:mx-10">•</span>
+        <span className="mx-6 md:mx-10">YOUR DATA</span><span className="mx-6 md:mx-10">•</span>
+        {/* Duplicated for seamless scrolling */}
+        <span className="mx-6 md:mx-10">NO DISTRACTIONS</span><span className="mx-6 md:mx-10">•</span>
+        <span className="mx-6 md:mx-10">PURE FOCUS</span><span className="mx-6 md:mx-10">•</span>
+        <span className="mx-6 md:mx-10">LOCAL STORAGE</span><span className="mx-6 md:mx-10">•</span>
+        <span className="mx-6 md:mx-10">YOUR DATA</span><span className="mx-6 md:mx-10">•</span>
+      </div>
+    </section>
+
+    {/* Big Block FAQs (Agency Brutalism) */}
+    <section className="w-full px-6 md:px-10 py-32 md:py-48 z-10">
+      <div className="max-w-7xl mx-auto flex flex-col gap-10 md:gap-16">
+        <div className="w-full flex justify-between items-end mb-8">
+            <h3 className="text-5xl md:text-8xl font-black tracking-tighter leading-none">
+              Good to<br/>know.
+            </h3>
+            <Heart size={64} className="hidden md:block text-rose-500 animate-pulse mb-4" />
         </div>
 
-        <div className="lg:w-2/3 grid sm:grid-cols-2 gap-8 md:gap-12 pb-16 lg:pb-0">
-          <div className={`p-10 md:p-12 rounded-[3rem] transition-all duration-500 hover:-translate-y-4 hover:rotate-2 ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700 hover:bg-stone-800' : 'bg-stone-50 border border-stone-200/60 hover:shadow-2xl hover:bg-white'}`}>
-            <h4 className="text-3xl font-bold mb-6 tracking-tight">Local only.</h4>
-            <p className={`text-xl leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Everything is stored securely in your browser's local storage. Zero servers, zero tracking.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+          <div className="col-span-1 md:col-span-2 p-10 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-violet-200 text-violet-950 transition-transform hover:-translate-y-2 duration-500">
+            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Local only.</h4>
+            <p className="text-xl md:text-3xl font-medium leading-tight">Everything is stored securely in your browser's local storage. Zero servers, zero tracking.</p>
           </div>
-          <div className={`p-10 md:p-12 rounded-[3rem] transition-all duration-500 hover:-translate-y-4 hover:-rotate-2 sm:translate-y-16 ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700 hover:bg-stone-800' : 'bg-stone-50 border border-stone-200/60 hover:shadow-2xl hover:bg-white'}`}>
-            <h4 className="text-3xl font-bold mb-6 tracking-tight">Auto-save.</h4>
-            <p className={`text-xl leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Yes. Lumnr continuously saves your progress and creates backup snapshots every 5 minutes.</p>
+          <div className="p-10 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-orange-200 text-orange-950 transition-transform hover:-translate-y-2 duration-500">
+            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Auto-save.</h4>
+            <p className="text-xl md:text-2xl font-medium leading-tight">Lumnr continuously saves your progress and quietly creates backup snapshots every 5 minutes.</p>
           </div>
-          <div className={`p-10 md:p-12 rounded-[3rem] transition-all duration-500 hover:-translate-y-4 hover:rotate-2 sm:-translate-y-8 ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700 hover:bg-stone-800' : 'bg-stone-50 border border-stone-200/60 hover:shadow-2xl hover:bg-white'}`}>
-            <h4 className="text-3xl font-bold mb-6 tracking-tight">Cache care.</h4>
-            <p className={`text-xl leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Clearing your cache will delete notes. Use the "Export .txt" feature to back up important work.</p>
+          <div className="p-10 md:p-16 rounded-[2.5rem] md:rounded-[4rem] bg-lime-200 text-lime-950 transition-transform hover:-translate-y-2 duration-500">
+            <h4 className="text-3xl md:text-5xl font-black mb-6 tracking-tighter">Cache care.</h4>
+            <p className="text-xl md:text-2xl font-medium leading-tight">Clearing your browser cache will delete notes. Use the "Export" feature to back up your work.</p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <footer className={`w-full px-8 md:px-20 lg:px-32 py-20 flex flex-col md:flex-row items-center justify-between text-sm font-bold tracking-widest uppercase z-10 ${theme === 'dark' ? 'bg-stone-950 text-stone-500' : 'bg-stone-900 text-stone-400'}`}>
-      <div className="flex items-center flex-wrap justify-center gap-12 mb-8 md:mb-0">
-        <button onClick={() => setModalContent('privacy')} className={`transition-colors hover:-translate-y-1 block ${theme === 'dark' ? 'hover:text-white' : 'hover:text-white'}`}>Privacy</button>
-        <button onClick={() => setModalContent('terms')} className={`transition-colors hover:-translate-y-1 block ${theme === 'dark' ? 'hover:text-white' : 'hover:text-white'}`}>Terms</button>
-        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 transition-colors hover:-translate-y-1 ${theme === 'dark' ? 'hover:text-orange-400' : 'hover:text-orange-400'}`}>
-          <Coffee size={20} /> Support
+    <footer className={`w-full px-6 md:px-10 py-16 flex flex-col items-center justify-center gap-10 text-sm font-bold tracking-widest uppercase z-10 border-t-2 ${theme === 'dark' ? 'border-[#222]' : 'border-[#e0e0e0]'}`}>
+      <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+        <button onClick={() => setModalContent('privacy')} className="hover:opacity-50 transition-opacity">Privacy</button>
+        <button onClick={() => setModalContent('terms')} className="hover:opacity-50 transition-opacity">Terms</button>
+        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-50 transition-opacity">
+          <Coffee size={18} /> Support
         </a>
       </div>
-      <div className="flex items-center gap-3 opacity-80 text-xl group">
-        <span className="font-medium lowercase tracking-normal" style={{ fontFamily: "'Caveat', cursive" }}>crafted by</span>
-        <span className="group-hover:text-orange-500 transition-colors">Aayaam</span>
+      <div className="mt-8 font-black text-2xl md:text-4xl tracking-tighter flex items-center gap-3">
+          <span className="opacity-50">crafted by</span> AAYAAM
       </div>
     </footer>
   </div>
@@ -140,7 +149,7 @@ const Modal = ({ title, children, onClose, theme }) => (
     <div className={`${theme === 'dark' ? 'bg-[#1c1917] border-stone-800' : 'bg-[#faf8f5] border-stone-200'} border w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl`}>
       <div className={`flex items-center justify-between p-6 border-b ${theme === 'dark' ? 'border-stone-800' : 'border-stone-200/60'}`}>
         <h2 className={`text-sm font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-stone-200' : 'text-stone-800'}`}>{title}</h2>
-        <button onClick={onClose} className="text-stone-400 hover:text-orange-500 transition-colors bg-stone-100 dark:bg-stone-800 p-2 rounded-full">
+        <button onClick={onClose} className={`text-stone-400 hover:text-violet-500 transition-colors p-2 rounded-full ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-100'}`}>
           <X size={16} />
         </button>
       </div>
@@ -168,13 +177,13 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
             href="https://ko-fi.com/lumnr" 
             target="_blank" 
             rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-[11px] uppercase tracking-[0.15em] font-bold transition-all shadow-sm ${theme === 'dark' ? 'bg-orange-200 text-stone-900 hover:bg-orange-300' : 'bg-orange-100 text-orange-900 hover:bg-orange-200'}`}
+            className={`flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-[11px] uppercase tracking-[0.15em] font-bold transition-all shadow-sm ${theme === 'dark' ? 'bg-violet-500 text-white hover:bg-violet-400' : 'bg-violet-100 text-violet-900 hover:bg-violet-200'}`}
           >
             <Coffee size={16} /> Support the Project
           </a>
           <div className="flex items-center justify-center gap-1.5 opacity-60 text-[10px] uppercase tracking-widest mt-8 font-bold">
             <span>Made with</span>
-            <Heart size={12} className="text-rose-400 fill-current" />
+            <Heart size={12} className="text-violet-400 fill-current" />
             <span>by Aayaam</span>
           </div>
         </div>
@@ -230,7 +239,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
                     updateNote(activeNote.id, { title: ver.title, content: ver.content });
                     setModalContent(null);
                   }}
-                  className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors ${theme === 'dark' ? 'bg-stone-700 hover:bg-orange-200 hover:text-stone-900 text-stone-200' : 'bg-stone-100 text-stone-700 hover:bg-orange-100 hover:text-orange-900'}`}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors ${theme === 'dark' ? 'bg-stone-700 hover:bg-violet-400 hover:text-stone-900 text-stone-200' : 'bg-stone-100 text-stone-700 hover:bg-violet-100 hover:text-violet-900'}`}
                 >
                   Restore
                 </button>
@@ -304,7 +313,7 @@ const Header = ({
         <div className={`w-[1px] h-3 flex-shrink-0 hidden lg:block ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-300'}`}></div>
         <span className="hidden lg:inline flex-shrink-0">{readingTime} min read</span>
         <div className={`w-[1px] h-3 flex-shrink-0 ${theme === 'dark' ? 'bg-stone-800' : 'bg-stone-300'}`}></div>
-        <span className={`transition-opacity duration-500 flex-shrink-0 ${isSaving ? 'opacity-100 text-orange-400' : 'opacity-50'}`}>
+        <span className={`transition-opacity duration-500 flex-shrink-0 ${isSaving ? 'opacity-100 text-violet-400' : 'opacity-50'}`}>
           {isSaving ? 'Saving...' : 'Saved'}
         </span>
         {activeNote?.deletedAt && (
@@ -316,7 +325,7 @@ const Header = ({
       </div>
       
       <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 pl-2">
-        <button onClick={onGoHome} className={`p-2 rounded-full transition-colors flex items-center ${theme === 'dark' ? 'text-stone-400 hover:text-orange-200 hover:bg-stone-800' : 'text-stone-500 hover:text-orange-600 hover:bg-stone-100'}`} title="Go Home">
+        <button onClick={onGoHome} className={`p-2 rounded-full transition-colors flex items-center ${theme === 'dark' ? 'text-stone-400 hover:text-violet-300 hover:bg-stone-800' : 'text-stone-500 hover:text-violet-600 hover:bg-stone-100'}`} title="Go Home">
           <Home size={16} strokeWidth={2.5} />
         </button>
 
@@ -328,16 +337,16 @@ const Header = ({
               </button>
               {shareMenuOpen && (
                 <div className={`absolute right-0 top-12 w-48 border rounded-2xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-stone-900 border-stone-800' : 'bg-white border-stone-200'}`}>
-                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                     <Download size={14} /> Download .txt
                   </button>
-                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white border-stone-800' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700 border-stone-100'}`}>
+                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider border-b transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white border-stone-800' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700 border-stone-100'}`}>
                     <Copy size={14} /> Copy Text
                   </button>
-                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                     <Twitter size={14} /> X (Twitter)
                   </button>
-                  <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+                  <button onClick={() => shareToSocial('whatsapp')} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                     <ExternalLink size={14} /> WhatsApp
                   </button>
                 </div>
@@ -347,18 +356,18 @@ const Header = ({
         )}
 
         <div className="relative" ref={moreMenuRef}>
-          <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`p-2 rounded-full transition-colors flex items-center ${theme === 'dark' ? 'text-stone-400 hover:text-orange-200 hover:bg-stone-800' : 'text-stone-500 hover:text-orange-600 hover:bg-stone-100'}`}>
+          <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`p-2 rounded-full transition-colors flex items-center ${theme === 'dark' ? 'text-stone-400 hover:text-violet-300 hover:bg-stone-800' : 'text-stone-500 hover:text-violet-600 hover:bg-stone-100'}`}>
             <MoreHorizontal size={18} strokeWidth={2.5} />
           </button>
           {moreMenuOpen && (
             <div className={`absolute right-0 top-12 w-48 border rounded-2xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-stone-900 border-stone-800' : 'bg-white border-stone-200'}`}>
-              <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+              <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                 <Info size={14} /> About
               </button>
-              <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+              <button onClick={() => { setModalContent('privacy'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                 <ShieldCheck size={14} /> Privacy
               </button>
-              <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+              <button onClick={() => { setModalContent('terms'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                 <FileText size={14} /> Terms
               </button>
             </div>
@@ -382,16 +391,16 @@ const Sidebar = ({
   const getAccentClass = (isActive) => {
     if (!isActive) return theme === 'dark' ? 'hover:bg-stone-800/50 text-stone-400' : 'hover:bg-stone-100 text-stone-500';
     return theme === 'dark' 
-      ? 'bg-orange-900/20 text-orange-200 border border-orange-900/30' 
-      : 'bg-orange-50 text-orange-900 border border-orange-200/60 shadow-sm';
+      ? 'bg-violet-900/30 text-violet-200 border border-violet-800/50' 
+      : 'bg-violet-50 text-violet-900 border border-violet-200/60 shadow-sm';
   };
 
   return (
     <aside className={`${sidebarOpen ? 'w-[85vw] sm:w-80' : 'w-0'} absolute md:relative z-40 h-full transition-[width] duration-500 ease-in-out border-r flex flex-col overflow-hidden ${sidebarClasses} ${sidebarOpen ? 'shadow-2xl md:shadow-none' : ''}`}>
       <div className="p-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-orange-100'}`}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-orange-300' : 'text-orange-600'}`}>
+          <div className={`p-2 rounded-xl ${theme === 'dark' ? 'bg-stone-800' : 'bg-violet-100'}`}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-violet-300' : 'text-violet-600'}`}>
               <rect x="17" y="3" width="4" height="4" rx="2" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1.5" />
               <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -400,10 +409,10 @@ const Sidebar = ({
           <span className={`font-black tracking-tight text-xl ${theme === 'dark' ? 'text-stone-100' : 'text-stone-800'}`}>lumnr</span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={createNote} className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-stone-800 text-stone-400 hover:text-orange-300' : 'hover:bg-orange-100 text-stone-500 hover:text-orange-600'}`}>
+          <button onClick={createNote} className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-stone-800 text-stone-400 hover:text-violet-300' : 'hover:bg-violet-100 text-stone-500 hover:text-violet-600'}`}>
             <Plus size={18} strokeWidth={2.5} />
           </button>
-          <button onClick={() => setSidebarOpen(false)} className={`md:hidden p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-stone-800 text-stone-400 hover:text-orange-300' : 'hover:bg-orange-100 text-stone-500 hover:text-orange-600'}`}>
+          <button onClick={() => setSidebarOpen(false)} className={`md:hidden p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-stone-800 text-stone-400 hover:text-violet-300' : 'hover:bg-violet-100 text-stone-500 hover:text-violet-600'}`}>
             <X size={18} strokeWidth={2.5} />
           </button>
         </div>
@@ -471,7 +480,7 @@ const Sidebar = ({
                 <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
                   {showTrash ? (
                     <>
-                      <button onClick={(e) => restoreNote(note.id, e)} className="p-1.5 text-stone-400 hover:text-orange-500 transition-colors" title="Restore">
+                      <button onClick={(e) => restoreNote(note.id, e)} className="p-1.5 text-stone-400 hover:text-violet-500 transition-colors" title="Restore">
                         <RotateCcw size={14} />
                       </button>
                       <button onClick={(e) => permanentlyDeleteNote(note.id, e)} className="p-1.5 text-stone-400 hover:text-rose-500 transition-colors" title="Delete Permanently">
@@ -480,7 +489,7 @@ const Sidebar = ({
                     </>
                   ) : (
                     <>
-                      <button onClick={(e) => togglePin(note.id, e)} className={`p-1.5 transition-colors ${note.pinned ? (activeNoteId === note.id ? 'text-current' : 'text-orange-400') : 'text-stone-400 hover:text-orange-500'}`}>
+                      <button onClick={(e) => togglePin(note.id, e)} className={`p-1.5 transition-colors ${note.pinned ? (activeNoteId === note.id ? 'text-current' : 'text-violet-400') : 'text-stone-400 hover:text-violet-500'}`}>
                         {note.pinned ? <PinOff size={14} /> : <Pin size={14} />}
                       </button>
                       <button onClick={(e) => moveNoteToTrash(note.id, e)} className="p-1.5 text-stone-400 hover:text-rose-500 transition-colors">
@@ -501,16 +510,16 @@ const Sidebar = ({
       <div className={`p-5 border-t text-[10px] font-bold text-stone-400 uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-stone-800' : 'border-stone-200/60'}`}>
         <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
         <div ref={settingsRef}>
-          <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:text-orange-200 hover:bg-stone-800' : 'hover:text-orange-600 hover:bg-orange-50'}`}>
+          <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-2 rounded-full transition-colors ${theme === 'dark' ? 'hover:text-violet-200 hover:bg-stone-800' : 'hover:text-violet-600 hover:bg-violet-50'}`}>
             <Settings size={16} strokeWidth={2} />
           </button>
           {settingsOpen && (
             <div className={`absolute bottom-14 right-4 w-56 border rounded-2xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-stone-900 border-stone-800' : 'bg-white border-stone-200'}`}>
-              <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+              <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                 {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
                 {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
               </button>
-              <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-orange-50 hover:text-orange-700'}`}>
+              <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-stone-300 hover:bg-stone-800 hover:text-white' : 'text-stone-600 hover:bg-violet-50 hover:text-violet-700'}`}>
                 <History size={14} /> Version History
               </button>
             </div>
@@ -739,16 +748,16 @@ const App = () => {
   const readingTime = Math.ceil(wordCount / 200);
 
   const themeClasses = theme === 'dark' 
-    ? 'bg-[#1c1917] text-stone-100 selection:bg-orange-900/40 selection:text-orange-100' 
-    : 'bg-[#faf8f5] text-stone-900 selection:bg-orange-200 selection:text-stone-900';
+    ? 'bg-[#1c1917] text-stone-100 selection:bg-violet-900/40 selection:text-violet-100' 
+    : 'bg-[#faf8f5] text-stone-900 selection:bg-violet-200 selection:text-stone-900';
 
   const sidebarClasses = theme === 'dark'
     ? 'bg-[#1c1917]/90 border-stone-800 backdrop-blur-2xl'
     : 'bg-[#faf8f5]/90 border-stone-200/60 backdrop-blur-2xl';
 
   const inputClasses = theme === 'dark'
-    ? 'bg-stone-800/50 border border-stone-700/50 text-stone-200 focus:border-orange-500/50 placeholder:text-stone-500'
-    : 'bg-white border border-stone-200/60 text-stone-800 focus:border-orange-300 placeholder:text-stone-400 shadow-sm';
+    ? 'bg-stone-800/50 border border-stone-700/50 text-stone-200 focus:border-violet-500/50 placeholder:text-stone-500'
+    : 'bg-white border border-stone-200/60 text-stone-800 focus:border-violet-300 placeholder:text-stone-400 shadow-sm';
 
   return (
     <div className={`flex h-screen font-sans theme-transition ${themeClasses}`}>
@@ -787,7 +796,7 @@ const App = () => {
           <main className="flex-1 flex flex-col relative">
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-1.5 border border-l-0 rounded-r-xl transition-all duration-500 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-stone-800 border-stone-700 text-stone-400 hover:text-orange-300 hover:bg-stone-700' : 'bg-white border-stone-200 text-stone-500 hover:text-orange-600 hover:bg-orange-50'}`}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-1.5 border border-l-0 rounded-r-xl transition-all duration-500 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-stone-800 border-stone-700 text-stone-400 hover:text-violet-300 hover:bg-stone-700' : 'bg-white border-stone-200 text-stone-500 hover:text-violet-600 hover:bg-violet-50'}`}
             >
               <ChevronRight size={18} />
             </button>
@@ -811,7 +820,7 @@ const App = () => {
         </>
       )}
 
-      {/* 4. Popups Component (Moved outside the condition so it works over the home page too) */}
+      {/* 4. Popups Component */}
       <ContentModals 
         modalContent={modalContent} setModalContent={setModalContent} 
         theme={theme} activeNote={activeNote} updateNote={updateNote} 
@@ -831,17 +840,35 @@ const App = () => {
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .animate-in { animation: fadeIn 0.4s ease-out forwards; }
         
-        @keyframes float {
-          0%, 100% { transform: translateY(0) scale(1); }
-          50% { transform: translateY(-30px) scale(1.05); }
-        }
-        .animate-float { animation: float 10s ease-in-out infinite; }
-        
+        /* Griflan-style Bold Animations */
         @keyframes slideUp {
-          from { opacity: 0; transform: translateY(60px); }
+          from { opacity: 0; transform: translateY(80px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide-up { animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slide-up { animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          display: flex;
+          width: 200%;
+          animation: marquee 15s linear infinite;
+        }
+
+        /* Outline Text Effect */
+        .text-outline {
+          -webkit-text-fill-color: transparent;
+          -webkit-text-stroke-width: 2px;
+          -webkit-text-stroke-color: currentColor;
+        }
+        @media (min-width: 768px) {
+          .text-outline {
+            -webkit-text-stroke-width: 4px;
+          }
+        }
+
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
