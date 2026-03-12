@@ -411,6 +411,9 @@ const App = () => {
                   {theme === 'dark' ? <Sun size={12} /> : <Moon size={12} />}
                   {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
                 </button>
+                <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
+                  <History size={12} /> Version History
+                </button>
                 
                 <div className={`mx-4 my-2 border-t pt-3 flex flex-col gap-2 ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-100'}`}>
                   <div className="flex items-center gap-2 text-[9px] text-zinc-500 font-bold tracking-[0.2em]">
@@ -497,9 +500,6 @@ const App = () => {
               </button>
               {moreMenuOpen && (
                 <div className={`absolute right-0 top-10 w-40 border rounded-lg shadow-2xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#0a0a0a] border-[#1f1f1f]' : 'bg-white border-zinc-200'}`}>
-                  <button onClick={() => { setModalContent('history'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors border-b ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white border-[#1f1f1f]' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black border-zinc-100'}`}>
-                    <History size={12} /> Version History
-                  </button>
                   <button onClick={() => { setModalContent('about'); setMoreMenuOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                     <Info size={12} /> About
                   </button>
