@@ -39,83 +39,94 @@ import {
 // COMPONENT: Home / Landing Page
 // ==========================================
 const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
-  <div className={`flex-1 w-full h-full flex flex-col items-center overflow-y-auto scrollbar-hide relative animate-in ${theme === 'dark' ? 'bg-[#1c1917]' : 'bg-[#faf8f5]'}`}>
+  <div className={`flex-1 w-full h-full flex flex-col overflow-x-hidden overflow-y-auto scrollbar-hide relative ${theme === 'dark' ? 'bg-[#1c1917] text-stone-100' : 'bg-[#faf8f5] text-stone-900'}`}>
     
-    {/* Lively Background Blobs (Griflan-inspired pastel aesthetic vibes) */}
-    <div className="absolute inset-0 overflow-hidden pointer-events-none flex justify-center items-center opacity-60 dark:opacity-20">
-      <div className="absolute w-[50vw] h-[50vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] animate-pulse bg-orange-300/50 dark:bg-orange-500/40 -top-20 -left-20"></div>
-      <div className="absolute w-[40vw] h-[40vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] animate-pulse bg-rose-300/50 dark:bg-rose-500/40 top-40 right-10" style={{ animationDelay: '2s' }}></div>
-      <div className="absolute w-[60vw] h-[60vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] animate-pulse bg-amber-200/50 dark:bg-amber-500/30 -bottom-32 left-1/4" style={{ animationDelay: '4s' }}></div>
+    {/* Griflan-style Asymmetrical Blobs */}
+    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-80 dark:opacity-30">
+      <div className="absolute w-[70vw] h-[70vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] animate-float bg-orange-400/60 dark:bg-orange-500/40 -top-40 -left-20"></div>
+      <div className="absolute w-[50vw] h-[50vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] animate-float bg-rose-400/60 dark:bg-rose-500/40 top-[20%] -right-32" style={{ animationDelay: '2s' }}></div>
+      <div className="absolute w-[80vw] h-[80vw] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[140px] animate-float bg-amber-300/60 dark:bg-amber-600/30 -bottom-60 left-[10%]" style={{ animationDelay: '4s' }}></div>
     </div>
 
     <button 
       onClick={toggleTheme} 
-      className={`absolute top-6 right-6 p-3 rounded-full transition-colors z-20 ${theme === 'dark' ? 'text-stone-400 hover:text-orange-200 hover:bg-stone-800' : 'text-stone-500 hover:text-orange-700 hover:bg-white shadow-sm'}`}
+      className={`absolute top-8 right-8 p-4 rounded-full transition-all duration-500 z-50 hover:scale-110 hover:-rotate-12 ${theme === 'dark' ? 'bg-stone-800/80 text-orange-300 hover:bg-orange-500 hover:text-white' : 'bg-white/80 text-orange-600 hover:bg-orange-500 hover:text-white shadow-xl backdrop-blur-md'}`}
       title="Toggle Theme"
     >
-      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      {theme === 'dark' ? <Sun size={24} strokeWidth={2.5} /> : <Moon size={24} strokeWidth={2.5} />}
     </button>
     
-    <div className="flex-1 flex flex-col items-center justify-center max-w-4xl w-full text-center px-6 py-20 mt-8 space-y-12 z-10">
-      <div className="flex flex-col items-center justify-center gap-6">
-        <div className={`p-6 rounded-full backdrop-blur-md shadow-lg ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700' : 'bg-white/80 border border-orange-100'}`}>
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-orange-200' : 'text-orange-500'}`}>
-            <rect x="17" y="3" width="4" height="4" rx="2" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <h1 className={`text-7xl md:text-8xl font-black tracking-tighter ${theme === 'dark' ? 'text-stone-100' : 'text-stone-800'}`}>lumnr</h1>
+    <div className="w-full min-h-[90vh] flex flex-col items-start justify-center px-8 md:px-20 lg:px-32 relative z-10">
+      
+      <div className="opacity-0 animate-slide-up w-full">
+        <h1 className="text-[20vw] md:text-[15vw] leading-[0.8] font-black tracking-tighter mix-blend-overlay dark:mix-blend-normal relative -left-2 md:-left-5">
+          lumnr<span className="text-orange-500">.</span>
+        </h1>
       </div>
       
-      <h2 className={`text-5xl md:text-6xl font-medium tracking-wide ${theme === 'dark' ? 'text-stone-300' : 'text-stone-700'}`} style={{ fontFamily: "'Caveat', cursive" }}>
-        Welcome to your digital sanctuary.
-      </h2>
+      <div className="opacity-0 animate-slide-up delay-100 mt-8 md:mt-0 md:absolute md:top-1/3 md:right-20 lg:right-32 max-w-md z-20 pointer-events-none">
+        <h2 className="text-6xl md:text-8xl font-medium tracking-tight mb-6" style={{ fontFamily: "'Caveat', cursive", transform: 'rotate(-6deg)' }}>
+          not your <br/> average <br/> notepad
+        </h2>
+      </div>
 
-      <p className={`text-xl md:text-2xl font-medium max-w-2xl mx-auto leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>
-        A beautifully lively workspace designed to remove distractions and let your ideas bloom.
-      </p>
+      <div className="opacity-0 animate-slide-up delay-200 mt-16 max-w-2xl">
+        <p className={`text-2xl md:text-4xl font-medium leading-snug ${theme === 'dark' ? 'text-stone-400' : 'text-stone-600'}`}>
+          A digital sanctuary designed to remove distractions, break the grid, and let your ideas <i className="text-orange-500 font-serif">shine</i>.
+        </p>
+      </div>
       
-      <div className="pt-8">
+      <div className="opacity-0 animate-slide-up delay-300 pt-20">
         <button 
           onClick={onStart}
-          className={`px-12 py-5 rounded-full font-black tracking-widest uppercase text-sm flex items-center justify-center gap-3 transition-all hover:-translate-y-1 hover:shadow-2xl ${theme === 'dark' ? 'bg-orange-200 text-stone-900 shadow-orange-900/20' : 'bg-orange-500 text-white shadow-orange-500/30'}`}
+          className={`group relative px-12 py-6 rounded-full font-black tracking-[0.2em] uppercase text-sm md:text-base flex items-center justify-center gap-4 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl overflow-hidden ${theme === 'dark' ? 'bg-stone-100 text-stone-900 shadow-orange-900/20' : 'bg-stone-900 text-white shadow-orange-500/30'}`}
         >
-          <PenLine size={20} /> Start Writing
+          <span className="relative z-10 flex items-center gap-3 group-hover:text-white dark:group-hover:text-stone-900 transition-colors duration-500">
+            <PenLine size={24} className="group-hover:rotate-12 transition-transform duration-500" /> Start Writing
+          </span>
+          <div className={`absolute inset-0 w-full h-full transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ${theme === 'dark' ? 'bg-orange-400' : 'bg-orange-500'}`}></div>
         </button>
       </div>
     </div>
 
-    <div className={`w-full max-w-5xl px-6 py-20 mt-auto border-t z-10 backdrop-blur-sm ${theme === 'dark' ? 'border-stone-800/50' : 'border-stone-200/50'}`}>
-      <h3 className={`text-sm font-black tracking-widest uppercase text-center mb-12 ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Frequently Asked Questions</h3>
-      <div className="grid gap-6 md:grid-cols-3 text-left">
-        <div className={`p-8 rounded-3xl transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-stone-800/40 border border-stone-800 hover:bg-stone-800/80' : 'bg-white/60 border border-white hover:bg-white shadow-sm hover:shadow-md'}`}>
-          <h4 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-stone-200' : 'text-stone-800'}`}>Where are my notes saved?</h4>
-          <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Everything is stored securely in your browser's local storage. We don't use servers, and your data never leaves your device.</p>
+    {/* Griflan-style Grid Breaker / Offset Layout for FAQs */}
+    <div className={`w-full px-8 md:px-20 lg:px-32 py-32 z-10 ${theme === 'dark' ? 'bg-stone-900/80 backdrop-blur-xl' : 'bg-white/60 backdrop-blur-3xl'}`}>
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-20">
+        <div className="lg:w-1/3">
+          <h3 className="text-6xl md:text-7xl font-black tracking-tighter leading-none mb-8">
+            Good<br/>to know
+          </h3>
+          <p className={`text-2xl font-medium leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Everything works right in your browser. Fast, fluid, and completely private.</p>
         </div>
-        <div className={`p-8 rounded-3xl transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-stone-800/40 border border-stone-800 hover:bg-stone-800/80' : 'bg-white/60 border border-white hover:bg-white shadow-sm hover:shadow-md'}`}>
-          <h4 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-stone-200' : 'text-stone-800'}`}>Is there an auto-save feature?</h4>
-          <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Yes! Lumnr automatically saves your progress as you type, and creates a backup snapshot every 5 minutes in case you make a mistake.</p>
-        </div>
-        <div className={`p-8 rounded-3xl transition-all hover:-translate-y-1 ${theme === 'dark' ? 'bg-stone-800/40 border border-stone-800 hover:bg-stone-800/80' : 'bg-white/60 border border-white hover:bg-white shadow-sm hover:shadow-md'}`}>
-          <h4 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-stone-200' : 'text-stone-800'}`}>What if I clear my browser cache?</h4>
-          <p className={`text-base leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Clearing your cache will delete your notes. Be sure to use the "Export .txt" feature in the share menu to back up important documents.</p>
+
+        <div className="lg:w-2/3 grid sm:grid-cols-2 gap-8 md:gap-12 pb-16 lg:pb-0">
+          <div className={`p-10 md:p-12 rounded-[3rem] transition-all duration-500 hover:-translate-y-4 hover:rotate-2 ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700 hover:bg-stone-800' : 'bg-stone-50 border border-stone-200/60 hover:shadow-2xl hover:bg-white'}`}>
+            <h4 className="text-3xl font-bold mb-6 tracking-tight">Local only.</h4>
+            <p className={`text-xl leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Everything is stored securely in your browser's local storage. Zero servers, zero tracking.</p>
+          </div>
+          <div className={`p-10 md:p-12 rounded-[3rem] transition-all duration-500 hover:-translate-y-4 hover:-rotate-2 sm:translate-y-16 ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700 hover:bg-stone-800' : 'bg-stone-50 border border-stone-200/60 hover:shadow-2xl hover:bg-white'}`}>
+            <h4 className="text-3xl font-bold mb-6 tracking-tight">Auto-save.</h4>
+            <p className={`text-xl leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Yes. Lumnr continuously saves your progress and creates backup snapshots every 5 minutes.</p>
+          </div>
+          <div className={`p-10 md:p-12 rounded-[3rem] transition-all duration-500 hover:-translate-y-4 hover:rotate-2 sm:-translate-y-8 ${theme === 'dark' ? 'bg-stone-800/80 border border-stone-700 hover:bg-stone-800' : 'bg-stone-50 border border-stone-200/60 hover:shadow-2xl hover:bg-white'}`}>
+            <h4 className="text-3xl font-bold mb-6 tracking-tight">Cache care.</h4>
+            <p className={`text-xl leading-relaxed ${theme === 'dark' ? 'text-stone-400' : 'text-stone-500'}`}>Clearing your cache will delete notes. Use the "Export .txt" feature to back up important work.</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <footer className={`w-full max-w-5xl px-6 py-10 flex flex-col md:flex-row items-center justify-between text-xs font-bold tracking-wider uppercase border-t z-10 backdrop-blur-sm ${theme === 'dark' ? 'border-stone-800/50 text-stone-500' : 'border-stone-200/50 text-stone-400'}`}>
-      <div className="flex items-center flex-wrap justify-center gap-8 mb-6 md:mb-0">
-        <button onClick={() => setModalContent('privacy')} className={`transition-colors ${theme === 'dark' ? 'hover:text-stone-300' : 'hover:text-stone-600'}`}>Privacy</button>
-        <button onClick={() => setModalContent('terms')} className={`transition-colors ${theme === 'dark' ? 'hover:text-stone-300' : 'hover:text-stone-600'}`}>Terms</button>
-        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-2 transition-colors ${theme === 'dark' ? 'hover:text-orange-300' : 'hover:text-orange-500'}`}>
-          <Coffee size={16} /> Support
+    <footer className={`w-full px-8 md:px-20 lg:px-32 py-20 flex flex-col md:flex-row items-center justify-between text-sm font-bold tracking-widest uppercase z-10 ${theme === 'dark' ? 'bg-stone-950 text-stone-500' : 'bg-stone-900 text-stone-400'}`}>
+      <div className="flex items-center flex-wrap justify-center gap-12 mb-8 md:mb-0">
+        <button onClick={() => setModalContent('privacy')} className={`transition-colors hover:-translate-y-1 block ${theme === 'dark' ? 'hover:text-white' : 'hover:text-white'}`}>Privacy</button>
+        <button onClick={() => setModalContent('terms')} className={`transition-colors hover:-translate-y-1 block ${theme === 'dark' ? 'hover:text-white' : 'hover:text-white'}`}>Terms</button>
+        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-3 transition-colors hover:-translate-y-1 ${theme === 'dark' ? 'hover:text-orange-400' : 'hover:text-orange-400'}`}>
+          <Coffee size={20} /> Support
         </a>
       </div>
-      <div className="flex items-center gap-2 opacity-80">
-        <span>Made with</span>
-        <Heart size={14} className="text-rose-400 fill-current" />
-        <span>by Aayaam</span>
+      <div className="flex items-center gap-3 opacity-80 text-xl group">
+        <span className="font-medium lowercase tracking-normal" style={{ fontFamily: "'Caveat', cursive" }}>crafted by</span>
+        <span className="group-hover:text-orange-500 transition-colors">Aayaam</span>
       </div>
     </footer>
   </div>
@@ -816,8 +827,24 @@ const App = () => {
         .theme-transition { transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         .animate-in { animation: fadeIn 0.4s ease-out forwards; }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-30px) scale(1.05); }
+        }
+        .animate-float { animation: float 10s ease-in-out infinite; }
+        
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
       `}</style>
     </div>
   );
