@@ -31,8 +31,8 @@ import {
   PinOff,
   RotateCcw,
   Trash,
-  Palette,
-  History
+  History,
+  CheckSquare
 } from 'lucide-react';
 
 const App = () => {
@@ -66,11 +66,6 @@ const App = () => {
     if (typeof window === 'undefined') return 'dark';
     return localStorage.getItem('lumnr_theme') || 'dark';
   });
-
-  const [accentColor, setAccentColor] = useState(() => {
-    if (typeof window === 'undefined') return 'zinc';
-    return localStorage.getItem('lumnr_accent') || 'zinc';
-  });
   
   const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -93,10 +88,6 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('lumnr_theme', theme);
   }, [theme]);
-
-  useEffect(() => {
-    localStorage.setItem('lumnr_accent', accentColor);
-  }, [accentColor]);
 
   // Click Outside Handlers
   useEffect(() => {
@@ -246,33 +237,9 @@ const App = () => {
   const charCount = activeNote?.content.length || 0;
   const readingTime = Math.ceil(wordCount / 200);
 
-  // Accents Configuration
-  const accents = {
-    zinc: {
-      light: 'bg-zinc-100 text-black',
-      dark: 'bg-[#111] text-white',
-      dot: 'bg-zinc-500',
-    },
-    sage: {
-      light: 'bg-emerald-50 text-emerald-900',
-      dark: 'bg-emerald-950/40 text-emerald-100',
-      dot: 'bg-emerald-500',
-    },
-    amber: {
-      light: 'bg-amber-50 text-amber-900',
-      dark: 'bg-amber-950/40 text-amber-100',
-      dot: 'bg-amber-500',
-    },
-    blue: {
-      light: 'bg-blue-50 text-blue-900',
-      dark: 'bg-blue-950/40 text-blue-100',
-      dot: 'bg-blue-500',
-    }
-  };
-
   const getAccentClass = (isActive) => {
     if (!isActive) return theme === 'dark' ? 'hover:bg-[#0a0a0a] text-zinc-400' : 'hover:bg-zinc-50 text-zinc-500';
-    return theme === 'dark' ? accents[accentColor].dark : accents[accentColor].light;
+    return theme === 'dark' ? 'bg-[#111] text-white' : 'bg-zinc-100 text-black';
   };
 
   // Custom Modal Component
@@ -414,22 +381,6 @@ const App = () => {
                 <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2 text-[11px] uppercase tracking-wider transition-colors ${theme === 'dark' ? 'text-zinc-400 hover:bg-[#111] hover:text-white' : 'text-zinc-600 hover:bg-zinc-50 hover:text-black'}`}>
                   <History size={12} /> Version History
                 </button>
-                
-                <div className={`mx-4 my-2 border-t pt-3 flex flex-col gap-2 ${theme === 'dark' ? 'border-[#1f1f1f]' : 'border-zinc-100'}`}>
-                  <div className="flex items-center gap-2 text-[9px] text-zinc-500 font-bold tracking-[0.2em]">
-                    <Palette size={10} /> Accent Color
-                  </div>
-                  <div className="flex gap-2">
-                    {Object.keys(accents).map((color) => (
-                      <button
-                        key={color}
-                        onClick={() => setAccentColor(color)}
-                        className={`w-5 h-5 rounded-full transition-all ring-offset-2 ${theme === 'dark' ? 'ring-offset-black' : 'ring-offset-white'} ${accentColor === color ? 'ring-2 ring-zinc-500 scale-110' : 'hover:scale-105'} ${accents[color].dot}`}
-                        title={color.charAt(0).toUpperCase() + color.slice(1)}
-                      />
-                    ))}
-                  </div>
-                </div>
               </div>
             )}
           </div>
@@ -571,17 +522,44 @@ const App = () => {
             </div>
           )}
           {modalContent === 'privacy' && (
-            <>
-              <p className={`mb-4 font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays with you.</p>
-              <p className="mb-4">lumnr uses local storage technology. This means all your notes are saved directly in your browser's memory, not on our servers.</p>
-              <p className="mb-4">We do not track your typing, sell your information, or have any access to the content you create.</p>
-            </>
+            <div className="flex flex-col space-y-5">
+              <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Your data stays strictly with you.</p>
+              
+              <div>
+                <h3 className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Local Storage</h3>
+                <p>lumnr is a client-side application. All your notes, settings, and version histories are saved directly in your device's browser memory. We do not operate servers, and your data never leaves your device.</p>
+              </div>
+
+              <div>
+                <h3 className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Data Collection</h3>
+                <p>We do not track your typing, employ analytics, use tracking cookies, or sell your information. We have absolutely zero access to the content you create.</p>
+              </div>
+
+              <div>
+                <h3 className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Security</h3>
+                <p>Because your data is stored locally, the privacy and security of your notes depend entirely on the physical and digital security of your own device.</p>
+              </div>
+            </div>
           )}
           {modalContent === 'terms' && (
-            <>
-              <p className="mb-4">By using lumnr, you acknowledge that this is a client-side application. Since data is stored locally, clearing your browser cache or switching devices will result in data loss unless you use the export feature.</p>
-              <p className="mb-4">The software is provided "as is", without warranty of any kind. You are responsible for maintaining backups of your important documents.</p>
-            </>
+            <div className="flex flex-col space-y-5">
+              <p className={`font-medium ${theme === 'dark' ? 'text-white' : 'text-black'}`}>By using lumnr, you agree to the following conditions.</p>
+              
+              <div>
+                <h3 className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Data Loss & Backups</h3>
+                <p>As lumnr relies entirely on browser local storage, clearing your browser cache, using strict incognito modes, or switching devices will result in permanent data loss unless you manually export your documents. You are solely responsible for maintaining your own backups.</p>
+              </div>
+
+              <div>
+                <h3 className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>"As Is" Service</h3>
+                <p>The software is provided "as is", without warranty of any kind, express or implied. We do not guarantee continuous availability or error-free operation.</p>
+              </div>
+
+              <div>
+                <h3 className={`text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Limitation of Liability</h3>
+                <p>Under no circumstances shall the creators of lumnr be held liable for any data loss, damages, or issues arising from the use or inability to use this application.</p>
+              </div>
+            </div>
           )}
           {modalContent === 'history' && (
             <div className="flex flex-col gap-3">
