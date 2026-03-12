@@ -38,15 +38,32 @@ import {
 } from 'lucide-react';
 
 // ==========================================
+// UTILITY: Plain Text Extractor
+// ==========================================
+const getPlainText = (html) => {
+  if (!html) return '';
+  return html
+    .replace(/<div><br><\/div>/g, '\n')
+    .replace(/<div>/g, '\n')
+    .replace(/<\/div>/g, '')
+    .replace(/<br>/g, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#8203;/g, '');
+};
+
+// ==========================================
+// MAP: Cozy Cover Icons
+// ==========================================
+const IconMap = {
+  Sparkles, Star, Heart, Cloud, Coffee, Moon, Sun, PenLine
+};
+
+// ==========================================
 // COMPONENT: Notebook Cover
 // ==========================================
-const NotebookCover = ({ color, pattern, title, onClick, isPinned }) => {
-  const patterns = {
-    stripes: 'pattern-stripes',
-    dots: 'pattern-dots',
-    floral: 'pattern-floral',
-    none: ''
-  };
+const NotebookCover = ({ color, icon, title, onClick, isPinned }) => {
+  const IconComponent = IconMap[icon] || IconMap.Sparkles;
 
   return (
     <button 
@@ -58,28 +75,30 @@ const NotebookCover = ({ color, pattern, title, onClick, isPinned }) => {
         className="relative w-full aspect-[3/4] rounded-r-2xl rounded-l-sm shadow-lg border border-black/5 overflow-hidden transition-colors duration-500"
         style={{ backgroundColor: color || '#ff9ebd' }}
       >
-        {/* Animated Pattern Layer */}
-        <div className={`absolute inset-0 opacity-30 ${patterns[pattern || 'none']}`}></div>
+        {/* Aesthetic Cover Icon */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-[0.15] pointer-events-none z-0">
+          <IconComponent size={84} className="text-[#5d4037]" />
+        </div>
         
         {/* Spine Detail */}
-        <div className="absolute left-0 top-0 bottom-0 w-3 bg-black/10 border-r border-white/5"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-3 bg-black/10 border-r border-white/5 z-10"></div>
         
         {/* Pinned Indicator */}
         {isPinned && (
-          <div className="absolute top-2 right-2 z-10 bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-sm border border-black/5 animate-pop-in">
+          <div className="absolute top-2 right-2 z-20 bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-sm border border-black/5 animate-pop-in">
             <Pin size={10} className="text-[#ff6b8b] fill-current" strokeWidth={3} />
           </div>
         )}
 
         {/* Sticker Label */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[75%] aspect-[3/2] bg-white/90 backdrop-blur-sm rounded-md border border-black/5 flex items-center justify-center p-2 shadow-inner group-hover:bg-white transition-colors">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[75%] aspect-[3/2] bg-white/90 backdrop-blur-sm rounded-md border border-black/5 flex items-center justify-center p-2 shadow-inner group-hover:bg-white transition-colors z-20">
           <span className="text-[10px] font-black text-[#5d4037] line-clamp-3 text-center leading-tight">
             {title || 'Untitled'}
           </span>
         </div>
 
         {/* Shine */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/10 pointer-events-none z-30"></div>
       </div>
       
       {/* Soft Shadow */}
@@ -199,7 +218,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
                 <NotebookCover 
                   key={note.id}
                   color={note.color}
-                  pattern={note.cover}
+                  icon={note.icon}
                   title={note.title}
                   isPinned={note.pinned}
                   onClick={() => onSelectNote(note.id)}
@@ -297,14 +316,14 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
                 </p>
               </div>
 
-              <div className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
-                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 mb-4 text-center">Recent Supporter</h4>
-                <div className="flex flex-wrap justify-center gap-3">
-                  <div className={`px-4 py-2 rounded-xl font-black text-base border-2 shadow-sm transform hover:scale-105 transition-transform ${isDark ? 'bg-[#3b364c] border-[#ff8da1] text-[#fce4ec]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
-                    Tia Rose 🌸
-                  </div>
+              <button 
+                onClick={() => setModalContent('supporters')}
+                className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 transition-transform hover:scale-105 active:scale-95 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}
+              >
+                <div className={`px-6 py-3 rounded-xl font-black text-base border-2 shadow-sm ${isDark ? 'bg-[#3b364c] border-[#ff8da1] text-[#fce4ec]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
+                  Our Supporters 💖
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -364,7 +383,7 @@ const Modal = ({ title, children, onClose, theme }) => {
 // ==========================================
 const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updateNote }) => {
   if (!modalContent) return null;
-  const title = modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : modalContent === 'terms' ? "Terms of Service" : modalContent === 'history' ? "Version History" : "";
+  const title = modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : modalContent === 'terms' ? "Terms of Service" : modalContent === 'history' ? "Version History" : modalContent === 'supporters' ? "Our Supporters" : "";
   const isDark = theme === 'dark';
 
   return (
@@ -420,36 +439,46 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
       )}
 
       {modalContent === 'terms' && (
+        <div className="flex flex-col space-y-6">
+          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
+            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
+            <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
+          </div>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
+            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
+            <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
+          </div>
+        </div>
+      )}
+
+      {modalContent === 'supporters' && (
         <div className="flex flex-col items-center space-y-8 py-2">
           <div className="relative">
-            <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#a6c9ff]/10 border-[#a6c9ff]/20' : 'bg-[#87cefa]/10 border-[#87cefa]/20'}`}>
-              <FileText size={64} className={isDark ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} strokeWidth={2.5} />
+            <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#ff8da1]/10 border-[#ff8da1]/20' : 'bg-[#ff9ebd]/10 border-[#ff9ebd]/20'}`}>
+              <Heart size={64} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} strokeWidth={2.5} fill="currentColor" />
             </div>
-            <div className="absolute -top-2 -left-2 animate-bounce-slow">
-              <Star size={28} className="text-[#ffd700] fill-current" />
+            <div className="absolute -top-2 -right-2 animate-bounce-slow">
+              <Sparkles size={28} className="text-[#ffd700]" />
             </div>
           </div>
 
           <div className="text-center">
             <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
-              Friendly Rules 📜
+              Lovely Souls 🌸
             </h3>
-            <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Simple ways to keep your notes safe.</p>
+            <p className="font-bold opacity-70 text-base animate-fade-up delay-100 max-w-sm">
+              A massive thank you to these amazing people for helping keep lumnr alive and blooming. Your support means the world!
+            </p>
           </div>
 
-          <div className="grid gap-4 w-full">
-            <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
-               <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Trash2 size={18}/> Cache Risk</h4>
-               <p className="text-sm opacity-80 font-bold leading-relaxed">Since data is local, clearing browser history deletes notes! Back up using Export often.</p>
+          <div className="flex flex-col gap-4 w-full animate-fade-up delay-200">
+            <div className={`p-4 rounded-[1.5rem] border-2 text-center font-black text-lg shadow-sm ${isDark ? 'bg-[#2b2738] border-[#ff8da1] text-[#fce4ec]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
+              Tia R. ✨
             </div>
-            <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5]'}`}>
-               <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><ShieldCheck size={18}/> Provided "As Is"</h4>
-               <p className="text-sm opacity-80 font-bold leading-relaxed">We built this with love, but you are the guardian of your words. We aren't liable for data loss.</p>
+            <div className={`p-4 rounded-[1.5rem] border-2 text-center font-black text-lg shadow-sm ${isDark ? 'bg-[#2b2738] border-[#ff8da1] text-[#fce4ec]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
+              Sahana S. ✨
             </div>
-          </div>
-
-          <div className="w-full text-center opacity-40 animate-fade-up delay-400">
-             <p className="text-xs font-black uppercase tracking-[0.2em]">Simple & Transparent</p>
           </div>
         </div>
       )}
@@ -578,14 +607,16 @@ const Header = ({
               </button>
               {styleMenuOpen && (
                 <div className={`absolute right-0 top-11 w-64 border-2 rounded-[2rem] shadow-xl p-4 z-50 animate-in ${isDark ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-3 ml-2 text-left">Cover Pattern</h4>
-                  <div className="flex gap-2 mb-5">
-                    {['none', 'stripes', 'dots', 'floral'].map(p => (
-                      <button key={p} onClick={() => updateNote(activeNote.id, { cover: p })} className={`flex-1 aspect-square rounded-xl border-2 transition-all hover:scale-105 ${activeNote.cover === p ? 'border-[#ff9ebd]' : 'border-black/5'} overflow-hidden relative`}>
-                        {p !== 'none' && <div className={`absolute inset-0 opacity-40 pattern-${p}`}></div>}
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/10 text-[8px] font-black uppercase">{p === 'none' ? 'Plain' : ''}</div>
-                      </button>
-                    ))}
+                  <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-3 ml-2 text-left">Cover Icon</h4>
+                  <div className="grid grid-cols-4 gap-2 mb-5">
+                    {Object.keys(IconMap).map(iconKey => {
+                      const IconComponent = IconMap[iconKey];
+                      return (
+                        <button key={iconKey} onClick={() => updateNote(activeNote.id, { icon: iconKey })} className={`flex aspect-square items-center justify-center rounded-xl border-2 transition-all hover:scale-105 ${activeNote.icon === iconKey ? 'border-[#ff9ebd] bg-black/5' : 'border-transparent'} overflow-hidden relative`}>
+                          <IconComponent size={20} className={isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} />
+                        </button>
+                      );
+                    })}
                   </div>
                   <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-3 ml-2 text-left">Sanctuary Color</h4>
                   <div className="grid grid-cols-5 gap-2">
@@ -775,7 +806,7 @@ const App = () => {
       pinned: false,
       deletedAt: null,
       color: '#ff9ebd',
-      cover: 'stripes'
+      icon: 'Sparkles'
     }];
 
     // Auto-purge notes older than 30 days from trash
@@ -841,7 +872,7 @@ const App = () => {
 
   const createNote = () => {
     const colors = ['#ff9ebd', '#c1f2d5', '#a6c9ff', '#f2ecd5', '#e2d5f2', '#ffc4b2'];
-    const patterns = ['stripes', 'dots', 'floral', 'none'];
+    const icons = Object.keys(IconMap);
     const newNote = {
       id: Date.now().toString(),
       title: '',
@@ -850,7 +881,7 @@ const App = () => {
       pinned: false,
       deletedAt: null,
       color: colors[Math.floor(Math.random() * colors.length)],
-      cover: patterns[Math.floor(Math.random() * patterns.length)]
+      icon: icons[Math.floor(Math.random() * icons.length)]
     };
     setNotes(prev => {
       const updated = [newNote, ...prev];
