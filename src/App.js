@@ -75,13 +75,13 @@ const NotebookCover = ({ color, icon, title, onClick, isPinned }) => {
         className="relative w-full aspect-[3/4] rounded-r-2xl rounded-l-sm shadow-lg border border-black/5 overflow-hidden transition-colors duration-500"
         style={{ backgroundColor: color || '#ff9ebd' }}
       >
-        {/* Aesthetic Cover Icon */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-[0.15] pointer-events-none z-0">
-          <IconComponent size={84} className="text-[#5d4037]" />
-        </div>
-        
         {/* Spine Detail */}
-        <div className="absolute left-0 top-0 bottom-0 w-3 bg-black/10 border-r border-white/5 z-10"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-[12%] bg-black/10 border-r border-white/5 z-10"></div>
+        
+        {/* Aesthetic Cover Icon - Made fully prominent on the front face */}
+        <div className="absolute top-[40%] left-[56%] -translate-x-1/2 -translate-y-1/2 z-10 opacity-90 drop-shadow-sm transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3">
+          <IconComponent size={52} className="text-[#5d4037]" strokeWidth={1.5} />
+        </div>
         
         {/* Pinned Indicator */}
         {isPinned && (
@@ -90,9 +90,9 @@ const NotebookCover = ({ color, icon, title, onClick, isPinned }) => {
           </div>
         )}
 
-        {/* Sticker Label */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[75%] aspect-[3/2] bg-white/90 backdrop-blur-sm rounded-md border border-black/5 flex items-center justify-center p-2 shadow-inner group-hover:bg-white transition-colors z-20">
-          <span className="text-[10px] font-black text-[#5d4037] line-clamp-3 text-center leading-tight">
+        {/* Sticker Label - Shifted down to act as a bottom label */}
+        <div className="absolute bottom-4 left-[56%] -translate-x-1/2 w-[75%] bg-white/95 backdrop-blur-sm rounded-md border border-black/5 flex items-center justify-center p-2 shadow-sm group-hover:bg-white transition-colors z-20">
+          <span className="text-[10px] font-black text-[#5d4037] line-clamp-2 text-center leading-tight">
             {title || 'Untitled'}
           </span>
         </div>
