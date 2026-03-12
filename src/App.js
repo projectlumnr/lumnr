@@ -484,7 +484,7 @@ const App = () => {
           </div>
         </header>
 
-        <div className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 lg:py-20 overflow-y-auto scrollbar-hide flex flex-col">
+        <div className="flex-1 w-full px-8 lg:px-16 pt-12 lg:pt-20 flex flex-col">
           {activeNote ? (
             <div className={`flex-1 flex flex-col space-y-10 animate-in ${activeNote.deletedAt ? 'opacity-50 pointer-events-none' : ''}`}>
               <input
@@ -500,7 +500,7 @@ const App = () => {
                 onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
                 placeholder="Write your thoughts..."
                 disabled={!!activeNote.deletedAt}
-                className={`w-full flex-1 bg-transparent text-lg leading-relaxed focus:outline-none resize-none ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
+                className={`w-full flex-1 bg-transparent text-lg leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${theme === 'dark' ? 'text-zinc-200 placeholder:text-zinc-800' : 'text-zinc-700 placeholder:text-zinc-200'}`}
               />
             </div>
           ) : (
