@@ -13,14 +13,11 @@ import {
   PenLine, 
   Clock, 
   Search, 
-  MoreHorizontal,
   Settings,
   Share2, 
   Download,
   Copy,
   Twitter,
-  ExternalLink,
-  Info,
   ShieldCheck,
   FileText,
   X,
@@ -101,15 +98,15 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
   const activeNotes = notes.filter(n => !n.deletedAt);
 
   return (
-    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative animate-in font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
+    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
       
       {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
       <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transform-gpu transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
       {/* Floating Background Decors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-20 lg:top-32 left-[10%] lg:left-[20%] animate-float-mimu opacity-60"><Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" /></div>
-        <div className="absolute top-40 lg:top-52 right-[10%] lg:right-[20%] animate-bounce-slow opacity-80"><Star size={56} className="text-[#ffd700]" fill="currentColor" /></div>
+        <div className="absolute top-20 left-[10%] animate-float-mimu opacity-60"><Cloud size={80} className="text-[#a6c9ff]" fill="currentColor" /></div>
+        <div className="absolute top-40 right-[10%] animate-bounce-slow opacity-80"><Star size={56} className="text-[#ffd700]" fill="currentColor" /></div>
         <div className="absolute bottom-40 left-[15%] animate-float-mimu opacity-70"><Sparkles size={64} className="text-[#c1f2d5]" /></div>
         <div className="absolute bottom-20 right-[15%] animate-bounce-slow opacity-50"><Heart size={48} className="text-[#ff9ebd]" fill="currentColor" /></div>
       </div>
@@ -189,7 +186,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           </div>
           
           {/* Tile 2: Blue */}
-          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 hover:scale-[1.02] hover:-rotate-1 border-b-[6px] ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5] shadow-sm'}`}>
             <h4 className="font-black text-2xl mb-4 flex items-center gap-3">
               <Star size={24} className={isDark ? 'text-[#a6c9ff]' : 'text-[#5fa8d3]'} /> Auto-save.
             </h4>
@@ -228,6 +225,9 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
               <p className="text-xl md:text-2xl font-black mb-3">Support Lumnr ✨</p>
               <p className="font-bold opacity-75 text-base leading-relaxed">
                 This is an individual project and it means a lot if you could support us on your will. Every act of kindness helps keep the project alive and blooming.
+                <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`inline-block ml-1 align-text-bottom transition-transform hover:scale-110 active:scale-95 ${isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`} title="Buy me a coffee!">
+                  <Coffee size={20} strokeWidth={2.5} />
+                </a>
               </p>
             </div>
 
@@ -264,23 +264,27 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
 // ==========================================
 // COMPONENT: Reusable Modal Wrapper
 // ==========================================
-const Modal = ({ title, children, onClose, theme, isHome }) => {
-  const homeStyle = isHome 
-    ? `border-4 ${theme === 'dark' ? 'border-[#ff8da1] shadow-[0_12px_0_#d86a80]' : 'border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'} rounded-[3.5rem]`
-    : `border-2 ${theme === 'dark' ? 'border-[#4a445d]' : 'border-[#ffccd5]'} rounded-[2.5rem] shadow-2xl`;
-
-  const animationClass = isHome ? 'animate-pop-in' : 'animate-in';
+const Modal = ({ title, children, onClose, theme }) => {
+  const isDark = theme === 'dark';
+  // Aesthetic flyer-like style: soft rounded corners, elegant shadow, subtle borders
+  const flyerStyle = `border-2 ${isDark ? 'border-[#4a445d] shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'border-[#ffe4e9] shadow-[0_20px_50px_-15px_rgba(255,107,139,0.3)]'} rounded-[2rem]`;
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center bg-black/10 backdrop-blur-sm p-6 ${animationClass}`}>
-      <div className={`${theme === 'dark' ? 'bg-[#3b364c]' : 'bg-white'} w-full max-w-lg overflow-hidden ${homeStyle}`}>
-        <div className={`flex items-center justify-between p-6 ${isHome ? 'border-b-4' : 'border-b-2'} ${theme === 'dark' ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
-          <h2 className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{title}</h2>
-          <button onClick={onClose} className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#5d4037]'}`}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+      {/* Soothing backdrop blur */}
+      <div 
+        className={`absolute inset-0 backdrop-blur-md transition-opacity duration-500 animate-in ${isDark ? 'bg-[#2b2738]/60' : 'bg-[#fffcfd]/60'}`}
+        onClick={onClose}
+      ></div>
+      {/* Flyer Card */}
+      <div className={`relative z-10 ${isDark ? 'bg-[#3b364c]' : 'bg-[#fffcfd]'} w-full max-w-lg overflow-hidden animate-pop-in ${flyerStyle}`}>
+        <div className={`flex items-center justify-between p-6 border-b-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
+          <h2 className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{title}</h2>
+          <button onClick={onClose} className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDark ? 'bg-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#5d4037]'}`}>
             <X size={18} strokeWidth={3} />
           </button>
         </div>
-        <div className={`p-10 ${theme === 'dark' ? 'text-[#e6d5eb]' : 'text-[#795548]'} text-base font-bold leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
+        <div className={`p-10 ${isDark ? 'text-[#e6d5eb]' : 'text-[#795548]'} text-base font-bold leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
           {children}
         </div>
       </div>
@@ -291,73 +295,94 @@ const Modal = ({ title, children, onClose, theme, isHome }) => {
 // ==========================================
 // COMPONENT: Pop-up Modals Content
 // ==========================================
-const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updateNote, isHome }) => {
+const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updateNote }) => {
   if (!modalContent) return null;
   const title = modalContent === 'about' ? "About lumnr" : modalContent === 'privacy' ? "Privacy Policy" : modalContent === 'terms' ? "Terms of Service" : modalContent === 'history' ? "Version History" : "";
   const isDark = theme === 'dark';
 
   return (
-    <Modal title={title} onClose={() => setModalContent(null)} theme={theme} isHome={isHome}>
+    <Modal title={title} onClose={() => setModalContent(null)} theme={theme}>
       {modalContent === 'about' && (
-        <div className="flex flex-col items-center text-center py-2 animate-in">
-          <div className={`p-4 rounded-[2rem] border-2 mb-6 ${isDark ? 'bg-[#ffb7c5]/10 border-[#ffb7c5]/20' : 'bg-[#ff9ebd]/10 border-[#ff9ebd]/20'}`}>
-            <Sparkles size={40} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} strokeWidth={2.5} />
-          </div>
+        <div className="flex flex-col items-center text-center py-4 animate-in">
+          <h3 className={`text-3xl font-black mb-4 tracking-tight ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>lumnr <span className="text-lg opacity-50 font-bold ml-1">v1.2</span></h3>
           
-          <h3 className={`text-2xl font-black mb-3 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>Lumnr v1.2</h3>
-          
-          <p className="text-base font-bold opacity-80 leading-relaxed mb-6">
-            A minimal digital sanctuary designed to quiet the noise and let your creativity bloom. Built for speed, privacy, and the love of beautiful writing.
+          <p className="text-lg font-bold opacity-80 leading-relaxed mb-8 max-w-sm">
+            A minimal digital sanctuary designed to quiet the noise. Built for speed, privacy, and the absolute joy of beautiful writing.
           </p>
 
-          <div className="w-full flex flex-col gap-3 mb-10">
-            <div className={`p-4 rounded-2xl border-2 flex items-center justify-center gap-3 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fffcfd] border-[#ffe4e9]'}`}>
-              <ShieldCheck size={18} className="text-[#c1f2d5]" />
-              <span className="text-xs font-black uppercase tracking-widest opacity-60">100% Local & Private</span>
-            </div>
-          </div>
-
-          <a 
-            href="https://ko-fi.com/lumnr" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-3 w-full py-4 rounded-3xl text-base font-black transition-all shadow-sm active:translate-y-1 ${isDark ? 'bg-[#ff8da1] text-white hover:brightness-110 shadow-[0_6px_0_#d86a80]' : 'bg-[#ff9ebd] text-white hover:brightness-105 shadow-[0_6px_0_#e07a9b]'}`}
-          >
-            <Coffee size={20} /> Support the Project
-          </a>
-
-          <div className="flex items-center justify-center gap-2 opacity-40 text-xs font-black mt-10 uppercase tracking-widest">
-            <span>Crafted with</span>
-            <Heart size={14} className="text-[#ff6b8b] fill-current animate-soft-blink" />
-            <span>by Aayaam</span>
+          <div className={`w-full max-w-xs p-5 rounded-3xl border-2 flex flex-col items-center justify-center gap-2 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fffcfd] border-[#ffe4e9]'}`}>
+            <ShieldCheck size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} />
+            <span className="text-[11px] font-black uppercase tracking-widest opacity-70">100% Local & Private</span>
           </div>
         </div>
       )}
       
       {modalContent === 'privacy' && (
-        <div className="flex flex-col space-y-6">
-          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ Your data stays strictly with you.</p>
-          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
-            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Cloud size={16}/> Local Storage</h3>
-            <p className="font-bold text-sm opacity-80">All your notes and settings are saved directly in your device's browser memory. We never see your content.</p>
+        <div className="flex flex-col items-center space-y-8 py-2">
+          <div className="relative">
+            <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#ff8da1]/10 border-[#ff8da1]/20' : 'bg-[#ff9ebd]/10 border-[#ff9ebd]/20'}`}>
+              <ShieldCheck size={64} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} strokeWidth={2.5} />
+            </div>
+            <div className="absolute -bottom-2 -right-2 animate-bounce-slow">
+              <Sparkles size={28} className="text-[#ffd700]" />
+            </div>
           </div>
-          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
-            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 flex items-center gap-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}><Sparkles size={16}/> Data Collection</h3>
-            <p className="font-bold text-sm opacity-80">We do not track your typing or use tracking cookies. We have absolutely zero access to your documents.</p>
+          
+          <div className="text-center">
+            <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
+              Privacy Magic ✨
+            </h3>
+            <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Your thoughts are yours alone.</p>
+          </div>
+
+          <div className="grid gap-4 w-full">
+            <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#2d4239] border-[#1e2e27] text-[#c1f2d5]' : 'bg-[#e2f2d5] border-[#c9e5b8]'}`}>
+               <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Cloud size={18}/> No Servers</h4>
+               <p className="text-sm opacity-80 font-bold leading-relaxed">Lumnr doesn't have a database. Everything you write stays safely on your device.</p>
+            </div>
+            <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#2d3b42] border-[#1e272e] text-[#a6c9ff]' : 'bg-[#d5e8f2] border-[#b8d7e5]'}`}>
+               <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Sparkles size={18}/> No Cookies</h4>
+               <p className="text-sm opacity-80 font-bold leading-relaxed">We don't track your behavior, use analytics, or sell your data. Pure, simple focus.</p>
+            </div>
+          </div>
+
+          <div className="w-full text-center opacity-40 animate-fade-up delay-400">
+             <p className="text-xs font-black uppercase tracking-[0.2em]">Verified Privacy Focus</p>
           </div>
         </div>
       )}
 
       {modalContent === 'terms' && (
-        <div className="flex flex-col space-y-6">
-          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
-          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
-            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
-            <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
+        <div className="flex flex-col items-center space-y-8 py-2">
+          <div className="relative">
+            <div className={`p-6 rounded-[2rem] border-4 shadow-sm animate-float-mimu ${isDark ? 'bg-[#a6c9ff]/10 border-[#a6c9ff]/20' : 'bg-[#87cefa]/10 border-[#87cefa]/20'}`}>
+              <FileText size={64} className={isDark ? 'text-[#a6c9ff]' : 'text-[#87cefa]'} strokeWidth={2.5} />
+            </div>
+            <div className="absolute -top-2 -left-2 animate-bounce-slow">
+              <Star size={28} className="text-[#ffd700] fill-current" />
+            </div>
           </div>
-          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
-            <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
-            <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
+
+          <div className="text-center">
+            <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
+              Friendly Rules 📜
+            </h3>
+            <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Simple ways to keep your notes safe.</p>
+          </div>
+
+          <div className="grid gap-4 w-full">
+            <div className={`p-5 rounded-[2rem] border-2 transform -rotate-1 animate-fade-up delay-200 ${isDark ? 'bg-[#423d2d] border-[#2e2b1e] text-[#f2ecd5]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
+               <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><Trash2 size={18}/> Cache Risk</h4>
+               <p className="text-sm opacity-80 font-bold leading-relaxed">Since data is local, clearing browser history deletes notes! Back up using Export often.</p>
+            </div>
+            <div className={`p-5 rounded-[2rem] border-2 transform rotate-1 animate-fade-up delay-300 ${isDark ? 'bg-[#3b2d42] border-[#271e2e] text-[#e2d5f2]' : 'bg-[#e2d5f2] border-[#d0c1e5]'}`}>
+               <h4 className="font-black flex items-center gap-2 mb-1 text-lg"><ShieldCheck size={18}/> Provided "As Is"</h4>
+               <p className="text-sm opacity-80 font-bold leading-relaxed">We built this with love, but you are the guardian of your words. We aren't liable for data loss.</p>
+            </div>
+          </div>
+
+          <div className="w-full text-center opacity-40 animate-fade-up delay-400">
+             <p className="text-xs font-black uppercase tracking-[0.2em]">Simple & Transparent</p>
           </div>
         </div>
       )}
@@ -968,7 +993,6 @@ const App = () => {
       <ContentModals 
         modalContent={modalContent} setModalContent={setModalContent} 
         theme={theme} activeNote={activeNote} updateNote={updateNote} 
-        isHome={showHome}
       />
 
       {/* Global CSS */}
