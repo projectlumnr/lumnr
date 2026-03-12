@@ -136,6 +136,12 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
             </h4>
             <p className="font-semibold opacity-80 leading-relaxed">Clearing your cache will delete your notes. Be sure to use the "Export .txt" feature to back up important documents.</p>
           </div>
+          <div className={`p-8 md:p-10 rounded-[2.5rem] transition-transform hover:-translate-y-2 shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffccd5]'} ${cardBg}`}>
+            <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
+              <History size={20} className={iconColor} /> Version history.
+            </h4>
+            <p className="font-semibold opacity-80 leading-relaxed">Made a mistake? No problem. Access past versions of your current document directly from the settings menu.</p>
+          </div>
         </div>
       </div>
 
@@ -186,7 +192,6 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
     <Modal title={title} onClose={() => setModalContent(null)} theme={theme}>
       {modalContent === 'about' && (
         <div className="flex flex-col text-center items-center">
-          <Sparkles size={48} className={`mb-4 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'}`} />
           <p className="mb-4 text-base font-bold">lumnr is a cozy digital workspace designed to remove distractions and let your ideas shine.</p>
           <p className="mb-8 opacity-80">Built with a focus on speed, privacy, and absolute cuteness. A soft slate for your daily thoughts.</p>
           <a 
@@ -195,7 +200,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
             rel="noopener noreferrer"
             className={`flex items-center justify-center gap-2 w-full py-4 rounded-3xl text-sm font-bold transition-all shadow-sm active:translate-y-1 ${theme === 'dark' ? 'bg-[#ff8da1] text-white hover:brightness-110 shadow-[0_4px_0_#d86a80]' : 'bg-[#ff9ebd] text-white hover:brightness-105 shadow-[0_4px_0_#e07a9b]'}`}
           >
-            <Coffee size={18} /> Buy me a coffee!
+            <Coffee size={18} /> Support the Project
           </a>
           <div className="flex items-center justify-center gap-1.5 opacity-60 text-xs font-bold mt-8">
             <span>Made with</span>
@@ -577,8 +582,8 @@ const App = () => {
   const [showTrash, setShowTrash] = useState(false);
   const [showPinned, setShowPinned] = useState(false);
   const [theme, setTheme] = useState(() => {
-    if (typeof window === 'undefined') return 'dark';
-    return localStorage.getItem('lumnr_theme') || 'dark';
+    if (typeof window === 'undefined') return 'light';
+    return localStorage.getItem('lumnr_theme') || 'light';
   });
   
   const [showHome, setShowHome] = useState(true); // New state for Home Page
