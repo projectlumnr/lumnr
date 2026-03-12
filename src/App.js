@@ -53,10 +53,10 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
   const iconColor = isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]';
 
   return (
-    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative animate-in font-['Quicksand',sans-serif] ${bgWrapper} ${textMain}`}>
+    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] ${bgWrapper} ${textMain}`}>
       
       {/* Aesthetic Mimu Gridline Layer */}
-      <div className={`absolute inset-0 z-0 opacity-30 pointer-events-none ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
+      <div className={`absolute inset-0 z-0 opacity-30 pointer-events-none transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
 
       {/* Floating Background Decors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -159,6 +159,26 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => {
         </div>
       </div>
 
+      {/* Supporters Section */}
+      <div className={`w-full max-w-5xl px-6 pb-24 z-10 opacity-0 animate-fade-up`} style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}>
+        <div className={`p-10 md:p-16 rounded-[3.5rem] text-center border-4 ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_12px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
+          <Heart size={48} className="mx-auto mb-6 text-[#ff6b8b] fill-current animate-bounce-slow" />
+          <p className="text-2xl md:text-3xl font-black mb-4">Support Lumnr ✨</p>
+          <p className="font-bold opacity-80 leading-relaxed mb-10 max-w-2xl mx-auto text-lg">
+            This is an individual project and it means a lot if you could support us on your will. Every act of kindness helps keep the digital sanctuary alive and blooming.
+          </p>
+          
+          <div className={`pt-10 border-t-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] opacity-50 mb-6">Top Supporters</h4>
+            <div className="flex flex-wrap justify-center gap-4">
+              <div className={`px-6 py-3 rounded-2xl font-black text-lg border-2 transform rotate-2 hover:rotate-0 transition-transform ${isDark ? 'bg-[#2b2738] border-[#ff8da1] text-[#fce4ec]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
+                Tia Rose 🌸
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="w-full px-6 py-16 flex flex-col items-center justify-center gap-8 font-black z-10 opacity-80">
         <div className="flex flex-wrap items-center justify-center gap-10">
@@ -192,7 +212,7 @@ const Modal = ({ title, children, onClose, theme, isHome }) => {
         <div className={`flex items-center justify-between p-6 ${isHome ? 'border-b-4' : 'border-b-2'} ${theme === 'dark' ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
           <h2 className={`text-sm font-black uppercase tracking-widest ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{title}</h2>
           <button onClick={onClose} className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${theme === 'dark' ? 'bg-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#5d4037]'}`}>
-            <X size={18} strokeWidth={2.5} />
+            <X size={18} strokeWidth={3} />
           </button>
         </div>
         <div className={`p-10 ${theme === 'dark' ? 'text-[#e6d5eb]' : 'text-[#795548]'} text-base font-bold leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
@@ -366,7 +386,7 @@ const Header = ({
   onGoHome
 }) => {
   return (
-    <header className={`h-14 flex-shrink-0 border-b-2 flex items-center justify-between px-4 sm:px-6 z-10 ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]/80 backdrop-blur-md' : 'border-[#ffe4e9] bg-[#fffcfd]/80 backdrop-blur-md'}`}>
+    <header className={`h-14 flex-shrink-0 border-b-2 flex items-center justify-between px-4 sm:px-6 z-[35] ${theme === 'dark' ? 'border-[#4a445d] bg-[#2b2738]/80 backdrop-blur-md' : 'border-[#ffe4e9] bg-[#fffcfd]/80 backdrop-blur-md'}`}>
       <div className={`flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] font-black uppercase tracking-widest whitespace-nowrap overflow-x-auto scrollbar-hide pr-2 ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]'}`}>
         <span className="flex items-center gap-1.5 flex-shrink-0">
           <Clock size={14} strokeWidth={2.5} />
@@ -385,14 +405,14 @@ const Header = ({
       </div>
       
       <div className="flex items-center gap-2 flex-shrink-0 pl-2">
-        <button onClick={onGoHome} className={`p-2 rounded-full transition-all active:scale-90 flex items-center border-2 ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`} title="Go Home">
+        <button onClick={onGoHome} className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`} title="Go Home">
           <Home size={16} strokeWidth={2.5} />
         </button>
 
         {!activeNote?.deletedAt && (
           <>
             <div className="relative" ref={shareMenuRef}>
-              <button onClick={() => setShareMenuOpen(!shareMenuOpen)} className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-all px-4 py-1.5 rounded-full active:scale-95 border-2 shadow-sm ${theme === 'dark' ? 'text-[#fce4ec] bg-[#3b364c] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#5d4037] bg-white border-[#ffe4e9] hover:bg-[#fff0f5]'}`}>
+              <button onClick={(e) => { e.stopPropagation(); setShareMenuOpen(!shareMenuOpen); }} className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-all px-4 py-1.5 rounded-full active:scale-95 border-2 shadow-sm ${theme === 'dark' ? 'text-[#fce4ec] bg-[#3b364c] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#5d4037] bg-white border-[#ffe4e9] hover:bg-[#fff0f5]'}`}>
                 <Share2 size={13} strokeWidth={2.5} /> Share
               </button>
               {shareMenuOpen && (
@@ -413,7 +433,7 @@ const Header = ({
         )}
 
         <div className="relative" ref={moreMenuRef}>
-          <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className={`p-2 rounded-full transition-all active:scale-90 flex items-center border-2 ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`}>
+          <button onClick={(e) => { e.stopPropagation(); setMoreMenuOpen(!moreMenuOpen); }} className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${theme === 'dark' ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`}>
             <MoreHorizontal size={18} strokeWidth={2.5} />
           </button>
           {moreMenuOpen && (
@@ -653,7 +673,11 @@ const App = () => {
       if (settingsRef.current && !settingsRef.current.contains(event.target)) setSettingsOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   const toggleTheme = () => {
@@ -849,7 +873,7 @@ const App = () => {
           <main className="flex-1 flex flex-col relative">
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-1.5 border-y-4 border-r-4 rounded-r-2xl transition-transform active:scale-90 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d] text-[#ffb7c5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b]'}`}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-1.5 border-y-4 border-r-4 rounded-r-[1.5rem] transition-transform active:scale-90 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d] text-[#ffb7c5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b]'}`}
             >
               <ChevronRight size={18} strokeWidth={4} />
             </button>
@@ -890,7 +914,7 @@ const App = () => {
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Mimu Aesthetic Background Gridlines */
+        /* Mimu Aesthetic Background Gridlines with smooth transitions */
         .bg-grid-light {
           background-size: 40px 40px;
           background-image: linear-gradient(to right, #ffe4e9 1px, transparent 1px),
@@ -902,21 +926,24 @@ const App = () => {
                             linear-gradient(to bottom, #3b364c 1px, transparent 1px);
         }
 
-        /* Smooth Entrance Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-in { animation: fadeIn 0.4s ease-out forwards; }
+        /* Smooth Entrance Animations with hardware acceleration */
+        @keyframes fadeIn { 
+          from { opacity: 0; transform: translateY(4px); } 
+          to { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-in { animation: fadeIn 0.4s ease-out forwards; will-change: opacity, transform; }
         
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(40px); filter: blur(4px); }
           to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        .animate-fade-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform, filter; }
         
         @keyframes popIn { 
           0% { opacity: 0; transform: scale(0.85) translateY(20px); } 
           100% { opacity: 1; transform: scale(1) translateY(0); } 
         }
-        .animate-pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-pop-in { animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; will-change: opacity, transform, scale; }
 
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
