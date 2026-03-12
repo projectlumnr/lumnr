@@ -32,55 +32,89 @@ import {
   RotateCcw,
   Trash,
   History,
-  CheckSquare
+  CheckSquare,
+  Home
 } from 'lucide-react';
 
 // ==========================================
 // COMPONENT: Home / Landing Page
 // ==========================================
-const HomePage = ({ theme, onStart, toggleTheme }) => (
-  <div className="flex-1 w-full h-full flex flex-col items-center justify-center p-6 relative animate-in">
+const HomePage = ({ theme, onStart, toggleTheme, setModalContent }) => (
+  <div className="flex-1 w-full h-full flex flex-col items-center overflow-y-auto scrollbar-hide relative animate-in">
     <button 
       onClick={toggleTheme} 
-      className={`absolute top-6 right-6 p-2 rounded-md transition-colors ${theme === 'dark' ? 'text-zinc-500 hover:text-zinc-100 hover:bg-zinc-900' : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100'}`}
+      className={`absolute top-6 right-6 p-2 rounded-md transition-colors z-10 ${theme === 'dark' ? 'text-zinc-500 hover:text-zinc-100 hover:bg-zinc-900' : 'text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100'}`}
       title="Toggle Theme"
     >
       {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
     </button>
     
-    <div className="max-w-lg w-full text-center space-y-8">
-      <div className="flex flex-col items-center justify-center gap-4 mb-4">
-        <div className={`p-5 rounded-2xl ${theme === 'dark' ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-200 shadow-sm'}`}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>
+    <div className="flex-1 flex flex-col items-center justify-center max-w-3xl w-full text-center px-6 py-20 mt-8 space-y-10">
+      <div className="flex flex-col items-center justify-center gap-5">
+        <div className={`p-6 rounded-3xl ${theme === 'dark' ? 'bg-zinc-900 border border-zinc-800' : 'bg-white border border-zinc-200 shadow-sm'}`}>
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>
             <rect x="17" y="3" width="4" height="4" rx="1" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
             <path d="M15 5L5 15L3 21L9 19L19 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M13 7L17 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h1 className={`text-5xl font-bold tracking-tighter ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>lumnr</h1>
+        <h1 className={`text-6xl font-bold tracking-tighter ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>lumnr</h1>
       </div>
       
-      <p className={`text-lg leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>
-        A minimalist digital workspace designed to remove distractions and let your ideas shine.
+      <h2 className={`text-4xl md:text-5xl font-medium tracking-wide ${theme === 'dark' ? 'text-zinc-300' : 'text-zinc-600'}`} style={{ fontFamily: "'Caveat', cursive" }}>
+        Welcome to your digital sanctuary.
+      </h2>
+
+      <p className={`text-lg md:text-xl leading-relaxed max-w-xl mx-auto ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>
+        A minimalist workspace designed to remove distractions and let your ideas shine.
       </p>
       
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
+      <div className="pt-8">
         <button 
           onClick={onStart}
-          className={`w-full sm:w-auto px-8 py-3.5 rounded-lg font-semibold tracking-wider uppercase text-xs flex items-center justify-center gap-2 transition-all shadow-sm ${theme === 'dark' ? 'bg-zinc-100 text-zinc-900 hover:bg-white hover:scale-105' : 'bg-zinc-900 text-white hover:bg-black hover:scale-105'}`}
+          className={`px-10 py-4 rounded-xl font-bold tracking-widest uppercase text-sm flex items-center justify-center gap-3 transition-all shadow-md hover:shadow-xl ${theme === 'dark' ? 'bg-zinc-100 text-zinc-900 hover:bg-white hover:scale-105' : 'bg-zinc-900 text-white hover:bg-black hover:scale-105'}`}
         >
-          <PenLine size={16} /> Start Writing
+          <PenLine size={18} /> Start Writing
         </button>
-        <a 
-          href="https://ko-fi.com/lumnr" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className={`w-full sm:w-auto px-8 py-3.5 rounded-lg font-semibold tracking-wider uppercase text-xs flex items-center justify-center gap-2 transition-all border ${theme === 'dark' ? 'border-zinc-800 text-zinc-300 hover:bg-zinc-900 hover:text-white' : 'border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'}`}
-        >
-          <Coffee size={16} /> Support the Project
-        </a>
       </div>
     </div>
+
+    <div className={`w-full max-w-4xl px-6 py-16 mt-auto border-t ${theme === 'dark' ? 'border-zinc-800/50' : 'border-zinc-200/80'}`}>
+      <h3 className={`text-xs font-bold tracking-widest uppercase text-center mb-10 opacity-50 ${theme === 'dark' ? 'text-zinc-100' : 'text-zinc-900'}`}>Frequently Asked Questions</h3>
+      <div className="grid gap-6 md:grid-cols-2 text-left">
+        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
+          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>Where are my notes saved?</h4>
+          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Everything is stored securely in your browser's local storage. We don't use servers, and your data never leaves your device.</p>
+        </div>
+        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
+          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>Is there an auto-save feature?</h4>
+          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Yes! Lumnr automatically saves your progress as you type, and creates a backup snapshot every 5 minutes in case you make a mistake.</p>
+        </div>
+        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
+          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>How do I use checklists?</h4>
+          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Simply click the checklist icon in the editor header, or type " - [ ] " to start a task. You can click the brackets directly to check them off!</p>
+        </div>
+        <div className={`p-6 rounded-2xl transition-colors ${theme === 'dark' ? 'bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900' : 'bg-zinc-50/50 border border-zinc-200/50 hover:bg-zinc-50'}`}>
+          <h4 className={`font-semibold mb-2 ${theme === 'dark' ? 'text-zinc-200' : 'text-zinc-800'}`}>What if I clear my browser cache?</h4>
+          <p className={`text-sm leading-relaxed ${theme === 'dark' ? 'text-zinc-400' : 'text-zinc-500'}`}>Clearing your cache will delete your notes. Be sure to use the "Export .txt" feature in the share menu to back up important documents.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer className={`w-full max-w-4xl px-6 py-8 flex flex-col md:flex-row items-center justify-between text-[10px] sm:text-xs font-medium tracking-wider uppercase border-t ${theme === 'dark' ? 'border-zinc-800/50 text-zinc-500' : 'border-zinc-200/80 text-zinc-400'}`}>
+      <div className="flex items-center flex-wrap justify-center gap-6 mb-6 md:mb-0">
+        <button onClick={() => setModalContent('privacy')} className={`transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-600'}`}>Privacy</button>
+        <button onClick={() => setModalContent('terms')} className={`transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-600'}`}>Terms</button>
+        <a href="https://ko-fi.com/lumnr" target="_blank" rel="noopener noreferrer" className={`flex items-center gap-1.5 transition-colors ${theme === 'dark' ? 'hover:text-zinc-300' : 'hover:text-zinc-600'}`}>
+          <Coffee size={14} /> Support
+        </a>
+      </div>
+      <div className="flex items-center gap-1.5 opacity-80">
+        <span>Made with</span>
+        <Heart size={12} className="text-red-500 fill-current" />
+        <span>by Aayaam</span>
+      </div>
+    </footer>
   </div>
 );
 
@@ -238,7 +272,8 @@ const Header = ({
   theme, activeNote, wordCount, charCount, readingTime, isSaving, 
   handleToggleCheckbox, shareMenuRef, shareMenuOpen, setShareMenuOpen, 
   downloadNote, copyToClipboard, shareToSocial, 
-  moreMenuRef, moreMenuOpen, setMoreMenuOpen, setModalContent 
+  moreMenuRef, moreMenuOpen, setMoreMenuOpen, setModalContent,
+  onGoHome
 }) => {
   return (
     <header className={`h-14 flex-shrink-0 border-b flex items-center justify-between px-4 sm:px-6 z-10 ${theme === 'dark' ? 'border-zinc-800 bg-[#09090b]/80 backdrop-blur-md' : 'border-zinc-200 bg-[#fcfcfc]/80 backdrop-blur-md'}`}>
@@ -266,6 +301,10 @@ const Header = ({
       </div>
       
       <div className="flex items-center gap-3 flex-shrink-0 pl-2">
+        <button onClick={onGoHome} className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900'}`} title="Go Home">
+          <Home size={18} />
+        </button>
+
         {!activeNote?.deletedAt && (
           <>
             <button onClick={handleToggleCheckbox} className={`transition-colors flex items-center ${theme === 'dark' ? 'text-zinc-400 hover:text-zinc-100' : 'text-zinc-500 hover:text-zinc-900'}`} title="Add/Toggle Checkbox">
@@ -750,6 +789,7 @@ const App = () => {
           theme={theme} 
           onStart={() => setShowHome(false)} 
           toggleTheme={toggleTheme} 
+          setModalContent={setModalContent}
         />
       ) : (
         <>
@@ -789,6 +829,7 @@ const App = () => {
               downloadNote={downloadNote} copyToClipboard={copyToClipboard} shareToSocial={shareToSocial}
               moreMenuRef={moreMenuRef} moreMenuOpen={moreMenuOpen} setMoreMenuOpen={setMoreMenuOpen}
               setModalContent={setModalContent}
+              onGoHome={() => setShowHome(true)}
             />
 
             <Editor 
@@ -797,17 +838,20 @@ const App = () => {
             />
           </main>
 
-          {/* 4. Popups Component */}
-          <ContentModals 
-            modalContent={modalContent} setModalContent={setModalContent} 
-            theme={theme} activeNote={activeNote} updateNote={updateNote} 
-          />
         </>
       )}
+
+      {/* 4. Popups Component (Moved outside the condition so it works over the home page too) */}
+      <ContentModals 
+        modalContent={modalContent} setModalContent={setModalContent} 
+        theme={theme} activeNote={activeNote} updateNote={updateNote} 
+      />
 
       {/* Global CSS */}
       <style>{`
         /* Added from index.css */
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+        
         body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background-color: black; }
         .theme-transition * { transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), color 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), fill 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important; }
         .theme-transition { transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
