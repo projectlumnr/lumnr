@@ -112,12 +112,12 @@ const NotebookCover = ({ color, icon, title, onClick, isPinned }) => {
 // ==========================================
 const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelectNote }) => {
   const isDark = theme === 'dark';
-  const cardBg = isDark ? 'bg-[#3b364c]' : 'bg-white';
+  const cardBg = isDark ? 'bg-[#1e1e1e]' : 'bg-white';
   const iconColor = isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]';
   const activeNotes = notes.filter(n => !n.deletedAt);
 
   return (
-    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#2b2738]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>
+    <div className={`flex-1 w-full h-full flex flex-col items-center overflow-x-hidden overflow-y-auto relative font-['Quicksand',sans-serif] custom-pen-cursor ${isDark ? 'bg-[#121212]' : 'bg-[#fffcfd]'} ${isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'}`}>
       
       {/* Aesthetic Mimu Gridline Layer - Set to fixed to cover the entire scrollable area */}
       <div className={`fixed inset-0 z-0 opacity-30 pointer-events-none transform-gpu transition-all duration-700 ${isDark ? 'bg-grid-dark' : 'bg-grid-light'}`}></div>
@@ -140,7 +140,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
         {/* Top Bar */}
         <div className="w-full p-6 md:p-8 flex justify-between items-center z-20 relative">
           <div className="flex items-center gap-3">
-            <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
+            <div className={`p-3 rounded-[1.2rem] ${cardBg} shadow-sm border-2 ${isDark ? 'border-[#2d2d2d]' : 'border-[#ffe4e9]'}`}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-6 h-6">
                 <rect x="24" y="17" width="56" height="70" rx="6" fill="rgba(0,0,0,0.1)"/>
                 <rect x="22" y="15" width="56" height="70" rx="6" fill="#ff9ebd"/>
@@ -165,7 +165,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
           </div>
           <button 
             onClick={toggleTheme} 
-            className={`p-3 rounded-full transition-transform hover:scale-110 active:scale-95 shadow-sm border-2 ${cardBg} ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}
+            className={`p-3 rounded-full transition-transform hover:scale-110 active:scale-95 shadow-sm border-2 ${cardBg} ${isDark ? 'border-[#2d2d2d]' : 'border-[#ffe4e9]'}`}
             title="Toggle Theme"
           >
             {theme === 'dark' ? <Sun size={20} className="text-[#ffd700]" /> : <Moon size={20} className="text-[#a6c9ff]" />}
@@ -298,7 +298,7 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
 
         {/* Supporters Corner */}
         <div className={`w-full max-w-4xl px-6 pb-24 relative z-20`}>
-          <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#3b364c] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
+          <div className={`relative p-8 md:p-10 rounded-[3rem] border-4 transition-all ${isDark ? 'bg-[#1e1e1e] border-[#ff8da1] shadow-[0_10px_0_#d86a80]' : 'bg-white border-[#ff9ebd] shadow-[0_12px_0_#e07a9b]'}`}>
             
             {/* Floating Sticker Label */}
             <div className={`absolute -top-6 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full font-black text-sm uppercase tracking-widest border-4 shadow-sm animate-bounce-slow ${isDark ? 'bg-[#ff8da1] border-[#d86a80] text-white' : 'bg-[#ff9ebd] border-[#e07a9b] text-white'}`}>
@@ -318,9 +318,9 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
 
               <button 
                 onClick={() => setModalContent('supporters')}
-                className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 transition-transform hover:scale-105 active:scale-95 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}
+                className={`flex-shrink-0 w-full md:w-auto p-6 rounded-[2rem] border-2 transition-transform hover:scale-105 active:scale-95 ${isDark ? 'bg-[#121212] border-[#2d2d2d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}
               >
-                <div className={`px-6 py-3 rounded-xl font-black text-base border-2 shadow-sm ${isDark ? 'bg-[#3b364c] border-[#ff8da1] text-[#fce4ec]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
+                <div className={`px-6 py-3 rounded-xl font-black text-base border-2 shadow-sm ${isDark ? 'bg-[#1e1e1e] border-[#ff8da1] text-[#f5f5f5]' : 'bg-white border-[#ff9ebd] text-[#ff6b8b]'}`}>
                   Our Supporters 💖
                 </div>
               </button>
@@ -353,24 +353,24 @@ const HomePage = ({ theme, onStart, toggleTheme, setModalContent, notes, onSelec
 const Modal = ({ title, children, onClose, theme }) => {
   const isDark = theme === 'dark';
   // Aesthetic flyer-like style: soft rounded corners, elegant shadow, subtle borders
-  const flyerStyle = `border-2 ${isDark ? 'border-[#4a445d] shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'border-[#ffe4e9] shadow-[0_20px_50px_-15px_rgba(255,107,139,0.3)]'} rounded-[2rem]`;
+  const flyerStyle = `border-2 ${isDark ? 'border-[#2d2d2d] shadow-[0_20px_50px_rgba(0,0,0,0.5)]' : 'border-[#ffe4e9] shadow-[0_20px_50px_-15px_rgba(255,107,139,0.3)]'} rounded-[2rem]`;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       {/* Soothing backdrop blur */}
       <div 
-        className={`absolute inset-0 backdrop-blur-md transition-opacity duration-500 animate-in ${isDark ? 'bg-[#2b2738]/60' : 'bg-[#fffcfd]/60'}`}
+        className={`absolute inset-0 backdrop-blur-md transition-opacity duration-500 animate-in ${isDark ? 'bg-[#121212]/60' : 'bg-[#fffcfd]/60'}`}
         onClick={onClose}
       ></div>
       {/* Flyer Card */}
-      <div className={`relative z-10 ${isDark ? 'bg-[#3b364c]' : 'bg-[#fffcfd]'} w-full max-w-lg overflow-hidden animate-pop-in ${flyerStyle}`}>
-        <div className={`flex items-center justify-between p-6 border-b-2 ${isDark ? 'border-[#4a445d]' : 'border-[#ffe4e9]'}`}>
-          <h2 className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{title}</h2>
-          <button onClick={onClose} className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDark ? 'bg-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#5d4037]'}`}>
+      <div className={`relative z-10 ${isDark ? 'bg-[#1e1e1e]' : 'bg-[#fffcfd]'} w-full max-w-lg overflow-hidden animate-pop-in ${flyerStyle}`}>
+        <div className={`flex items-center justify-between p-6 border-b-2 ${isDark ? 'border-[#2d2d2d]' : 'border-[#ffe4e9]'}`}>
+          <h2 className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'}`}>{title}</h2>
+          <button onClick={onClose} className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDark ? 'bg-[#2d2d2d] text-[#ffb7c5] hover:text-[#f5f5f5]' : 'bg-[#fff0f5] text-[#ff6b8b] hover:text-[#5d4037]'}`}>
             <X size={18} strokeWidth={3} />
           </button>
         </div>
-        <div className={`p-10 ${isDark ? 'text-[#e6d5eb]' : 'text-[#795548]'} text-base font-bold leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
+        <div className={`p-10 ${isDark ? 'text-[#d4d4d4]' : 'text-[#795548]'} text-base font-bold leading-relaxed max-h-[60vh] overflow-y-auto scrollbar-hide`}>
           {children}
         </div>
       </div>
@@ -390,13 +390,13 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
     <Modal title={title} onClose={() => setModalContent(null)} theme={theme}>
       {modalContent === 'about' && (
         <div className="flex flex-col items-center text-center py-4 animate-in">
-          <h3 className={`text-3xl font-black mb-4 tracking-tight ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>lumnr <span className="text-lg opacity-50 font-bold ml-1">v1.2</span></h3>
+          <h3 className={`text-3xl font-black mb-4 tracking-tight ${isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'}`}>lumnr <span className="text-lg opacity-50 font-bold ml-1">v1.2</span></h3>
           
           <p className="text-lg font-bold opacity-80 leading-relaxed mb-8 max-w-sm">
             A minimal digital sanctuary designed to quiet the noise. Built for speed, privacy, and the absolute joy of beautiful writing.
           </p>
 
-          <div className={`w-full max-w-xs p-5 rounded-3xl border-2 flex flex-col items-center justify-center gap-2 ${isDark ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fffcfd] border-[#ffe4e9]'}`}>
+          <div className={`w-full max-w-xs p-5 rounded-3xl border-2 flex flex-col items-center justify-center gap-2 ${isDark ? 'bg-[#121212] border-[#2d2d2d]' : 'bg-[#fffcfd] border-[#ffe4e9]'}`}>
             <ShieldCheck size={24} className={isDark ? 'text-[#c1f2d5]' : 'text-[#8cb369]'} />
             <span className="text-[11px] font-black uppercase tracking-widest opacity-70">100% Local & Private</span>
           </div>
@@ -415,7 +415,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
           </div>
           
           <div className="text-center">
-            <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
+            <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'} animate-fade-up`}>
               Privacy Magic ✨
             </h3>
             <p className="font-bold opacity-70 text-base animate-fade-up delay-100">Your thoughts are yours alone.</p>
@@ -440,12 +440,12 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
 
       {modalContent === 'terms' && (
         <div className="flex flex-col space-y-6">
-          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
-          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
+          <p className={`font-black text-lg ${theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#5d4037]'}`}>✨ By using lumnr, you agree to the following.</p>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#121212] border-[#2d2d2d]' : 'bg-[#f2ecd5] border-[#e5dec1]'}`}>
             <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Data Loss</h3>
             <p className="font-bold text-sm opacity-80">You are responsible for your own backups. Clearing browser data will result in permanent note deletion.</p>
           </div>
-          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
+          <div className={`p-5 rounded-[2rem] border-2 ${theme === 'dark' ? 'bg-[#121212] border-[#2d2d2d]' : 'bg-[#d5e8f2] border-[#d0c1e5]'}`}>
             <h3 className={`text-sm font-black uppercase tracking-widest mb-2 ${theme === 'dark' ? 'text-[#ffb7c5]' : 'text-[#5d4037]'}`}>Warranty</h3>
             <p className="font-bold text-sm opacity-80">Software is provided "as is" without warranty. We are not liable for any data loss.</p>
           </div>
@@ -464,7 +464,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
           </div>
 
           <div className="text-center">
-            <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} animate-fade-up`}>
+            <h3 className={`font-black text-3xl mb-2 ${isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'} animate-fade-up`}>
               Lovely Souls 🌸
             </h3>
             <p className="font-bold opacity-70 text-base animate-fade-up delay-100 max-w-sm">
@@ -473,10 +473,10 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
           </div>
 
           <div className="flex flex-col gap-4 w-full animate-fade-up delay-200">
-            <div className={`p-4 rounded-[1.5rem] border-2 text-center font-black text-lg shadow-sm ${isDark ? 'bg-[#2b2738] border-[#ff8da1] text-[#fce4ec]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
+            <div className={`p-4 rounded-[1.5rem] border-2 text-center font-black text-lg shadow-sm ${isDark ? 'bg-[#121212] border-[#ff8da1] text-[#f5f5f5]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
               Tia R. ✨
             </div>
-            <div className={`p-4 rounded-[1.5rem] border-2 text-center font-black text-lg shadow-sm ${isDark ? 'bg-[#2b2738] border-[#ff8da1] text-[#fce4ec]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
+            <div className={`p-4 rounded-[1.5rem] border-2 text-center font-black text-lg shadow-sm ${isDark ? 'bg-[#121212] border-[#ff8da1] text-[#f5f5f5]' : 'bg-[#fff5f7] border-[#ff9ebd] text-[#ff6b8b]'}`}>
               Sahana S. ✨
             </div>
           </div>
@@ -487,12 +487,12 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
         <div className="flex flex-col gap-3">
           <p className="mb-4 text-sm font-black text-center opacity-70">Restore previous versions of this document.</p>
           {(!activeNote?.history || activeNote.history.length === 0) ? (
-            <div className={`text-center py-12 font-bold opacity-50 rounded-[2.5rem] ${isDark ? 'bg-[#2b2738]' : 'bg-[#fff0f5]'}`}>No previous versions found ✨</div>
+            <div className={`text-center py-12 font-bold opacity-50 rounded-[2.5rem] ${isDark ? 'bg-[#121212]' : 'bg-[#fff0f5]'}`}>No previous versions found ✨</div>
           ) : (
             activeNote.history.map((ver, idx) => (
-              <div key={idx} className={`flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all ${isDark ? 'border-[#4a445d] bg-[#2b2738] hover:bg-[#3b364c]' : 'border-[#ffe4e9] bg-white hover:bg-[#fff0f5]'}`}>
+              <div key={idx} className={`flex items-center justify-between p-5 rounded-[2rem] border-2 transition-all ${isDark ? 'border-[#2d2d2d] bg-[#121212] hover:bg-[#1e1e1e]' : 'border-[#ffe4e9] bg-white hover:bg-[#fff0f5]'}`}>
                 <div className="flex flex-col">
-                  <span className={`font-black text-lg ${isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>{new Date(ver.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                  <span className={`font-black text-lg ${isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'}`}>{new Date(ver.timestamp).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</span>
                   <span className="text-sm font-bold opacity-60 truncate max-w-[180px] mt-0.5">{ver.title || 'Untitled'}</span>
                 </div>
                 <button 
@@ -500,7 +500,7 @@ const ContentModals = ({ modalContent, setModalContent, theme, activeNote, updat
                     updateNote(activeNote.id, { title: ver.title, content: ver.content });
                     setModalContent(null);
                   }}
-                  className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${isDark ? 'bg-[#4a445d] hover:bg-[#ff8da1] hover:text-white' : 'bg-[#fff0f5] border-2 border-[#ffe4e9] hover:bg-[#ff9ebd] hover:border-[#ff9ebd] hover:text-white shadow-sm'}`}
+                  className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${isDark ? 'bg-[#2d2d2d] hover:bg-[#ff8da1] hover:text-white' : 'bg-[#fff0f5] border-2 border-[#ffe4e9] hover:bg-[#ff9ebd] hover:border-[#ff9ebd] hover:text-white shadow-sm'}`}
                 >
                   Restore
                 </button>
@@ -528,7 +528,7 @@ const Editor = ({ activeNote, updateNote, theme }) => {
             onChange={(e) => updateNote(activeNote.id, { title: e.target.value })}
             placeholder="Untitled"
             disabled={!!activeNote.deletedAt}
-            className={`w-full bg-transparent text-3xl sm:text-4xl font-black tracking-tight focus:outline-none ${isDark ? 'text-[#fce4ec] placeholder:text-[#4a445d]' : 'text-[#5d4037] placeholder:text-[#ffe4e9]'}`}
+            className={`w-full bg-transparent text-3xl sm:text-4xl font-black tracking-tight focus:outline-none ${isDark ? 'text-[#f5f5f5] placeholder:text-[#525252]' : 'text-[#5d4037] placeholder:text-[#ffe4e9]'}`}
           />
           <textarea
             id="note-textarea"
@@ -536,15 +536,15 @@ const Editor = ({ activeNote, updateNote, theme }) => {
             onChange={(e) => updateNote(activeNote.id, { content: e.target.value })}
             placeholder="Write your thoughts..."
             disabled={!!activeNote.deletedAt}
-            className={`w-full flex-1 bg-transparent text-base sm:text-lg font-bold leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${isDark ? 'text-[#e6d5eb] placeholder:text-[#4a445d]' : 'text-[#795548] placeholder:text-[#ffe4e9]'}`}
+            className={`w-full flex-1 bg-transparent text-base sm:text-lg font-bold leading-relaxed focus:outline-none resize-none pb-12 lg:pb-20 scrollbar-hide ${isDark ? 'text-[#d4d4d4] placeholder:text-[#525252]' : 'text-[#795548] placeholder:text-[#ffe4e9]'}`}
           />
         </div>
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center space-y-6 opacity-60">
-          <div className={`p-8 rounded-[2rem] shadow-sm border-2 animate-float-mimu ${isDark ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+          <div className={`p-8 rounded-[2rem] shadow-sm border-2 animate-float-mimu ${isDark ? 'bg-[#1e1e1e] border-[#2d2d2d]' : 'bg-white border-[#ffe4e9]'}`}>
             <Sparkles size={64} className={isDark ? 'text-[#ffb7c5]' : 'text-[#ff6b8b]'} />
           </div>
-          <p className={`text-sm font-black tracking-widest uppercase animate-pulse ${isDark ? 'text-[#e6d5eb]' : 'text-[#5d4037]'}`}>Select a document to begin ✨</p>
+          <p className={`text-sm font-black tracking-widest uppercase animate-pulse ${isDark ? 'text-[#d4d4d4]' : 'text-[#5d4037]'}`}>Select a document to begin ✨</p>
         </div>
       )}
     </div>
@@ -573,24 +573,24 @@ const Header = ({
   }, []);
 
   return (
-    <header className={`h-14 flex-shrink-0 border-b-2 flex items-center justify-between px-4 sm:px-6 z-[35] ${isDark ? 'border-[#4a445d] bg-[#2b2738]/80 backdrop-blur-md' : 'border-[#ffe4e9] bg-[#fffcfd]/80 backdrop-blur-md'}`}>
-      <div className={`flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] font-black uppercase tracking-widest whitespace-nowrap overflow-x-auto scrollbar-hide pr-2 ${isDark ? 'text-[#9e96b3]' : 'text-[#a1887f]'}`}>
+    <header className={`h-14 flex-shrink-0 border-b-2 flex items-center justify-between px-4 sm:px-6 z-[35] ${isDark ? 'border-[#2d2d2d] bg-[#121212]/80 backdrop-blur-md' : 'border-[#ffe4e9] bg-[#fffcfd]/80 backdrop-blur-md'}`}>
+      <div className={`flex items-center gap-2 sm:gap-4 text-[10px] sm:text-[11px] font-black uppercase tracking-widest whitespace-nowrap overflow-x-auto scrollbar-hide pr-2 ${isDark ? 'text-[#a3a3a3]' : 'text-[#a1887f]'}`}>
         <span className="flex items-center gap-1.5 flex-shrink-0">
           <Clock size={14} strokeWidth={2.5} />
           {activeNote ? new Date(activeNote.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}
         </span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden sm:block ${isDark ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden sm:block ${isDark ? 'bg-[#2d2d2d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className="hidden sm:inline flex-shrink-0">{wordCount} words</span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden md:block ${isDark ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden md:block ${isDark ? 'bg-[#2d2d2d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className="hidden md:inline flex-shrink-0">{charCount} characters</span>
-        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden lg:block ${isDark ? 'bg-[#4a445d]' : 'bg-[#ffe4e9]'}`}></div>
+        <div className={`w-[2px] h-4 flex-shrink-0 rounded-full hidden lg:block ${isDark ? 'bg-[#2d2d2d]' : 'bg-[#ffe4e9]'}`}></div>
         <span className={`transition-opacity duration-500 flex-shrink-0 ${isSaving ? `opacity-100 ${isDark ? 'text-[#ff8da1]' : 'text-[#ff6b8b]'}` : 'opacity-40'}`}>
           {isSaving ? 'Saving ✨' : 'Saved'}
         </span>
       </div>
       
       <div className="flex items-center gap-2 flex-shrink-0 pl-2">
-        <button onClick={onGoHome} className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${isDark ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`} title="Go Home">
+        <button onClick={onGoHome} className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${isDark ? 'text-[#ffb7c5] hover:text-[#f5f5f5] border-[#2d2d2d] hover:bg-[#2d2d2d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`} title="Go Home">
           <Home size={16} strokeWidth={2.5} />
         </button>
 
@@ -600,20 +600,20 @@ const Header = ({
             <div className="relative" ref={styleMenuRef}>
               <button 
                 onClick={(e) => { e.stopPropagation(); setStyleMenuOpen(!styleMenuOpen); }} 
-                className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${isDark ? 'text-[#ffb7c5] hover:text-[#fce4ec] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`}
+                className={`p-2.5 rounded-full transition-all active:scale-90 flex items-center border-2 ${isDark ? 'text-[#ffb7c5] hover:text-[#f5f5f5] border-[#2d2d2d] hover:bg-[#2d2d2d]' : 'text-[#ff6b8b] hover:text-[#5d4037] border-[#ffe4e9] hover:bg-white shadow-sm'}`}
                 title="Notebook Cover"
               >
                 <Palette size={16} strokeWidth={2.5} />
               </button>
               {styleMenuOpen && (
-                <div className={`absolute right-0 top-11 w-64 border-2 rounded-[2rem] shadow-xl p-4 z-50 animate-in ${isDark ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
+                <div className={`absolute right-0 top-11 w-64 border-2 rounded-[2rem] shadow-xl p-4 z-50 animate-in ${isDark ? 'bg-[#1e1e1e] border-[#2d2d2d]' : 'bg-white border-[#ffe4e9]'}`}>
                   <h4 className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-3 ml-2 text-left">Cover Icon</h4>
                   <div className="grid grid-cols-4 gap-2 mb-5">
                     {Object.keys(IconMap).map(iconKey => {
                       const IconComponent = IconMap[iconKey];
                       return (
                         <button key={iconKey} onClick={() => updateNote(activeNote.id, { icon: iconKey })} className={`flex aspect-square items-center justify-center rounded-xl border-2 transition-all hover:scale-105 ${activeNote.icon === iconKey ? 'border-[#ff9ebd] bg-black/5' : 'border-transparent'} overflow-hidden relative`}>
-                          <IconComponent size={20} className={isDark ? 'text-[#fce4ec]' : 'text-[#5d4037]'} />
+                          <IconComponent size={20} className={isDark ? 'text-[#f5f5f5]' : 'text-[#5d4037]'} />
                         </button>
                       );
                     })}
@@ -629,18 +629,18 @@ const Header = ({
             </div>
 
             <div className="relative" ref={shareMenuRef}>
-              <button onClick={(e) => { e.stopPropagation(); setShareMenuOpen(!shareMenuOpen); }} className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-all px-4 py-1.5 rounded-full active:scale-95 border-2 shadow-sm ${isDark ? 'text-[#fce4ec] bg-[#3b364c] border-[#4a445d] hover:bg-[#4a445d]' : 'text-[#5d4037] bg-white border-[#ffe4e9] hover:bg-[#fff0f5]'}`}>
+              <button onClick={(e) => { e.stopPropagation(); setShareMenuOpen(!shareMenuOpen); }} className={`flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest transition-all px-4 py-1.5 rounded-full active:scale-95 border-2 shadow-sm ${isDark ? 'text-[#f5f5f5] bg-[#1e1e1e] border-[#2d2d2d] hover:bg-[#2d2d2d]' : 'text-[#5d4037] bg-white border-[#ffe4e9] hover:bg-[#fff0f5]'}`}>
                 <Share2 size={13} strokeWidth={2.5} /> Share
               </button>
               {shareMenuOpen && (
-                <div className={`absolute right-0 top-11 w-48 border-2 rounded-[1.5rem] shadow-xl py-2 z-50 animate-in ${isDark ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
-                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                <div className={`absolute right-0 top-11 w-48 border-2 rounded-[1.5rem] shadow-xl py-2 z-50 animate-in ${isDark ? 'bg-[#1e1e1e] border-[#2d2d2d]' : 'bg-white border-[#ffe4e9]'}`}>
+                  <button onClick={downloadNote} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#f5f5f5] hover:bg-[#2d2d2d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
                     <Download size={14} strokeWidth={2.5} /> Download .txt
                   </button>
-                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black border-b-2 transition-colors ${isDark ? 'text-[#fce4ec] hover:bg-[#4a445d] border-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b] border-[#ffe4e9]'}`}>
+                  <button onClick={copyToClipboard} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black border-b-2 transition-colors ${isDark ? 'text-[#f5f5f5] hover:bg-[#2d2d2d] border-[#2d2d2d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b] border-[#ffe4e9]'}`}>
                     <Copy size={14} strokeWidth={2.5} /> Copy Text
                   </button>
-                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
+                  <button onClick={() => shareToSocial('twitter')} className={`w-full flex items-center gap-3 px-5 py-2.5 text-xs font-black transition-colors ${isDark ? 'text-[#f5f5f5] hover:bg-[#2d2d2d]' : 'text-[#5d4037] hover:bg-[#fff0f5] hover:text-[#ff6b8b]'}`}>
                     <Twitter size={14} strokeWidth={2.5} /> Twitter
                   </button>
                 </div>
@@ -664,9 +664,9 @@ const Sidebar = ({
   settingsRef, settingsOpen, setSettingsOpen, toggleTheme, setModalContent
 }) => {
   const getAccentClass = (isActive) => {
-    if (!isActive) return theme === 'dark' ? 'hover:bg-[#2b2738]/80 text-[#9e96b3]' : 'hover:bg-[#fff5f7]/80 text-[#a1887f]';
+    if (!isActive) return theme === 'dark' ? 'hover:bg-[#121212]/80 text-[#a3a3a3]' : 'hover:bg-[#fff5f7]/80 text-[#a1887f]';
     return theme === 'dark' 
-      ? 'bg-[#2b2738] text-[#fce4ec] border-2 border-[#4a445d] shadow-sm' 
+      ? 'bg-[#121212] text-[#f5f5f5] border-2 border-[#2d2d2d] shadow-sm' 
       : 'bg-white text-[#5d4037] border-2 border-[#ffe4e9] shadow-sm';
   };
 
@@ -674,13 +674,13 @@ const Sidebar = ({
     <aside className={`${sidebarOpen ? 'w-[80vw] sm:w-72' : 'w-0'} absolute md:relative z-40 h-full transition-[width] duration-500 ease-in-out flex flex-col overflow-hidden ${sidebarClasses} ${sidebarOpen ? 'shadow-2xl md:shadow-none' : ''}`}>
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className={`font-black tracking-tight text-xl ${theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]'}`}>lumnr</span>
+          <span className={`font-black tracking-tight text-xl ${theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#5d4037]'}`}>lumnr</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <button onClick={createNote} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
+          <button onClick={createNote} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#121212] border-[#2d2d2d] text-[#ffb7c5] hover:text-[#f5f5f5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
             <Plus size={16} strokeWidth={2.5} />
           </button>
-          <button onClick={() => setSidebarOpen(false)} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d] text-[#ffb7c5] hover:text-[#fce4ec]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
+          <button onClick={() => setSidebarOpen(false)} className={`p-1.5 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'bg-[#121212] border-[#2d2d2d] text-[#ffb7c5] hover:text-[#f5f5f5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b] hover:text-[#5d4037] shadow-sm'}`}>
             <ChevronLeft size={16} strokeWidth={2.5} />
           </button>
         </div>
@@ -688,7 +688,7 @@ const Sidebar = ({
 
       <div className="px-4 mb-4 space-y-4">
         <div className="relative group">
-          <Search className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#ffccd5]'}`} size={16} strokeWidth={2.5} />
+          <Search className={`absolute left-4 top-1/2 -translate-y-1/2 ${theme === 'dark' ? 'text-[#a3a3a3]' : 'text-[#ffccd5]'}`} size={16} strokeWidth={2.5} />
           <input 
             type="text"
             placeholder="Search..."
@@ -698,22 +698,22 @@ const Sidebar = ({
           />
         </div>
         
-        <div className={`flex gap-1 p-1 rounded-xl border-2 ${theme === 'dark' ? 'bg-[#2b2738] border-[#4a445d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
+        <div className={`flex gap-1 p-1 rounded-xl border-2 ${theme === 'dark' ? 'bg-[#121212] border-[#2d2d2d]' : 'bg-[#fff5f7] border-[#ffe4e9]'}`}>
           <button 
             onClick={() => { setShowTrash(false); setShowPinned(false); }}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${!showTrash && !showPinned ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${!showTrash && !showPinned ? (theme === 'dark' ? 'bg-[#1e1e1e] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#a3a3a3] hover:text-[#f5f5f5]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
           >
             <PenLine size={12} strokeWidth={2.5} />
           </button>
           <button 
             onClick={() => { setShowTrash(false); setShowPinned(true); }}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${!showTrash && showPinned ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${!showTrash && showPinned ? (theme === 'dark' ? 'bg-[#1e1e1e] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#a3a3a3] hover:text-[#f5f5f5]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
           >
             <Pin size={12} strokeWidth={2.5} />
           </button>
           <button 
             onClick={() => { setShowTrash(true); setShowPinned(false); }}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${showTrash ? (theme === 'dark' ? 'bg-[#3b364c] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#9e96b3] hover:text-[#fce4ec]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[10px] uppercase tracking-widest font-black rounded-lg transition-all ${showTrash ? (theme === 'dark' ? 'bg-[#1e1e1e] text-[#ffb7c5] shadow-sm' : 'bg-white text-[#ff6b8b] border-2 border-[#ffe4e9] shadow-sm') : (theme === 'dark' ? 'text-[#a3a3a3] hover:text-[#f5f5f5]' : 'text-[#a1887f] hover:text-[#ff6b8b]')}`}
           >
             <Trash size={12} strokeWidth={2.5} />
           </button>
@@ -734,7 +734,7 @@ const Sidebar = ({
               <div className="flex items-center gap-2 overflow-hidden">
                 <div className="w-2.5 h-3.5 rounded-[2px] shadow-sm flex-shrink-0" style={{ backgroundColor: note.color || '#ff9ebd' }}></div>
                 {note.pinned && <Pin size={10} strokeWidth={3} className="flex-shrink-0 text-[#ffb7c5] fill-current" />}
-                <span className={`text-sm font-black truncate ${activeNoteId === note.id ? '' : (theme === 'dark' ? 'text-[#fce4ec]' : 'text-[#5d4037]')}`}>
+                <span className={`text-sm font-black truncate ${activeNoteId === note.id ? '' : (theme === 'dark' ? 'text-[#f5f5f5]' : 'text-[#5d4037]')}`}>
                   {note.title || 'Untitled'}
                 </span>
               </div>
@@ -760,26 +760,26 @@ const Sidebar = ({
                 )}
               </div>
             </div>
-            <span className={`text-[9px] line-clamp-1 truncate uppercase tracking-widest font-black ${activeNoteId === note.id ? 'opacity-80' : (theme === 'dark' ? 'text-[#9e96b3]' : 'text-[#a1887f]')}`}>
+            <span className={`text-[9px] line-clamp-1 truncate uppercase tracking-widest font-black ${activeNoteId === note.id ? 'opacity-80' : (theme === 'dark' ? 'text-[#a3a3a3]' : 'text-[#a1887f]')}`}>
               {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
             </span>
           </div>
         ))}
       </div>
 
-      <div className={`p-4 border-t-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#4a445d] text-[#9e96b3]' : 'border-[#ffe4e9] text-[#a1887f]'}`}>
+      <div className={`p-4 border-t-2 text-[10px] font-black uppercase tracking-widest flex justify-between items-center relative ${theme === 'dark' ? 'border-[#2d2d2d] text-[#a3a3a3]' : 'border-[#ffe4e9] text-[#a1887f]'}`}>
         <span>{notes.filter(n => !n.deletedAt).length} Docs</span>
         <div ref={settingsRef}>
-          <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-2 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'border-[#4a445d] hover:bg-[#2b2738] hover:text-[#fce4ec]' : 'border-[#ffe4e9] hover:bg-white hover:text-[#ff6b8b] hover:shadow-sm'}`}>
+          <button onClick={() => setSettingsOpen(!settingsOpen)} className={`p-2 rounded-full transition-transform active:scale-90 border-2 ${theme === 'dark' ? 'border-[#2d2d2d] hover:bg-[#121212] hover:text-[#f5f5f5]' : 'border-[#ffe4e9] hover:bg-white hover:text-[#ff6b8b] hover:shadow-sm'}`}>
             <Settings size={16} strokeWidth={2.5} />
           </button>
           {settingsOpen && (
-            <div className={`absolute bottom-14 right-4 w-48 border-2 rounded-2xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d]' : 'bg-white border-[#ffe4e9]'}`}>
-              <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff5f7] hover:text-[#ff6b8b]'}`}>
+            <div className={`absolute bottom-14 right-4 w-48 border-2 rounded-2xl shadow-xl py-2 z-50 animate-in ${theme === 'dark' ? 'bg-[#1e1e1e] border-[#2d2d2d]' : 'bg-white border-[#ffe4e9]'}`}>
+              <button onClick={toggleTheme} className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-black transition-colors ${theme === 'dark' ? 'text-[#f5f5f5] hover:bg-[#2d2d2d]' : 'text-[#5d4037] hover:bg-[#fff5f7] hover:text-[#ff6b8b]'}`}>
                 {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
                 {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
               </button>
-              <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-black transition-colors ${theme === 'dark' ? 'text-[#fce4ec] hover:bg-[#4a445d]' : 'text-[#5d4037] hover:bg-[#fff5f7] hover:text-[#ff6b8b]'}`}>
+              <button onClick={() => { setModalContent('history'); setSettingsOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-[11px] font-black transition-colors ${theme === 'dark' ? 'text-[#f5f5f5] hover:bg-[#2d2d2d]' : 'text-[#5d4037] hover:bg-[#fff5f7] hover:text-[#ff6b8b]'}`}>
                 <History size={14} /> Version History
               </button>
             </div>
@@ -1054,15 +1054,15 @@ const App = () => {
   const readingTime = Math.ceil(wordCount / 200);
 
   const themeClasses = theme === 'dark' 
-    ? 'bg-[#2b2738] text-[#fce4ec] selection:bg-[#ff8da1] selection:text-[#fff]' 
+    ? 'bg-[#121212] text-[#f5f5f5] selection:bg-[#ff8da1] selection:text-[#fff]' 
     : 'bg-[#fffcfd] text-[#5d4037] selection:bg-[#ffb7c5] selection:text-[#5d4037]';
 
   const sidebarClasses = theme === 'dark'
-    ? 'bg-[#3b364c]/95 border-[#4a445d] border-r-2 backdrop-blur-xl'
+    ? 'bg-[#1e1e1e]/95 border-[#2d2d2d] border-r-2 backdrop-blur-xl'
     : 'bg-white/95 border-[#ffe4e9] border-r-4 backdrop-blur-xl';
 
   const inputClasses = theme === 'dark'
-    ? 'bg-[#2b2738] border-2 border-[#4a445d] text-[#fce4ec] focus:border-[#ff8da1] placeholder:text-[#9e96b3] shadow-inner'
+    ? 'bg-[#121212] border-2 border-[#2d2d2d] text-[#f5f5f5] focus:border-[#ff8da1] placeholder:text-[#a3a3a3] shadow-inner'
     : 'bg-white border-2 border-[#ffe4e9] text-[#5d4037] focus:border-[#ff9ebd] placeholder:text-[#ffccd5] shadow-inner';
 
   return (
@@ -1114,7 +1114,7 @@ const App = () => {
           <main className="flex-1 flex flex-col relative">
             <button 
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-1.5 border-y-4 border-r-4 rounded-r-[1.5rem] transition-transform active:scale-90 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#3b364c] border-[#4a445d] text-[#ffb7c5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b]'}`}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 p-1.5 sm:p-1.5 border-y-4 border-r-4 rounded-r-[1.5rem] transition-transform active:scale-90 shadow-sm ${sidebarOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'} ${theme === 'dark' ? 'bg-[#1e1e1e] border-[#2d2d2d] text-[#ffb7c5]' : 'bg-white border-[#ffe4e9] text-[#ff6b8b]'}`}
             >
               <ChevronRight size={18} strokeWidth={4} />
             </button>
@@ -1197,8 +1197,8 @@ const App = () => {
         }
         .bg-grid-dark {
           background-size: 40px 40px;
-          background-image: linear-gradient(to right, #3b364c 1px, transparent 1px),
-                            linear-gradient(to bottom, #3b364c 1px, transparent 1px);
+          background-image: linear-gradient(to right, #2d2d2d 1px, transparent 1px),
+                            linear-gradient(to bottom, #2d2d2d 1px, transparent 1px);
         }
 
         /* Smooth Entrance Animations with hardware acceleration */
